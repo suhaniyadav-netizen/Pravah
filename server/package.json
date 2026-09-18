@@ -1,0 +1,21 @@
+{
+  "name": "pravah-v2-server",
+  "version": "2.0.0",
+  "description": "Pravah V2 Backend Server",
+  "main": "src/main.js",
+  "scripts": {
+    "verify:db": "node src/scripts/verify-db.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
+}
