@@ -18,6 +18,7 @@ const incidentRoutes = require('./routes/incident.routes');
 const responseTeamRoutes = require('./routes/response-team.routes');
 const decisionRoutes = require('./routes/decision.routes');
 const simulationRoutes = require('./routes/simulation.routes');
+const analyticsRoutes = require('./routes/analytics.routes');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use('/api/incidents', incidentRoutes);
 app.use('/api/response-teams', responseTeamRoutes);
 app.use('/api/decision-support', decisionRoutes);
 app.use('/api/simulation', simulationRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // 404 Handler
 app.use((req, res) => {

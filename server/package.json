@@ -17,7 +17,8 @@
     "verify:phase8": "node src/scripts/verify-phase8.js",
     "verify:phase9": "node src/scripts/verify-phase9.js",
     "verify:phase10": "node src/scripts/verify-phase10.js",
-    "verify:phase11": "node src/scripts/verify-phase11.js"
+    "verify:phase11": "node src/scripts/verify-phase11.js",
+    "verify:phase12": "node src/scripts/verify-phase12.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
