@@ -19,11 +19,40 @@ const responseTeamRoutes = require('./routes/response-team.routes');
 const decisionRoutes = require('./routes/decision.routes');
 const simulationRoutes = require('./routes/simulation.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
+const adminRoutes = require('./routes/admin.routes');
+
+const {
+  authLimiter,
+  publicMutationLimiter,
+  generalApiLimiter,
+  xssSanitizationMiddleware,
+} = require('./middlewares/security.middleware');
 
 const app = express();
 
-// Security Middlewares
-app.use(helmet());
+// OWASP Security Headers via Helmet
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://fonts.googleapis.com'],
+        imgSrc: ["'self'", 'data:', 'https://*.tile.openstreetmap.org', 'https://unpkg.com'],
+        connectSrc: ["'self'", 'ws:', 'wss:', 'https://api.open-meteo.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        objectSrc: ["'none'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+  })
+);
+
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || '*',
@@ -32,9 +61,16 @@ app.use(
   })
 );
 
-// Body Parsers
+// Body Parsers & Input Sanitization
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(xssSanitizationMiddleware);
+
+// Rate Limiting
+app.use('/api/', generalApiLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+app.use('/api/complaints', publicMutationLimiter);
 
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {
@@ -59,6 +95,7 @@ app.use('/api/response-teams', responseTeamRoutes);
 app.use('/api/decision-support', decisionRoutes);
 app.use('/api/simulation', simulationRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 Handler
 app.use((req, res) => {
@@ -68,20 +105,20 @@ app.use((req, res) => {
   });
 });
 
-// Centralized Error Handling Middleware
+// Centralized Error Handling Middleware (Leakage Protected)
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   const statusCode = err.statusCode || 500;
   const isProd = process.env.NODE_ENV === 'production';
 
-  console.error(`[Error] ${statusCode} - ${err.message}`);
-  if (!isProd && statusCode === 500) {
-    console.error(err.stack);
+  // Sanitize internal database/password strings from error message
+  let cleanMessage = err.message || 'An unexpected error occurred.';
+  if (cleanMessage.includes('password') || cleanMessage.includes('postgresql://')) {
+    cleanMessage = 'Database service error. Please contact system administrator.';
   }
 
   res.status(statusCode).json({
     error: err.name || 'InternalServerError',
-    message: err.message || 'An unexpected error occurred.',
-    ...(isProd ? {} : { stack: err.stack }),
+    message: cleanMessage,
   });
 });
 
