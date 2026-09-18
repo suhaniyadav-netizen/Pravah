@@ -90,10 +90,10 @@ function evaluateRisk({
   let confidenceScore = 95;
   let freshnessStatus = 'REAL_TIME';
 
-  if (ageInHours > 24) {
+  if (ageInHours > 12) {
     confidenceScore = 45;
     freshnessStatus = 'STALE';
-  } else if (ageInHours > 6) {
+  } else if (ageInHours > 4) {
     confidenceScore = 70;
     freshnessStatus = 'AGING';
   }

@@ -11,7 +11,17 @@
     "verify:phase2": "node src/scripts/verify-phase2.js",
     "verify:phase3": "node src/scripts/verify-phase3.js",
     "verify:phase4": "node src/scripts/verify-phase4.js",
-    "verify:phase5": "node src/scripts/verify-phase5.js"
+    "verify:phase5": "node src/scripts/verify-phase5.js",
+    "verify:phase6": "node src/scripts/verify-phase6.js",
+    "verify:phase7": "node src/scripts/verify-phase7.js",
+    "verify:phase8": "node src/scripts/verify-phase8.js",
+    "verify:phase9": "node src/scripts/verify-phase9.js",
+    "verify:phase10": "node src/scripts/verify-phase10.js",
+    "verify:phase11": "node src/scripts/verify-phase11.js",
+    "verify:phase12": "node src/scripts/verify-phase12.js",
+    "verify:phase13": "node src/scripts/verify-phase13.js",
+    "verify:phase14": "node src/scripts/verify-phase14.js",
+    "test": "node src/scripts/verify-phase14.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -19,9 +29,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^8.7.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.3",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
