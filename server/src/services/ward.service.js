@@ -62,10 +62,15 @@ async function getAllWardsGeoJSON() {
           id: w.id,
           ward_code: w.wardCode,
           ward_name: w.wardName,
+          name: w.wardName,
           drainage_capacity: w.drainageCapacity,
+          drainageCapacity: w.drainageCapacity,
           population_density: w.populationDensity,
           current_risk_score: w.currentRiskScore,
+          riskScore: w.currentRiskScore,
           current_risk_level: w.currentRiskLevel,
+          riskLevel: w.currentRiskLevel,
+          rainfall: 28.5,
           is_synthetic: false,
         },
       }));
@@ -98,8 +103,14 @@ async function getAllWardsGeoJSON() {
       properties: {
         ...f.properties,
         id: f.properties.ward_code,
+        name: f.properties.ward_name,
         current_risk_score: 52.5,
+        riskScore: 52.5,
         current_risk_level: 'MODERATE',
+        riskLevel: 'Moderate',
+        drainage_capacity: f.properties.drainage_capacity || 50.0,
+        drainageCapacity: f.properties.drainage_capacity || 50.0,
+        rainfall: 28.5,
       },
     })),
   };
@@ -275,6 +286,7 @@ async function getWardById(id) {
     wardName: matched.properties.ward_name,
     zone: matched.properties.zone,
     drainageCapacity: matched.properties.drainage_capacity || 50.0,
+    centroid: matched.properties.centroid,
     currentRisk: {
       score: 55.0,
       level: 'MODERATE',

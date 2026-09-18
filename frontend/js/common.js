@@ -2,7 +2,19 @@
  * COMMON CONFIGURATION
  */
 
-const API_BASE = "https://pravah-br0g.onrender.com";
+// Dynamically points to local development backend (port 5000) or production host
+const API_BASE = (function() {
+  if (typeof window !== 'undefined' && window.location) {
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || !host) {
+      return 'http://localhost:5000';
+    }
+    if (window.location.origin.startsWith('http') && !window.location.origin.includes('render.com')) {
+      return window.location.origin;
+    }
+  }
+  return 'http://localhost:5000';
+})();
 
 const Utils = {
     // Matches the backend's capitalized risk levels to your CSS colors

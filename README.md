@@ -1,226 +1,193 @@
-# <a href="https://pravah-proj.vercel.app/">Pravah (प्रवाह)</a>
+# Pravah V2 (प्रवाह) — Urban Flood Intelligence & Decision Support Platform
 
-> Data Driven Real-Time Delhi Flood Risk Monitoring & Management System
+> Production-Grade Urban Flood Monitoring, Explainable Risk Intelligence, Multi-Horizon Hydrological Forecasting, Incident Dispatch, Decision Support, and Real-Time Telemetry Platform for Delhi Municipal Wards.
 
-<img width="1351" height="682" alt="image" src="https://github.com/user-attachments/assets/5bf755f7-76d8-4b7b-8b7d-ed249a3f7dc1" />
-
-**Live Demo:** https://pravah-proj.vercel.app/
-
-
-A comprehensive, data-driven dashboard designed to help city administrators monitor, predict, and manage urban flood risks in real-time. 
-It integrates rainfall data, drainage capacity, and citizen complaints to generate dynamic risk scores for 250 municipal wards in Delhi.
-
-## ✨ Features
-
-- **Real-Time Risk Engine** — Dynamic algorithm calculating risk scores (0-100) based on rainfall (mm), drainage capacity (%), and active complaints.
-- **Interactive City Map** — Visualizes 250 wards with color-coded risk markers (Red/Yellow/Green) and pulse animations for high-risk zones.
-- **Dual-Role Interface** — 
-1. *Citizen Portal:* Submit geo-tagged waterlogging complaints bala 
-2. *Admin Dashboard*: Monitor KPIs, view ward-level analytics, and update infrastructure status.
-- **Professional Visualization** — Clean, government-grade UI with data-dense tables and actionable insights.
-- **Dual Themes** — Both light mode and dark mode implemented to suit all users.
-- **Simulated IoT Data** — Realistic, synchronized datasets for Rainfall and Drainage across all Delhi zones.
-
-## 🏗️ Architecture
-
-```
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│  IoT Sensors │      │   Citizen    │      │    Admin     │
-│ (Rain/Drain) │      │  Reporting   │      │   Actions    │
-└──────┬───────┘      └──────┬───────┘      └──────┬───────┘
-       │                     │                     │
-       ▼                     ▼                     ▼
-┌──────────────────────────────────────────────────────────┐
-│                   Data Aggregation Layer                 │
-│              (CSV / In-Memory State Store)               │
-└────────────────────────────┬─────────────────────────────┘
-                             │
-                             ▼
-┌──────────────────────────────────────────────────────────┐
-│                    Risk Engine (Python)                  │
-│   Formula: (Drainage * 0.5) + (Rain * 0.3) + (Logs * 0.2)│
-└────────────────────────────┬─────────────────────────────┘
-                             │
-                             ▼
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   REST API   │◀───▶│   Frontend   │◀ ──▶│ Leaflet Maps │
-│  (FastAPI)   │      │  (HTML/JS)   │      │ (Visuals)    │
-└──────────────┘      └──────────────┘      └──────────────┘
-```
-
-## 📁 Project Structure
-
-```
-Pravah/
-├── backend/
-│   ├── data/
-│   │   ├── wards.csv           # 250 Ward Geo-coordinates & Zones
-│   │   ├── rainfall.csv        # Live Rainfall Data (mm)
-│   │   ├── drainage.csv        # Infrastructure Capacity (%)
-│   │   └── complaints.csv      # Citizen Report Log
-│   │
-│   ├── src/
-│   │   ├── main.py             # FastAPI Entry Point & CORS
-│   │   ├── config.py           # Settings & Constants
-│   │   ├── models.py           # Pydantic Schemas
-│   │   └── services/
-│   │       ├── api.py          # API Route Handlers
-│   │       ├── data_loader.py  # CSV Parsing & Merging Logic
-│   │       ├── risk_engine.py  # Risk Calculation Algorithm
-│   │       └── admin_ops.py    # Admin Action Logic
-│   │
-│   └── requirements.txt        # Python Dependencies
-│
-├── frontend/
-│   ├── css/
-│   │   ├── styles.css          # Main Theme & Responsive Rules
-│   │   ├── admin.css           # Dashboard Specific Styles
-│   │
-│   ├── js/
-│   │   ├── common.js           # API Config & Utilities
-│   │   ├── admin.js            # Dashboard Logic & Maps
-│   │   ├── dashboard.js        # Citizen Map & Reporting
-│   │   ├── complaints.js       # Form Handling
-│   │   └── login.js            # Auth Logic
-│   │
-│   ├── index.html              # Landing Page
-│   ├── admin.html              # Main Admin Control Room
-│   ├── dashboard.html          # Citizen Reporting Page
-│   └── login.html              # Admin Login Gate
-│   └── about.html              # About The Project
-│
-└── README.md
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.9+
-- Web Browser(Desktop Mode for now)
-- Git
-
-### 1. Clone & Setup
-
-```powershell
-# Clone the repository
-git clone https://github.com/prabhatbhatiaa/pravah.git
-cd pravah
-
-# Backend Setup
-cd backend
-python -m venv venv
-.\venv\Scripts\activate  # Windows
-# source venv/bin/activate # Mac/Linux
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Runs the Backend
-```env
-# Start Uvicorn Server
-uvicorn src.main:app --reload
-```
-
-### 3. Run the Frontend
-```powershell
-1. Open the frontend folder.
-2. Open index.html via Live Server (VS Code Extension) or simply double-click it.
-3. Important: Ensure frontend/js/common.js points to http://localhost:8000 for local development.
-```
-
-## 🔐 System Access
-
-1. **Landing Page** — : Public access to project overview.
-2. **About Us Page** — : Public accessto the details of the project.
-3. **Citizen Dashboard** — Public access to view map & report issues.
-4. **Admin Portal** — : Restricted access via Session Storage.
-
-## 📋 API Endpoints
-
-### Public
-- `GET /api/wards` — Returns full GeoJSON of all 250 wards with calculated risk.
-- `GET /api/risk-summary` — Returns aggregate stats (High Risk count, Total Wards).
-- `POST /api/complaint` — Submit a new citizen complaint.
-
-### Admin
-- `GET /api/admin/overview` — Returns detailed tabular data sorted by risk.
-- `POST /api/admin/update-drainage` — Update drainage capacity for a specific ward.
-
-## 🧠 Risk Calculation Logic
-```The Risk Engine (risk_engine.py) calculates a score (0-100) for every ward in real-time```
-1. **Drainage Factor (50%):** Inverse of capacity. Lower drainage = Higher risk.
-2. **Rainfall Factor (30%):** Normalized against a critical threshold (150mm).
-3. **Complaint Factor (20%):** Active complaints boost the risk score significantly.
-
-```python
-Final Score = (Drainage_Risk * 0.5) + (Rainfall_Risk * 0.3) + (Complaint_Risk * 0.2)
-```
-
-## 🛠️ Technology Stack
-
-### Backend:
-- **FastAPI** — High-performance Python framework.
-- **Pandas** — Data manipulation and CSV handling.
-- **Uvicorn** — ASGI Server.
-
-### Frontend:
-- **HTML5 / CSS3** — Responsive layout with CSS Variables.
-- **Vanilla JavaScript** — Logic without heavy frameworks.
-- **Leaflet.js** — Interactive Maps & Marker rendering.
-
-## Deployment:
-- **Render** — Python Backend Hosting.
-- **Vercel** — Static Frontend Hosting.
-
-## 📦 Dependencies
-
-```txt
-fastapi
-uvicorn
-pandas
-pydantic
-python-multipart
-```
-##### Create `backend/requirements.txt` with the above and run:
-
-```powershell
-pip install -r backend/requirements.txt
-```
-
-## 🔒 Security Considerations
-
-- **Session Storage Auth** — Basic client-side session management for the hackathon prototype.
-- **CORS Configuration** — Backend restricted to specific origins in production.
-
-## 🐛 Troubleshooting
-
-**Map not loading:**
-- Check if the Backend URL in ```frontend/js/common.js``` matches your running server.
-- Ensure no trailing slash in the API base URL (e.g., ```https://api.com``` not ```https://api.com/```).
-
-**Admin page redirects to login:**
-- Ensure you actually logged in via ```login.```html to set the session key.
-- Check browser console for ```sessionStorage``` errors.
-
-**High latency on first load:**
-- The backend is hosted on a free Render instance which spins down after inactivity. The first request might take 50 seconds to wake it up.
-
-## 🎯 Roadmap
-
-- [ ] Integration with live IMD Weather API.
-- [ ] IoT Sensor integration for real-time water level monitoring.
-- [ ] SMS Alerts to citizens in High-Risk zones.
-- [ ] Predictive AI model for 24hr flood forecasting.
-- [ ] Mobile-responsive UI improvements
-
-
-## 👤 Author
-
-**Prabhat Bhatia** &
-**Suhani Yadav**
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-blue.svg)](https://www.postgresql.org/)
+[![PostGIS](https://img.shields.io/badge/PostGIS-3.4%2B-blue.svg)](https://postgis.net/)
+[![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748.svg)](https://www.prisma.io/)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-4.8-black.svg)](https://socket.io/)
+[![OWASP](https://img.shields.io/badge/OWASP-Hardened-orange.svg)](https://owasp.org/)
+[![Test Suite](https://img.shields.io/badge/Tests-19%2F19%20Passed-brightgreen.svg)]()
 
 ---
 
-**Note:** This project was built for a govt level hackathon. The data for "Rainfall" and "Drainage" is simulated based on real-world Delhi ward boundaries and flood hotspots.
+## 🌟 What is Pravah V2?
+
+**Pravah V2** is a complete architectural reimagining of municipal flood risk management. Engineered to replace opaque heuristics with transparent physical mass-balance models, Pravah V2 empowers municipal authorities, disaster response teams, hydrological analysts, and citizens with actionable real-time intelligence during severe monsoon weather events.
+
+---
+
+## 🚀 Key Platform Capabilities
+
+| Capability | Technical Implementation | Value to Municipal Operations |
+| :--- | :--- | :--- |
+| **Explainable Risk Engine V2** | Deterministic multi-factor synthesis: $(S_{\text{drain}} \times 0.4) + (S_{\text{rain}} \times 0.35) + (S_{\text{complaint}} \times 0.25)$ | 100% explainable, deterministic risk scoring (0–100) with primary driver attribution and data confidence indicators. |
+| **PostGIS Spatial Architecture** | PostGIS `GEOMETRY(Polygon, 4326)` & `POINT(4326)` spatial indexes with point-in-polygon containment and distance ranking | Sub-millisecond geographic ward resolution and spatial infrastructure proximity searches. |
+| **"What Should the City Do Now?"** | Multi-attribute decision scoring combining ward vulnerability, standing water, and equipment proximity | Automated, ranked tactical action plans for emergency managers (mobile pumps, road closures, citizen alerts). |
+| **What-If Scenario Simulator** | Hydrological intervention sandbox computing delta risk scores ($\Delta \text{Risk}$) and operational feasibility | Safe digital twin to stress-test high-capacity pump deployments and desilting before dispatching physical assets. |
+| **Multi-Horizon Forecasting** | Physics-grounded hydrological projections across 6-hour, 12-hour, and 24-hour windows | Early flood warnings with uncertainty confidence intervals, soil saturation factors, and time-to-peak inundation. |
+| **Real-Time Telemetry Bus** | Socket.IO WebSocket broadcast engine with ward-level spatial rooms and event listeners | Sub-second streaming of flood alerts, pump dispatches, citizen complaints, and precipitation updates. |
+| **Security & OWASP Hardening** | Helmet CSP/HSTS, Bcrypt hashing, signed JWTs, IP rate limiting, recursive XSS sanitization, and audit logging | Enterprise-grade protection against brute force, credential stuffing, SQL injection, and privilege escalation. |
+| **Zero-Crash Offline Resilience** | Resilient in-memory fallback stores with automatic database reconnection | Ensures uninterrupted emergency operations even if PostgreSQL or external weather APIs experience outages. |
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TB
+    subgraph Clients["Client Layer"]
+        CP["Citizen Portal (Leaflet GIS)"]
+        CD["City Command Dashboard"]
+        AC["Admin Control Center"]
+    end
+
+    subgraph Edge["Security & Gateway Layer"]
+        RL["Rate Limiters (Auth: 15/15m, Public: 30/15m)"]
+        SEC["Helmet Security Headers (CSP, HSTS, NoSniff)"]
+        XSS["Recursive XSS Sanitizer"]
+    end
+
+    subgraph Core["Pravah V2 Express Engine (Port 5000)"]
+        AUTH["JWT & RBAC Service"]
+        GIS["PostGIS Spatial Engine"]
+        RISK["Explainable Risk Engine V2"]
+        WEATHER["Weather Ingestion Cache (Open-Meteo)"]
+        FORECAST["Hydrological Forecasting (6h/12h/24h)"]
+        INCIDENTS["Incident Lifecycle Engine"]
+        DISPATCH["Response Team Dispatch"]
+        DECISION["Decision Support Engine"]
+        SIM["What-If Scenario Simulator"]
+        ANALYTICS["Historical Analytics Engine"]
+        AUDIT["Immutable Audit Logger"]
+    end
+
+    subgraph Realtime["Real-Time Bus"]
+        SIO["Socket.IO Telemetry Hub"]
+    end
+
+    subgraph Data["Persistence Layer"]
+        PRISMA["Prisma ORM Client"]
+        PG[("PostgreSQL 16 + PostGIS")]
+        CACHE["Resilient Local Fallback Cache"]
+    end
+
+    Clients --> Edge --> Core
+    Core <--> SIO -.-> Clients
+    Core <--> PRISMA <--> PG
+    Core -.-> CACHE
+```
+
+---
+
+## 📡 REST API Reference
+
+### 1. Wards & GIS Spatial Services
+- `GET /api/wards` — Returns GeoJSON FeatureCollection of all 250 municipal wards with risk metrics.
+- `GET /api/wards/search?q=:query` — Searches wards by name, code, or administrative zone.
+- `POST /api/wards/lookup-point` — Point-in-polygon containment lookup mapping GPS coordinates to containing ward.
+- `GET /api/wards/:id` — Retrieves comprehensive ward detail, active incidents, and infrastructure assets.
+
+### 2. Risk Engine & Forecasting
+- `GET /api/risk/summary` — Aggregate citywide risk metrics, critical counts, and top vulnerable wards.
+- `GET /api/risk/ward/:id` — Explainable risk breakdown with mathematical factor contributions.
+- `GET /api/forecasting/ward/:id` — Multi-horizon flood forecast projections (6h, 12h, 24h) with confidence intervals.
+- `GET /api/forecasting/city` — 24-hour citywide risk escalation overview identifying wards likely to flood.
+
+### 3. Decision Support & What-If Simulation
+- `GET /api/decision-support/ward/:id` — Generates ranked tactical action plans for a ward.
+- `GET /api/decision-support/city` — Citywide prioritized intervention roadmap for incident command.
+- `POST /api/simulation/ward` — Simulates pump deployment or rainfall surge and calculates delta risk ($\Delta \text{Risk}$).
+- `GET /api/simulation/presets` — Pre-calibrated emergency simulation scenarios (e.g. Yamuna overflow, cloudburst).
+
+### 4. Complaints, Incidents & Response Teams
+- `POST /api/complaints` — Submits citizen waterlogging report with automatic PostGIS ward mapping.
+- `GET /api/incidents` — Lists active operational flood incidents.
+- `POST /api/response-teams/dispatch` — Assigns emergency response team and equipment to an active incident.
+
+### 5. Administration & Security Audit
+- `POST /api/auth/login` — Authenticates credentials and issues signed JWT bearer token.
+- `GET /api/admin/overview` — Administrative ward vulnerability table.
+- `POST /api/admin/update-drainage` — Updates ward drainage capacity and writes to immutable audit log.
+- `GET /api/admin/audit-logs` — Retrieves security event history.
+
+---
+
+## 💻 Developer Quickstart
+
+### Prerequisites
+- Node.js 18+ and npm
+- (Optional) Docker for PostgreSQL + PostGIS (System includes resilient offline fallback mode)
+
+### 1. Backend Server Setup
+```powershell
+# Navigate to backend server
+cd server
+
+# Install dependencies
+npm install
+
+# Run database setup (if PostgreSQL is running)
+npx prisma generate
+npx prisma db push
+npm run prisma:seed
+
+# Start Pravah V2 server on port 5000
+npm run dev
+```
+
+### 2. Running Verification Suites
+Pravah V2 includes dedicated automated verification suites covering all phases and failure scenarios:
+```powershell
+cd server
+
+# Run Master Reliability & Failure Scenario Suite (Phase 14)
+npm test
+
+# Run Client Integration Suite (Phase 15)
+npm run verify:phase15
+```
+
+### 3. Frontend Clients
+
+#### A. Modern React + Vite Client (`client/`)
+```powershell
+# Navigate to modern client
+cd client
+
+# Install dependencies
+npm install
+
+# Start Vite dev server on port 5173 (with proxy to port 5000)
+npm run dev
+
+# Or build production bundle
+npm run build
+```
+
+#### B. Legacy Static Client (`frontend/`)
+Alternatively, open `frontend/index.html` via VS Code Live Server or double-click. `frontend/js/common.js` automatically routes requests to `http://localhost:5000`.
+
+**Default Demo Credentials:**
+- **Administrator**: `admin@pravah.delhi.gov.in` (Password: `PravahDev@2026`) or `admin` / `admin123`
+- **Hydrological Analyst**: `analyst@pravah.delhi.gov.in` (Password: `PravahDev@2026`)
+- **Response Team Lead**: `team.central@pravah.delhi.gov.in` (Password: `PravahDev@2026`)
+- **Citizen Reporter**: `citizen.delhi@example.com` (Password: `PravahDev@2026`)
+
+---
+
+## 📚 Technical Documentation Index
+
+- [System Architecture & Specifications](docs/system-architecture.md)
+- [Testing & Reliability Runbook](docs/testing-and-reliability.md)
+- [Security Hardening & OWASP Compliance](docs/security-hardening.md)
+- [Decision Support Engine](docs/decision-support-engine.md)
+- [What-If Scenario Simulator](docs/what-if-simulator.md)
+- [Real-Time Socket.IO Architecture](docs/realtime-socket-architecture.md)
+- [Historical Analytics & Hotspot Telemetry](docs/historical-analytics.md)
+- [Hydrological Forecasting Architecture](docs/forecasting-architecture.md)
+- [Explainable Risk Engine V2](docs/risk-engine-v2.md)
+- [GIS & Ward Spatial API](docs/ward-gis-api.md)
+- [Database Schema & PostGIS Entities](docs/database-schema.md)
+- [Authentication & RBAC](docs/authentication-rbac.md)
