@@ -15,6 +15,7 @@ const weatherRoutes = require('./routes/weather.routes');
 const forecastingRoutes = require('./routes/forecasting.routes');
 const complaintRoutes = require('./routes/complaint.routes');
 const incidentRoutes = require('./routes/incident.routes');
+const responseTeamRoutes = require('./routes/response-team.routes');
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/weather', weatherRoutes);
 app.use('/api/forecasting', forecastingRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/incidents', incidentRoutes);
+app.use('/api/response-teams', responseTeamRoutes);
 
 // 404 Handler
 app.use((req, res) => {
