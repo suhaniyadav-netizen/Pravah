@@ -8,7 +8,7 @@ if (!sessionStorage.getItem('isLoggedIn')) {
 // =====================
 // 1. CONFIGURATION
 // =====================
-// Check if API_BASE is already defined (by common.js), otherwise define it
+// Check if API_BASE is already defined, otherwise define it
 const BASE_URL = (typeof API_BASE !== 'undefined') ? API_BASE : "https://pravah-br0g.onrender.com";
 const DELHI_BOUNDS = [[28.40, 76.80], [28.90, 77.35]];
 const DELHI_CENTER = [28.6139, 77.2090];
@@ -37,6 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
           updateSliderValue(e.target.value);
       });
   }
+
+  // Initialize Modal Close Listener (Click outside to close)
+  const modal = document.getElementById('complaintsModal');
+  if(modal) {
+      modal.addEventListener('click', function(e) {
+          if (e.target === this) closeComplaintsModal();
+      });
+  }
 });
 
 // =====================
@@ -44,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // =====================
 async function loadDashboardData() {
     try {
-        // A. Fetch Risk Summary for KPI cards
         const summaryRes = await fetch(`${BASE_URL}/api/risk-summary`);
         if(summaryRes.ok) {
             const summary = await summaryRes.json();
@@ -59,7 +66,6 @@ async function loadDashboardData() {
             const adminData = await adminRes.json();
             wards = adminData.wards; 
             
-            // Calculate Total Complaints after wards are loaded
             const totalComplaints = wards.reduce((acc, w) => acc + (w.activeComplaints || 0), 0);
             const kpiTotal = document.getElementById('kpi-total');
             if(kpiTotal) kpiTotal.textContent = totalComplaints;
@@ -68,7 +74,6 @@ async function loadDashboardData() {
             renderPriorityList(adminData.priorityWards);
             populateWardSelect();
             
-            // C. Fetch Map Data (GeoJSON) - Only after getting table data
             fetch(`${BASE_URL}/api/wards`)
                 .then(res => res.json())
                 .then(geoJson => addMapMarkers(geoJson))
@@ -98,7 +103,6 @@ function initMap() {
 
   L.control.zoom({ position: "topright" }).addTo(map);
 
-  // Theme Aware Tiles: Check if 'light-mode' is active
   const isLight = document.body.classList.contains('light-mode');
   const tileUrl = isLight 
       ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
@@ -118,16 +122,11 @@ function addMapMarkers(geoJson) {
   markers.forEach(m => map.removeLayer(m));
   markers = [];
 
-  // Iterate over GeoJSON features
   geoJson.features.forEach(feature => {
     const props = feature.properties;
-    // Handle Lat/Lng vs Lng/Lat (GeoJSON is usually Lng/Lat, Leaflet needs Lat/Lng)
-    // Checking if coordinates exist
     if (!feature.geometry || !feature.geometry.coordinates) return;
     
-    // GeoJSON is [Lng, Lat], Leaflet wants [Lat, Lng]
     const coords = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
-    
     const riskLevel = (props.riskLevel || 'Low').toLowerCase();
     const color = getRiskColor(riskLevel);
     const radius = riskLevel === "high" ? 14 : riskLevel === "medium" ? 12 : 10;
@@ -135,14 +134,13 @@ function addMapMarkers(geoJson) {
     const circleMarker = L.circleMarker(coords, {
       radius: radius,
       fillColor: color,
-      color: '#fff', // White border for better visibility
+      color: '#fff', 
       weight: 1,
       opacity: 1,
       fillOpacity: 0.8,
       className: `ward-hotspot ward-hotspot-${riskLevel}`,
     }).addTo(map);
 
-    // Pulse effect for High Risk
     if (riskLevel === "high") {
       const pulseMarker = L.circleMarker(coords, {
         radius: radius + 8,
@@ -156,7 +154,6 @@ function addMapMarkers(geoJson) {
       markers.push(pulseMarker);
     }
 
-    // Determine Theme for Popup
     const isLight = document.body.classList.contains('light-mode');
     const popupBg = isLight ? '#ffffff' : '#1a1a2e';
     const popupText = isLight ? '#0f172a' : '#ffffff';
@@ -178,12 +175,7 @@ function addMapMarkers(geoJson) {
       </div>
     `;
 
-    circleMarker.bindPopup(popupContent, {
-      closeButton: false,
-      offset: [0, -5],
-      className: isLight ? "" : "dark-popup",
-    });
-
+    circleMarker.bindPopup(popupContent, { closeButton: false, offset: [0, -5], className: isLight ? "" : "dark-popup" });
     circleMarker.on("mouseover", function() { this.setRadius(radius + 4); this.openPopup(); });
     circleMarker.on("mouseout", function() { this.setRadius(radius); this.closePopup(); });
     circleMarker.on("click", function() { 
@@ -201,11 +193,8 @@ function addMapMarkers(geoJson) {
 function updateKPIs(summary) {
     const highEl = document.getElementById('kpi-high-risk');
     const pendEl = document.getElementById('kpi-pending');
-    
     if(highEl) highEl.textContent = summary.highRiskCount || 0;
     if(pendEl) pendEl.textContent = summary.mediumRiskCount || 0; 
-    
-    // Note: KPI Total is updated in loadDashboardData after wards fetch
 }
 
 function getRiskColor(level) {
@@ -229,7 +218,7 @@ function getRiskGlow(level) {
 }
 
 // =====================
-// 6. TABLE RENDERER
+// 6. TABLE & LIST RENDERERS
 // =====================
 function renderTable() {
   const tbody = document.getElementById('ward-table-body');
@@ -245,24 +234,16 @@ function renderTable() {
   });
 
   tbody.innerHTML = sortedWards.map((ward, index) => {
-    const scoreClass = ward.riskScore >= 70 ? 'high' : ward.riskScore >= 40 ? 'medium' : 'low';
-    const drainageClass = ward.drainageCapacity > 70 ? 'high' : ward.drainageCapacity > 40 ? 'medium' : 'low'; // High capacity is Green/Low Risk color
-    // Correct logic for colors: Low drainage = Bad (Red/High Risk Color)
-    const drainColor = ward.drainageCapacity < 40 ? 'high' : ward.drainageCapacity < 70 ? 'medium' : 'low';
-    
     const riskLevelLower = ward.riskLevel.toLowerCase();
     const riskColor = getRiskColor(riskLevelLower);
+    const drainColor = ward.drainageCapacity < 40 ? 'high' : ward.drainageCapacity < 70 ? 'medium' : 'low';
 
     return `
       <tr onclick="selectWardById('${ward.id}')">
         <td class="cell-mono">${String(index + 1).padStart(2, '0')}</td>
         <td class="cell-name">${ward.name}</td>
         <td class="cell-zone">${ward.zone}</td>
-        <td>
-          <span class="mono" style="font-weight: 600; color: ${riskColor};">
-            ${ward.riskScore}%
-          </span>
-        </td>
+        <td><span class="mono" style="font-weight: 600; color: ${riskColor};">${ward.riskScore}%</span></td>
         <td>
           <span class="risk-badge ${riskLevelLower}">
             ${riskLevelLower === 'high' ? '<i data-lucide="alert-triangle" style="width: 12px; height: 12px;"></i>' : ''}
@@ -294,9 +275,6 @@ window.sortTable = function(key) {
   renderTable();
 }
 
-// =====================
-// 7. PRIORITY LIST
-// =====================
 function renderPriorityList(priorityWards) {
   const container = document.getElementById('priority-list');
   if(!container) return;
@@ -332,7 +310,7 @@ function renderPriorityList(priorityWards) {
 }
 
 // =====================
-// 8. INTERACTIONS
+// 7. INTERACTIONS (Ward Selection)
 // =====================
 window.selectWardById = function(id) {
     const ward = wards.find(w => w.id === id);
@@ -364,20 +342,11 @@ function selectWard(ward) {
 
   const progressFill = document.getElementById('ward-progress-fill');
   progressFill.style.width = ward.drainageCapacity + '%';
-  progressFill.className = 'ward-progress-fill';
   
-  // Progress bar color logic
-  if (ward.drainageCapacity < 40) {
-    progressFill.style.background = 'var(--risk-high)';
-  } else if (ward.drainageCapacity < 70) {
-    progressFill.style.background = 'var(--risk-medium)';
-  } else {
-    progressFill.style.background = 'var(--risk-low)';
-  }
+  if (ward.drainageCapacity < 40) progressFill.style.background = 'var(--risk-high)';
+  else if (ward.drainageCapacity < 70) progressFill.style.background = 'var(--risk-medium)';
+  else progressFill.style.background = 'var(--risk-low)';
 
-  document.getElementById('ward-updated').textContent = 'Live Data Source';
-
-  // Pre-select in form
   document.getElementById('ward-select').value = ward.id;
   document.getElementById('drainage-slider').value = ward.drainageCapacity;
   updateSliderValue(ward.drainageCapacity);
@@ -393,9 +362,7 @@ window.closeWardDetails = function() {
 function populateWardSelect() {
   const select = document.getElementById('ward-select');
   select.innerHTML = '<option value="">Choose a ward</option>' + 
-    wards.map(ward => 
-      `<option value="${ward.id}">${ward.name} (Current: ${ward.drainageCapacity}%)</option>`
-    ).join('');
+    wards.map(ward => `<option value="${ward.id}">${ward.name} (Current: ${ward.drainageCapacity}%)</option>`).join('');
 }
 
 window.updateSliderValue = function(value) {
@@ -415,18 +382,14 @@ window.toggleSwitch = function() {
 }
 
 // =====================
-// 9. FORM SUBMISSION
+// 8. FORM SUBMISSION
 // =====================
 window.handleDrainageSubmit = async function(e) {
   e.preventDefault();
-  
   const wardId = document.getElementById('ward-select').value;
   const drainageCapacity = parseInt(document.getElementById('drainage-slider').value);
   
-  if (!wardId) {
-    showToast('Error', 'Please select a ward', 'error');
-    return;
-  }
+  if (!wardId) { showToast('Error', 'Please select a ward', 'error'); return; }
 
   const btn = document.getElementById('submit-btn');
   const originalContent = btn.innerHTML;
@@ -451,28 +414,90 @@ window.handleDrainageSubmit = async function(e) {
       if(response.ok) {
           const ward = wards.find(w => w.id === wardId);
           showToast('Update Successful', `Drainage status updated for ${ward ? ward.name : wardId}`, 'success');
-          
-          // Refresh Dashboard Data
           loadDashboardData();
-          
-          // Reset UI
           document.getElementById('drainage-form').reset();
-          document.getElementById('drainage-value').textContent = '50%';
           isClean = false;
           document.getElementById('clean-switch').classList.remove('active');
-      } else {
-          throw new Error("Server rejected update");
-      }
-
+      } else { throw new Error("Server rejected update"); }
   } catch (error) {
-      console.error(error);
       showToast('Update Failed', 'Could not update drainage status', 'error');
   } finally {
       btn.disabled = false;
-      btn.innerHTML = originalContent; // Restore icon and text
+      btn.innerHTML = originalContent;
       if(window.lucide) lucide.createIcons();
   }
 }
+
+// =====================
+// 9. COMPLAINTS MODAL LOGIC (FIXED)
+// =====================
+window.openComplaintsModal = async function() {
+    const modal = document.getElementById('complaintsModal');
+    const list = document.getElementById('complaintsList');
+    
+    // ✅ CRITICAL FIX: Add 'active' for opacity transition AND remove 'hidden' for display
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.add('active'), 10); 
+
+    list.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-muted);"><i class="ri-loader-4-line spin"></i> Loading...</div>';
+
+    try {
+        const res = await fetch(`${BASE_URL}/api/admin/complaints`);
+        
+        if (!res.ok) throw new Error("Failed to fetch");
+        const complaints = await res.json();
+        
+        if (complaints.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-muted);">No citizen reports found.</div>';
+            return;
+        }
+
+        // Render Cards
+        list.innerHTML = complaints.map(c => {
+            const ward = wards.find(w => w.id === c.ward_id);
+            const wardName = ward ? ward.name : `Ward ${c.ward_id}`;
+            const timeStr = c.timestamp ? new Date(c.timestamp).toLocaleString() : "Unknown Time";
+            
+            // Image handling (Show link or Placeholder)
+            const imgHtml = c.image_url 
+                ? `<img src="${c.image_url}" class="complaint-img" onclick="window.open(this.src, '_blank')" title="View Full Image">`
+                : `<div style="color:#555; font-size:0.75rem; text-align:center; padding:1rem; display:flex; flex-direction:column; align-items:center; gap:4px;"><i class="ri-image-line" style="font-size:1.5rem"></i>No Photo</div>`;
+
+            return `
+                <div class="complaint-card">
+                    <div class="complaint-img-box">
+                        ${imgHtml}
+                    </div>
+                    <div class="complaint-info">
+                        <div class="complaint-header">
+                            <span class="complaint-badge ${c.severity || 'Low'}">${c.severity || 'Normal'} Priority</span>
+                            <span class="complaint-time">${timeStr}</span>
+                        </div>
+                        <div class="complaint-desc">
+                            ${c.description || "No description provided."}
+                        </div>
+                        <div class="complaint-loc">
+                            <i class="ri-map-pin-line"></i> ${wardName}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error(err);
+        list.innerHTML = '<div style="text-align:center; color:var(--risk-high);">Failed to load complaints. <br><span style="font-size:0.8em">Ensure backend is running.</span></div>';
+    }
+};
+
+window.closeComplaintsModal = function() {
+    const modal = document.getElementById('complaintsModal');
+    modal.classList.remove('active');
+    // Wait for transition to finish before hiding
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+};
 
 // =====================
 // 10. TOAST & LOGOUT

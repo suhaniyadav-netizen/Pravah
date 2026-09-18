@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/admin.css">
 
   <script>
+    // Security Gatekeeper
     if (!sessionStorage.getItem('isLoggedIn')) {
         window.location.replace("login.html");
     }
@@ -39,8 +40,12 @@
               </a>
           </div>
           <div class="nav-links">
-              <button class="btn-ghost" onclick="ThemeSystem.toggle()" style="margin-right: 1rem;" aria-label="Toggle Theme">
+              <button class="btn-ghost" onclick="ThemeSystem.toggle()" style="margin-right: 0.5rem;" aria-label="Toggle Theme">
                   <i class="ri-sun-line" id="theme-icon" style="font-size: 1.2rem;"></i>
+              </button>
+
+              <button class="btn btn-hero" onclick="openComplaintsModal()" style="margin-right: 1rem; font-size: 0.85rem;">
+                  <i class="ri-file-list-3-line"></i> View Complaints
               </button>
 
               <a href="index.html" class="nav-link">
@@ -56,6 +61,7 @@
 
   <main>
     <div class="container">
+      
       <div class="page-title">
         <div class="page-title-label">
           <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i>
@@ -146,6 +152,7 @@
       </div>
 
       <div class="main-grid">
+        
         <div class="left-column">
           <div class="card">
             <div class="card-header">
@@ -293,12 +300,31 @@
     </div>
   </main>
 
+  <div id="complaintsModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 style="display:flex; align-items:center; gap:8px;">
+              <i class="ri-alarm-warning-fill" style="color:var(--risk-high)"></i> Citizen Reports
+            </h3>
+            <button class="close-btn" onclick="closeComplaintsModal()">
+                <i class="ri-close-line" style="font-size:1.5rem;"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div id="complaintsList" class="complaints-grid">
+                <div class="loading-state" style="text-align:center; padding:2rem; color:var(--text-muted);">
+                    <i class="ri-loader-4-line spin"></i> Loading reports...
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
   <div class="toast-container" id="toast-container"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script src="js/common.js"></script>
-
   <script src="js/admin.js"></script>
 
 </body>

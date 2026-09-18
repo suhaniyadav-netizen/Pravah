@@ -7,6 +7,7 @@ class ComplaintCreate(BaseModel):
     severity: str  # Expected: "Low" | "Medium" | "High"
     description: Optional[str] = None
     timestamp: Optional[str] = None
+    image_url: Optional[str] = None
 
 class DrainageUpdate(BaseModel):
     """Payload for an admin drainage update."""

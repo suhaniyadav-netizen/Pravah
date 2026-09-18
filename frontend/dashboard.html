@@ -129,6 +129,14 @@
                         </label>
                     </div>
 
+                    <label class="form-label">Photo Evidence <span style="font-size:0.7em; color:var(--text-muted);">(Optional)</span></label>
+                    <div class="file-upload-wrapper" style="margin-bottom: 1.25rem;">
+                        <input type="file" id="complaintImage" accept="image/*" class="hidden-file-input" style="display:none;">
+                        <label for="complaintImage" class="custom-file-label" style="cursor:pointer; display:flex; align-items: center; gap:10px; padding:10px; border:1px dashed var(--border); background: var(--input-bg); border-radius:8px; color:var(--text-muted); transition: 0.2s;">
+                            <i class="ri-camera-line" style="font-size: 1.2rem; color: var(--primary);"></i>
+                            <span id="fileName" style="font-size: 0.9rem;">Choose an image...</span>
+                        </label>
+                    </div>
                     <label class="form-label">Description (Optional)</label>
                     <textarea id="description" class="custom-textarea" rows="2" placeholder="Describe the situation..."></textarea>
                     
@@ -137,32 +145,13 @@
                     </button>
                 </form>
             </div>
-
-            <div class="stats-list-card">
-                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 0.1rem; padding-bottom: 0.1rem; border-bottom: 1px solid var(--border);">
-                    <i class="ri-bar-chart-box-line" style="color: #14b8a6;"></i>
-                    <h3 style="font-size: 0.95rem; color: var(--text-main); font-weight: 600;">Quick Statistics</h3>
-                </div>
-                
-                <div class="stats-scroll-container">
-                    <div id="wardList">
-                        <div class="quick-stat-row">
-                            <span style="color: var(--text-muted);">Low Risk Wards</span>
-                            <span style="color: #4ade80; font-weight: 300;">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 0.25rem; padding-top: 0.5rem; border-top: 1px solid var(--border); font-size: 0.65rem; color: var(--text-muted); text-align: right;">
-                    Last updated: <span id="lastUpdated">Just now</span>
-                </div>
-            </div>
         </div>
     </div>
 
     <div style="height: 0.1rem;"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
     <script src="js/common.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/complaints.js"></script>

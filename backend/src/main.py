@@ -24,7 +24,7 @@ def startup_event():
     """Loads CSVs into memory and precomputes risk scores."""
     print("🚀 System Booting...")
     data = load_initial_data()
-    print(f"✅ Loaded {len(data)} Wards into Memory from CSVs.")
+    print(f" Loaded {len(data)} Wards into Memory from CSVs.")
 
 @app.get("/")
 def root():

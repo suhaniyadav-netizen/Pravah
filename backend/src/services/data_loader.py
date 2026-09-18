@@ -107,7 +107,8 @@ def load_complaints_csv(path):
                     ward_id=row['ward_id'],
                     severity=row['severity'],
                     description=row.get('description', ''),
-                    timestamp=row.get('timestamp')
+                    timestamp=row.get('timestamp'),
+                    image_url=row.get('image_url') # ✅ Load image URL from CSV
                 )
                 DB_COMPLAINTS.append(complaint)
     except Exception as e:
@@ -138,13 +139,16 @@ def save_complaint_to_csv(complaint: ComplaintCreate):
             
         writer = csv.writer(f)
         if not file_exists:
-            writer.writerow(['ward_id', 'severity', 'description', 'timestamp'])
+            # ✅ Header now includes image_url
+            writer.writerow(['ward_id', 'severity', 'description', 'timestamp', 'image_url'])
         
+        # ✅ Row now includes image_url
         writer.writerow([
             complaint.ward_id, 
             complaint.severity, 
             complaint.description, 
-            complaint.timestamp
+            complaint.timestamp,
+            complaint.image_url
         ])
     
     # Update Memory and Recalculate
