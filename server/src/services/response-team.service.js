@@ -172,6 +172,22 @@ async function assignTeamToIncident({ incidentId, responseTeamId, notes = '', ac
     if (memTeam) memTeam.status = 'DISPATCHED';
   }
 
+  // Real-time broadcast
+  try {
+    const { broadcastTeamDispatched } = require('../config/socket');
+    broadcastTeamDispatched({
+      assignmentId: assignment.id,
+      teamId: team.id,
+      teamName: team.name,
+      incidentId,
+      wardId: 'W056',
+      status: 'DISPATCHED',
+      timestamp: new Date().toISOString(),
+    });
+  } catch {
+    // Socket broadcast non-fatal
+  }
+
   return {
     assignment,
     teamStatus: 'DISPATCHED',

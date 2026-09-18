@@ -94,6 +94,22 @@ async function createComplaint({
     MEMORY_COMPLAINTS.unshift(createdComplaint);
   }
 
+  // Real-time broadcast
+  try {
+    const { broadcastNewComplaint } = require('../config/socket');
+    broadcastNewComplaint({
+      id: createdComplaint.id,
+      wardId: ward.wardCode || ward.id,
+      severity: createdComplaint.severity,
+      address: createdComplaint.address || '',
+      waterDepthCm: createdComplaint.waterDepthCm || 0,
+      status: createdComplaint.status || 'SUBMITTED',
+      timestamp: createdComplaint.createdAt,
+    });
+  } catch {
+    // Socket broadcast non-fatal if offline
+  }
+
   return {
     ...createdComplaint,
     assignedWard: {
@@ -234,6 +250,22 @@ async function createIncident({
     MEMORY_INCIDENTS.unshift(incident);
   }
 
+  // Real-time broadcast
+  try {
+    const { broadcastIncidentCreated } = require('../config/socket');
+    broadcastIncidentCreated({
+      id: incident.id,
+      wardId: incident.wardId || 'W056',
+      title: description || 'Severe Waterlogging Incident',
+      severity: incident.severity,
+      status: incident.status,
+      waterDepthCm: incident.waterDepthCm || 0,
+      timestamp: incident.createdAt,
+    });
+  } catch {
+    // Socket broadcast non-fatal
+  }
+
   return incident;
 }
 
@@ -302,13 +334,29 @@ async function updateIncidentStatus(id, newStatus, actorUser) {
     }
   }
 
-  return {
+  const result = {
     id,
     previousStatus: currentStatus,
     newStatus,
     updatedBy: actorUser.email,
     updatedAt: now.toISOString(),
   };
+
+  try {
+    const { broadcastIncidentUpdated } = require('../config/socket');
+    broadcastIncidentUpdated({
+      id,
+      wardId: (incident && incident.wardId) || 'W056',
+      previousStatus: currentStatus,
+      newStatus,
+      updatedBy: actorUser.email,
+      timestamp: now.toISOString(),
+    });
+  } catch {
+    // Socket broadcast non-fatal
+  }
+
+  return result;
 }
 
 module.exports = {

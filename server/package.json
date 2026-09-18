@@ -16,7 +16,8 @@
     "verify:phase7": "node src/scripts/verify-phase7.js",
     "verify:phase8": "node src/scripts/verify-phase8.js",
     "verify:phase9": "node src/scripts/verify-phase9.js",
-    "verify:phase10": "node src/scripts/verify-phase10.js"
+    "verify:phase10": "node src/scripts/verify-phase10.js",
+    "verify:phase11": "node src/scripts/verify-phase11.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -27,6 +28,8 @@
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.3",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
