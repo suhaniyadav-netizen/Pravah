@@ -1,7 +1,9 @@
 // =====================
 // CONFIGURATION
 // =====================
-const IMGBB_API_KEY = "3c160e8872e502914dbb4568c01e3d19"; 
+// IMGBB_API_KEY must be supplied at runtime via window.APP_CONFIG (populated by a
+// non-committed config script). Never hardcode secrets in source control.
+const IMGBB_API_KEY = (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.IMGBB_API_KEY) || "";
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('complaintForm');
