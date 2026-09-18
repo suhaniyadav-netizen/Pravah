@@ -53,6 +53,7 @@ router.post('/', authenticate, authorize('ADMIN', 'RESPONSE_TEAM'), async (req, 
     res.status(201).json({
       message: 'Operational flood incident created successfully.',
       incident,
+      ...incident,
     });
   } catch (error) {
     next(error);

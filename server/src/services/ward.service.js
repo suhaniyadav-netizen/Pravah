@@ -165,7 +165,10 @@ async function searchWards(query) {
  * Resolves which ward contains a given GPS coordinate (lon, lat).
  */
 async function resolveWardFromPoint(lon, lat) {
-  validateCoordinates(lon, lat);
+  const coordCheck = validateCoordinates(lon, lat);
+  if (!coordCheck.isWithinDelhi) {
+    return null;
+  }
 
   try {
     const containingWard = await findWardByPoint(lon, lat);
