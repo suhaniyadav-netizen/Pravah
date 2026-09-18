@@ -1,0 +1,275 @@
+// ==============================================================================
+// Pravah V2 - Prisma Schema
+// Delhi Urban Flood & Waterlogging Risk Platform
+// ==============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis, uuid_ossp(map: "uuid-ossp")]
+}
+
+// ------------------------------------------------------------------------------
+// ENUMS
+// ------------------------------------------------------------------------------
+
+enum Role {
+  ADMIN
+  CITIZEN
+  RESPONSE_TEAM
+  ANALYST
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ComplaintStatus {
+  SUBMITTED
+  VERIFIED
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+enum IncidentStatus {
+  ACTIVE
+  INVESTIGATING
+  CONTAINED
+  RESOLVED
+}
+
+enum TeamStatus {
+  AVAILABLE
+  DISPATCHED
+  ON_SCENE
+  OFF_DUTY
+}
+
+enum AssignmentStatus {
+  DISPATCHED
+  EN_ROUTE
+  ON_SITE
+  COMPLETED
+  CANCELLED
+}
+
+enum RiskLevel {
+  LOW
+  MODERATE
+  HIGH
+  CRITICAL
+}
+
+enum InfrastructureType {
+  PUMP_STATION
+  DRAIN_OUTFALL
+  HOSPITAL
+  EMERGENCY_SHELTER
+  UNDERPASS
+}
+
+enum InfrastructureStatus {
+  OPERATIONAL
+  DEGRADED
+  OFFLINE
+}
+
+// ------------------------------------------------------------------------------
+// CORE ENTITIES
+// ------------------------------------------------------------------------------
+
+/// User authentication & accountability
+model User {
+  id           String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  email        String     @unique
+  passwordHash String     @map("password_hash")
+  name         String
+  role         Role       @default(CITIZEN)
+  isActive     Boolean    @default(true) @map("is_active")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  complaints   Complaint[]
+  auditLogs    AuditLog[]
+
+  @@map("users")
+}
+
+/// Municipal ward boundaries and baseline characteristics
+model Ward {
+  id                String                                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wardCode          String                                   @unique @map("ward_code")
+  wardName          String                                   @map("ward_name")
+  boundary          Unsupported("geometry(MultiPolygon, 4326)")?
+  drainageCapacity  Float                                    @default(0.0) @map("drainage_capacity")
+  populationDensity Float?                                   @map("population_density")
+  createdAt         DateTime                                 @default(now()) @map("created_at")
+  updatedAt         DateTime                                 @updatedAt @map("updated_at")
+
+  complaints        Complaint[]
+  incidents         Incident[]
+  riskSnapshots     RiskSnapshot[]
+  infrastructure    Infrastructure[]
+
+  @@map("wards")
+}
+
+/// Citizen-reported waterlogging complaints
+model Complaint {
+  id           String                                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wardId       String                                 @map("ward_id") @db.Uuid
+  reportedBy   String?                                @map("reported_by") @db.Uuid
+  location     Unsupported("geometry(Point, 4326)")
+  address      String?
+  description  String
+  severity     Severity                               @default(MEDIUM)
+  status       ComplaintStatus                        @default(SUBMITTED)
+  waterDepthCm Float?                                 @map("water_depth_cm")
+  createdAt    DateTime                               @default(now()) @map("created_at")
+  updatedAt    DateTime                               @updatedAt @map("updated_at")
+  resolvedAt   DateTime?                              @map("resolved_at")
+
+  ward         Ward                                   @relation(fields: [wardId], references: [id], onDelete: Restrict)
+  citizen      User?                                  @relation(fields: [reportedBy], references: [id], onDelete: SetNull)
+  incidents    Incident[]
+
+  @@index([wardId, status])
+  @@index([createdAt])
+  @@map("complaints")
+}
+
+/// Operational flood/waterlogging events managed by emergency response
+model Incident {
+  id                 String                                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wardId             String                                 @map("ward_id") @db.Uuid
+  primaryComplaintId String?                                @map("primary_complaint_id") @db.Uuid
+  location           Unsupported("geometry(Point, 4326)")
+  severity           Severity                               @default(MEDIUM)
+  status             IncidentStatus                         @default(ACTIVE)
+  waterDepthCm       Float?                                 @map("water_depth_cm")
+  description        String
+  createdAt          DateTime                               @default(now()) @map("created_at")
+  updatedAt          DateTime                               @updatedAt @map("updated_at")
+  resolvedAt         DateTime?                              @map("resolved_at")
+
+  ward               Ward                                   @relation(fields: [wardId], references: [id], onDelete: Restrict)
+  primaryComplaint   Complaint?                             @relation(fields: [primaryComplaintId], references: [id], onDelete: SetNull)
+  assignments        Assignment[]
+
+  @@index([wardId, status])
+  @@index([createdAt])
+  @@map("incidents")
+}
+
+/// Dedicated emergency response field teams
+model ResponseTeam {
+  id              String                                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name            String
+  status          TeamStatus                              @default(AVAILABLE)
+  contactPhone    String?                                 @map("contact_phone")
+  currentLocation Unsupported("geometry(Point, 4326)")?   @map("current_location")
+  createdAt       DateTime                                @default(now()) @map("created_at")
+  updatedAt       DateTime                                @updatedAt @map("updated_at")
+
+  assignments     Assignment[]
+
+  @@map("response_teams")
+}
+
+/// Assignment linking response teams to active incidents
+model Assignment {
+  id             String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  incidentId     String           @map("incident_id") @db.Uuid
+  responseTeamId String           @map("response_team_id") @db.Uuid
+  status         AssignmentStatus @default(DISPATCHED)
+  assignedAt     DateTime         @default(now()) @map("assigned_at")
+  startedAt      DateTime?        @map("started_at")
+  completedAt    DateTime?        @map("completed_at")
+  notes          String?
+
+  incident       Incident         @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  responseTeam   ResponseTeam     @relation(fields: [responseTeamId], references: [id], onDelete: Restrict)
+
+  @@index([incidentId, responseTeamId])
+  @@index([status])
+  @@map("assignments")
+}
+
+/// Historical ward risk calculations produced by the risk engine
+model RiskSnapshot {
+  id                  String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wardId              String    @map("ward_id") @db.Uuid
+  riskScore           Float     @map("risk_score")
+  riskLevel           RiskLevel @map("risk_level")
+  drainageComponent   Float     @map("drainage_component")
+  rainfallComponent   Float     @map("rainfall_component")
+  complaintComponent  Float     @map("complaint_component")
+  waterLevelComponent Float?    @map("water_level_component")
+  calculatedAt        DateTime  @default(now()) @map("calculated_at")
+
+  ward                Ward      @relation(fields: [wardId], references: [id], onDelete: Cascade)
+
+  @@index([wardId, calculatedAt(sort: Desc)])
+  @@map("risk_snapshots")
+}
+
+/// Normalized weather time-series records
+model WeatherObservation {
+  id                       String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  source                   String   @default("Open-Meteo")
+  stationName              String?  @map("station_name")
+  rainfallMm               Float    @map("rainfall_mm")
+  precipitationProbability Float?   @map("precipitation_probability")
+  temperatureC             Float?   @map("temperature_c")
+  observedAt               DateTime @map("observed_at")
+  fetchedAt                DateTime @default(now()) @map("fetched_at")
+
+  @@index([observedAt(sort: Desc)])
+  @@map("weather_observations")
+}
+
+/// Flood-critical urban infrastructure assets
+model Infrastructure {
+  id            String                                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wardId        String?                                @map("ward_id") @db.Uuid
+  type          InfrastructureType
+  name          String
+  location      Unsupported("geometry(Point, 4326)")
+  capacityValue Float?                                 @map("capacity_value")
+  status        InfrastructureStatus                   @default(OPERATIONAL)
+  metadata      Json?
+  createdAt     DateTime                               @default(now()) @map("created_at")
+  updatedAt     DateTime                               @updatedAt @map("updated_at")
+
+  ward          Ward?                                  @relation(fields: [wardId], references: [id], onDelete: SetNull)
+
+  @@index([wardId, type])
+  @@map("infrastructure")
+}
+
+/// Audit trail for administrative, operational, and system actions
+model AuditLog {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  actorUserId String?  @map("actor_user_id") @db.Uuid
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String?  @map("entity_id")
+  details     Json?
+  ipAddress   String?  @map("ip_address")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  actor       User?    @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
