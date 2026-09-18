@@ -187,3 +187,41 @@ Pravah V2 incorporates multi-layered defensive controls:
    - Strict Zod schema boundaries enforce coordinate bounds, enum values, and string constraints.
 5. **Audit Logging**:
    - Immutable security audit logs capture administrator ID, action type, IP address, and timestamp on all state modifications.
+
+---
+
+## 6. Client Application Architecture (`client/`)
+
+The primary frontend client is built with **React, Vite, Tailwind CSS, Leaflet.js, and Recharts**, fulfilling the complete UI roadmap outlined in `plan.md`:
+
+```
+client/
+├── src/
+│   ├── components/
+│   │   ├── Navbar.jsx          # Real-time WebSocket connection pill + weather indicator
+│   │   └── WardMap.jsx         # Leaflet GeoJSON layer, dynamic risk color fills & pulse markers
+│   ├── pages/
+│   │   ├── CitizenPortal.jsx   # Geotagged waterlogging form + live complaint feed
+│   │   ├── Dashboard.jsx       # 5 KPI cards + interactive ward map + Recharts risk surge curves
+│   │   ├── WardDetail.jsx      # Mathematical risk decomposition + multi-horizon forecast bars
+│   │   ├── IncidentCommand.jsx # Incident lifecycle management + "What Should City Do Now?" dispatch
+│   │   ├── Simulator.jsx       # Interactive sandbox (pumps, rainfall, desilting) with live ΔRisk
+│   │   ├── Analytics.jsx       # 14-day rainfall-complaint correlation + hotspot export
+│   │   └── AdminPortal.jsx     # RBAC login + drainage capacity slider + audit logs
+│   ├── services/
+│   │   ├── api.js              # Centralized fetch client attaching JWT Bearer token
+│   │   └── socket.js           # Socket.IO client listening for mutations
+│   ├── App.jsx                 # React Router routing table
+│   ├── main.jsx
+│   └── index.css               # Tailwind directives & flood pulse animations
+├── tailwind.config.js          # Dark theme palette & custom risk colors
+└── vite.config.js              # Vite proxy routing /api and /socket.io to backend on port 5000
+```
+
+### Running the Client
+```powershell
+cd client
+npm run dev        # Launches Vite development server on http://localhost:5173
+npm run build      # Compiles production bundle in client/dist/
+```
+

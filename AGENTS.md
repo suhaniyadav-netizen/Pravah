@@ -25,7 +25,17 @@ npm test                  # Phase 14 Master Reliability & Failure Suite (19/19 c
 npm run verify:phase15    # Phase 15 Client Integration Suite (8/8 checks)
 ```
 
-### Frontend (static files in `frontend/`)
+### Frontend Clients
+
+#### A. Modern React + Vite Client (`client/`)
+```powershell
+cd client
+npm install
+npm run dev        # Launches on http://localhost:5173 (proxies /api to port 5000)
+npm run build      # Verifies production build
+```
+
+#### B. Legacy Static Files (`frontend/`)
 Open `frontend/index.html` via VS Code Live Server or double-click.
 `frontend/js/common.js` automatically detects `http://localhost:5000` for local development and falls back to production when hosted.
 

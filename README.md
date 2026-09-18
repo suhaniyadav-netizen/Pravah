@@ -149,8 +149,25 @@ npm test
 npm run verify:phase15
 ```
 
-### 3. Frontend Client
-Simply open `frontend/index.html`, `frontend/dashboard.html`, or `frontend/admin.html` in your browser (or use VS Code Live Server). The client automatically connects to the Pravah V2 backend at `http://localhost:5000`.
+### 3. Frontend Clients
+
+#### A. Modern React + Vite Client (`client/`)
+```powershell
+# Navigate to modern client
+cd client
+
+# Install dependencies
+npm install
+
+# Start Vite dev server on port 5173 (with proxy to port 5000)
+npm run dev
+
+# Or build production bundle
+npm run build
+```
+
+#### B. Legacy Static Client (`frontend/`)
+Alternatively, open `frontend/index.html` via VS Code Live Server or double-click. `frontend/js/common.js` automatically routes requests to `http://localhost:5000`.
 
 **Default Demo Credentials:**
 - **Administrator**: `admin@pravah.delhi.gov.in` (Password: `PravahDev@2026`) or `admin` / `admin123`
