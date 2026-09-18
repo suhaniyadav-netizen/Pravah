@@ -10,6 +10,7 @@ const helmet = require('helmet');
 const authRoutes = require('./routes/auth.routes');
 const rbacRoutes = require('./routes/rbac-test.routes');
 const wardRoutes = require('./routes/ward.routes');
+const riskRoutes = require('./routes/risk.routes');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/test-rbac', rbacRoutes);
 app.use('/api/wards', wardRoutes);
+app.use('/api/risk', riskRoutes);
 
 // 404 Handler
 app.use((req, res) => {
