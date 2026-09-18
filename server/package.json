@@ -8,11 +8,15 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
     "pg": "^8.13.3"
   },
   "devDependencies": {
     "prisma": "^5.22.0"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "engines": {
     "node": ">=18.0.0"
