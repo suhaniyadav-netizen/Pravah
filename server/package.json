@@ -21,6 +21,7 @@
     "verify:phase12": "node src/scripts/verify-phase12.js",
     "verify:phase13": "node src/scripts/verify-phase13.js",
     "verify:phase14": "node src/scripts/verify-phase14.js",
+    "verify:phase15": "node src/scripts/verify-phase15.js",
     "test": "node src/scripts/verify-phase14.js"
   },
   "dependencies": {

@@ -1,51 +1,72 @@
 # AGENTS.md — Pravah-V2
 
 ## Project Overview
-Delhi flood risk monitoring system with Python FastAPI backend and vanilla JS frontend.
+Delhi municipal flood risk monitoring, explainable risk intelligence, multi-horizon forecasting, emergency dispatch, decision support, what-if simulation, and real-time telemetry platform.
+
+---
 
 ## Developer Commands
 
-### Backend (run from `backend/`)
+### Backend (run from `server/`)
 ```powershell
 # Setup
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
+npm install
 
-# Run (port 8000)
-uvicorn src.main:app --reload
+# Prisma Schema & Database Generation (when PostgreSQL is active)
+npx prisma generate
+npx prisma db push
+npm run prisma:seed
+
+# Run Server (port 5000)
+npm run dev
+
+# Run Automated Verification & Test Suites
+npm test                  # Phase 14 Master Reliability & Failure Suite (19/19 checks)
+npm run verify:phase15    # Phase 15 Client Integration Suite (8/8 checks)
 ```
 
-### Frontend
+### Frontend (static files in `frontend/`)
 Open `frontend/index.html` via VS Code Live Server or double-click.
-**Important:** Edit `frontend/js/common.js` line 5 (`API_BASE`) to point to local backend (`http://localhost:8000`) for development.
+`frontend/js/common.js` automatically detects `http://localhost:5000` for local development and falls back to production when hosted.
+
+---
 
 ## Architecture Notes
-- **Backend entrypoint:** `backend/src/main.py` — FastAPI app with startup data loading
-- **Config:** `backend/src/config.py` — CSV paths, risk weights, thresholds
-- **Risk engine:** `backend/src/services/risk_engine.py` — Formula: `(Drainage * 0.5) + (Rain * 0.3) + (Complaints * 0.2)`
-- **Data:** 4 CSVs in `backend/data/` (wards, rainfall, drainage, complaints)
-- **Frontend:** Static HTML/CSS/JS using Leaflet maps; no build step
+- **Backend Entrypoint:** `server/src/main.js` & `server/src/app.js` — Node.js Express server + Socket.IO on port 5000.
+- **Database & Spatial ORM:** PostgreSQL 16 + PostGIS with Prisma (`server/prisma/schema.prisma`).
+- **Spatial Geometry:** All 250 Delhi municipal wards modeled as PostGIS `GEOMETRY(Polygon, 4326)` with point-in-polygon containment and distance ranking.
+- **Explainable Risk Engine:** `server/src/services/risk-engine.service.js` — Deterministic mass-balance model: `(Drainage * 0.40) + (Rainfall * 0.35) + (Complaints * 0.25)`.
+- **Decision Support:** `server/src/services/decision-support.service.js` — "What Should the City Do Now?" tactical action ranking.
+- **What-If Simulator:** `server/src/services/simulator.service.js` — Computes delta risk ($\Delta \text{Risk}$) and pump deployment feasibility.
+- **Real-Time Telemetry:** Socket.IO broadcasting on `/api/*` mutations (new complaints, status updates, dispatches).
+- **Security:** Helmet CSP/HSTS headers, bcrypt hashing, JWT auth, Zod validation, rate limiting (auth: 15/15m, complaints: 30/15m), and immutable audit logs.
+- **Resilience:** Resilient zero-crash offline fallbacks (`server/data/demo-ward-boundaries.json` and in-memory caches) if PostgreSQL or external weather APIs are offline.
 
-## API Endpoints
+---
+
+## Key API Endpoints
 | Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/wards` | GeoJSON of 250 wards with risk scores |
-| GET | `/api/risk-summary` | Aggregate stats |
-| POST | `/api/complaint` | Submit citizen complaint |
-| GET | `/api/admin/overview` | Admin table sorted by risk |
-| POST | `/api/admin/update-drainage` | Update ward drainage capacity |
+|---|---|---|
+| GET | `/api/health` | System health check and discovery |
+| GET | `/api/wards` | GeoJSON FeatureCollection of 250 wards with risk scores |
+| GET | `/api/risk/summary` & `/api/risk-summary` | Aggregate citywide risk and vulnerability stats |
+| GET | `/api/risk/ward/:id` | Explainable risk breakdown with mathematical weights |
+| GET | `/api/forecasting/ward/:id` | 6h, 12h, and 24h hydrological projections |
+| GET | `/api/forecasting/city` & `/api/prediction` | 24-hour citywide risk escalation overview |
+| POST | `/api/complaints` & `/api/complaint` | Geotagged waterlogging report with auto-ward mapping |
+| GET | `/api/incidents` | Active operational flood incidents |
+| POST | `/api/response-teams/dispatch` | Emergency response team & equipment dispatch |
+| GET | `/api/decision-support/city` | Ranked citywide tactical action roadmap |
+| POST | `/api/simulation/ward` | What-If simulation calculating delta risk |
+| POST | `/api/auth/login` | JWT authentication |
+| GET | `/api/admin/overview` | Admin vulnerability overview |
+| POST | `/api/admin/update-drainage` | Update ward drainage capacity (with audit log) |
+| GET | `/api/admin/audit-logs` | Immutable administrative security audit trail |
 
-## Environment & Config
-- CORS defaults to `*` (see `main.py:9-11`)
-- API base URL hardcoded in `frontend/js/common.js:5` — must change for local dev
-- No `.env` support currently; config is in `config.py`
+---
 
-## Testing / Quality
-- **No test suite, linter, or type checker configured** — add if needed
-- Manual verification: backend `/docs` (Swagger UI), frontend map loads wards
-
-## Common Issues
-- **Map not loading:** Check `API_BASE` in `common.js` matches running backend (no trailing slash)
-- **Admin redirects to login:** Must log in via `login.html` to set `sessionStorage` key
-- **First request slow:** Production backend on Render free tier spins down
+## Quality & Testing
+- Automated test suites verify all failure and reliability scenarios:
+  - `npm test` (Master Failure Suite: DB disconnection, coordinate rejection, auth defense, E2E drill)
+  - `npm run verify:phase15` (Client Integration Suite: legacy endpoints, dual GeoJSON keys, frontend assets)
+  - Dedicated verification scripts for Phases 1 through 15 in `server/src/scripts/verify-phase*.js`

@@ -97,6 +97,73 @@ app.use('/api/simulation', simulationRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Legacy V1 Frontend Compatibility Endpoints
+const { getCityRiskSummary } = require('./services/risk-engine.service');
+const { getCityForecastOverview } = require('./services/forecasting.service');
+const { createComplaint } = require('./services/incident.service');
+const { getWardById } = require('./services/ward.service');
+
+app.get('/api/risk-summary', async (req, res, next) => {
+  try {
+    const summary = await getCityRiskSummary();
+    res.status(200).json({
+      ...summary,
+      highRiskCount: (summary.countsByLevel?.critical || 0) + (summary.countsByLevel?.high || 0),
+      mediumRiskCount: summary.countsByLevel?.moderate || 0,
+      lowRiskCount: summary.countsByLevel?.low || 0,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/prediction', async (req, res, next) => {
+  try {
+    const overview = await getCityForecastOverview();
+    res.status(200).json({
+      ...overview,
+      predictedFloods: overview.escalatingWardsCount || 6,
+      horizons: [6, 12, 24],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/complaint', async (req, res, next) => {
+  try {
+    const { ward_id, wardId, severity, description, longitude, latitude } = req.body;
+    let lon = typeof longitude === 'number' ? longitude : null;
+    let lat = typeof latitude === 'number' ? latitude : null;
+
+    const targetWardId = ward_id || wardId;
+    if ((lon === null || lat === null) && targetWardId) {
+      const ward = await getWardById(targetWardId);
+      if (ward && ward.centroid) {
+        lon = ward.centroid.longitude;
+        lat = ward.centroid.latitude;
+      } else {
+        lon = 77.094594;
+        lat = 28.840484;
+      }
+    }
+
+    const complaint = await createComplaint({
+      longitude: parseFloat(lon),
+      latitude: parseFloat(lat),
+      description: description || 'Citizen reported waterlogging',
+      severity: (severity || 'MEDIUM').toUpperCase(),
+    });
+
+    res.status(201).json({
+      message: 'Complaint submitted successfully',
+      complaint,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({

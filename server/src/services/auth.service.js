@@ -13,7 +13,16 @@ const jwtConfig = require('../config/jwt.config');
 
 // In-memory fallback users for development testing when PostgreSQL is offline
 const DEMO_PASSWORD_HASH = bcrypt.hashSync('PravahDev@2026', 10);
+const DEMO_ADMIN123_HASH = bcrypt.hashSync('admin123', 10);
 const MEMORY_USERS = [
+  {
+    id: '00000000-0000-4000-a000-000000000001',
+    email: 'admin',
+    passwordHash: DEMO_ADMIN123_HASH,
+    name: 'Municipal Administrator',
+    role: 'ADMIN',
+    isActive: true,
+  },
   {
     id: '11111111-1111-4111-a111-111111111111',
     email: 'admin@pravah.delhi.gov.in',

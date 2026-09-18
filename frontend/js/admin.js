@@ -52,7 +52,9 @@ async function loadDashboardData() {
         }
 
         // B. Fetch Admin Overview (Table & List Data)
-        const adminRes = await fetch(`${BASE_URL}/api/admin/overview`);
+        const token = sessionStorage.getItem('token');
+        const adminHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const adminRes = await fetch(`${BASE_URL}/api/admin/overview`, { headers: adminHeaders });
         if(adminRes.ok) {
             const adminData = await adminRes.json();
             wards = adminData.wards; 
@@ -432,9 +434,13 @@ window.handleDrainageSubmit = async function(e) {
   btn.innerHTML = '<div class="spinner"></div> Updating...';
 
   try {
+      const token = sessionStorage.getItem('token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const response = await fetch(`${BASE_URL}/api/admin/update-drainage`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify({
               ward_id: wardId,
               drainage_capacity: drainageCapacity,

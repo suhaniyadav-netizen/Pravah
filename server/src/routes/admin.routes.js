@@ -13,11 +13,35 @@ const prisma = require('../config/prisma');
 
 const router = express.Router();
 
-const updateDrainageSchema = z.object({
-  wardId: z.string().min(1),
-  drainageCapacity: z.number().min(5).max(100),
-  reason: z.string().optional().default('Routine municipal desilting adjustment'),
-});
+const updateDrainageSchema = z
+  .object({
+    wardId: z.string().optional(),
+    ward_id: z.string().optional(),
+    drainageCapacity: z.number().optional(),
+    drainage_capacity: z.number().optional(),
+    reason: z.string().optional().default('Routine municipal desilting adjustment'),
+    is_cleaned: z.boolean().optional(),
+  })
+  .refine((data) => data.wardId || data.ward_id, {
+    message: 'wardId or ward_id is required',
+    path: ['wardId'],
+  })
+  .refine(
+    (data) => {
+      const cap = data.drainageCapacity ?? data.drainage_capacity;
+      return typeof cap === 'number' && cap >= 5 && cap <= 100;
+    },
+    {
+      message: 'drainageCapacity must be a number between 5 and 100',
+      path: ['drainageCapacity'],
+    }
+  )
+  .transform((data) => ({
+    wardId: data.wardId || data.ward_id,
+    drainageCapacity: data.drainageCapacity ?? data.drainage_capacity,
+    reason: data.reason || 'Routine municipal desilting adjustment',
+    isCleaned: data.is_cleaned,
+  }));
 
 /**
  * GET /api/admin/overview
@@ -114,7 +138,10 @@ router.post('/update-drainage', authenticate, authorize('ADMIN'), async (req, re
       message: `Drainage capacity for Ward '${ward.wardName}' updated from ${previousCapacity} to ${drainageCapacity} m³/s.`,
       wardId: ward.id,
       wardCode: ward.wardCode,
+      drainageCapacity,
+      drainage_capacity: drainageCapacity,
       newDrainageCapacity: drainageCapacity,
+      previousCapacity,
       updatedBy: req.user.email,
       timestamp: new Date().toISOString(),
     });
