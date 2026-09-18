@@ -248,9 +248,21 @@ async function getWardById(id) {
   }
 
   const demoCollection = getCachedDemoGeoJSON();
-  const matched = demoCollection.features.find(
-    (f) => f.properties.ward_code === id || f.id === id
-  );
+  const cleanId = id ? String(id).trim().toUpperCase() : '';
+  const numMatch = cleanId.match(/\d+/);
+  const standardCode = numMatch
+    ? `W${String(parseInt(numMatch[0], 10)).padStart(3, '0')}`
+    : null;
+
+  const matched = demoCollection.features.find((f) => {
+    const wc = f.properties.ward_code ? String(f.properties.ward_code).toUpperCase() : '';
+    return (
+      wc === cleanId ||
+      (standardCode && wc === standardCode) ||
+      f.id === id ||
+      (f.properties.ward_name && f.properties.ward_name.toUpperCase() === cleanId)
+    );
+  });
 
   if (!matched) return null;
 
