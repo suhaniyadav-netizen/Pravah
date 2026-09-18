@@ -12,6 +12,7 @@ const rbacRoutes = require('./routes/rbac-test.routes');
 const wardRoutes = require('./routes/ward.routes');
 const riskRoutes = require('./routes/risk.routes');
 const weatherRoutes = require('./routes/weather.routes');
+const forecastingRoutes = require('./routes/forecasting.routes');
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/api/test-rbac', rbacRoutes);
 app.use('/api/wards', wardRoutes);
 app.use('/api/risk', riskRoutes);
 app.use('/api/weather', weatherRoutes);
+app.use('/api/forecasting', forecastingRoutes);
 
 // 404 Handler
 app.use((req, res) => {
