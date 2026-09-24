@@ -8,45 +8,156 @@
   }
 }
 
-/* Custom Leaflet Dark Mode & Pulse Animations */
+/* =========================================================
+   Page Transitions
+   ========================================================= */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageFadeIn 0.35s ease-out forwards;
+}
+
+/* =========================================================
+   Floating Orb Animation (Landing Page)
+   ========================================================= */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-22px); }
+}
+
+/* =========================================================
+   Stat Number Subtle Pulse
+   ========================================================= */
+@keyframes statPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.82; }
+}
+.stat-live {
+  animation: statPulse 3.5s ease-in-out infinite;
+}
+
+/* =========================================================
+   Glass Card Hover Lift
+   ========================================================= */
+.glass-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.glass-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+/* =========================================================
+   Inline Risk Badge Variants
+   ========================================================= */
+.risk-critical { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3);  border-radius: 0.5rem; }
+.risk-high     { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); border-radius: 0.5rem; }
+.risk-moderate { background: rgba(234,179,8,0.15);  color: #fbbf24; border: 1px solid rgba(234,179,8,0.3);  border-radius: 0.5rem; }
+.risk-low      { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3);  border-radius: 0.5rem; }
+
+/* =========================================================
+   Dark Input Base
+   ========================================================= */
+.input-dark {
+  background: rgba(2, 6, 23, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  width: 100%;
+}
+.input-dark:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+}
+.input-dark::placeholder {
+  color: #475569;
+}
+
+/* =========================================================
+   Leaflet Dark Mode
+   ========================================================= */
 .leaflet-container {
   background: #090d16 !important;
   font-family: inherit;
 }
-
 .leaflet-control-zoom {
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(15, 23, 42, 0.8) !important;
+  background: rgba(15, 23, 42, 0.85) !important;
   backdrop-filter: blur(8px);
 }
-
 .leaflet-control-zoom a {
   background: transparent !important;
   color: #94a3b8 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
-
 .leaflet-control-zoom a:hover {
   color: #38bdf8 !important;
 }
 
-/* Pulse animation for high-risk flood hotspots */
+/* =========================================================
+   Pulse animation for high-risk flood hotspots
+   ========================================================= */
 @keyframes floodPulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-  }
-  70% {
-    transform: scale(1.1);
-    box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-  }
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70%  { transform: scale(1.1);  box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
-
 .ward-pulse-marker {
   border-radius: 50%;
   animation: floodPulse 2s infinite;
+}
+
+/* =========================================================
+   Dark Leaflet Popup
+   ========================================================= */
+.dark-leaflet-popup .leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.97) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.5) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(14px) !important;
+  color: #f8fafc !important;
+  padding: 4px !important;
+}
+.dark-leaflet-popup .leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.97) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+}
+.dark-leaflet-popup a.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  padding: 6px 8px !important;
+}
+.dark-leaflet-popup a.leaflet-popup-close-button:hover {
+  color: #38bdf8 !important;
+}
+
+/* =========================================================
+   Custom Sleek Scrollbar
+   ========================================================= */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+/* =========================================================
+   Premium Glassmorphism Utilities
+   ========================================================= */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(2,6,23,0.88) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+}
+.glass-panel-glow {
+  background: linear-gradient(135deg, rgba(15,23,42,0.82) 0%, rgba(2,6,23,0.92) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 28px -5px rgba(14, 165, 233, 0.15);
 }

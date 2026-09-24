@@ -55,7 +55,9 @@ app.use(
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || '*',
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+      : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
@@ -179,14 +181,29 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 
   // Sanitize internal database/password strings from error message
   let cleanMessage = err.message || 'An unexpected error occurred.';
-  if (cleanMessage.includes('password') || cleanMessage.includes('postgresql://')) {
-    cleanMessage = 'Database service error. Please contact system administrator.';
+  const SENSITIVE_PATTERNS = ['password', 'postgresql://', 'prisma', 'database', 'PrismaClient', 'stack'];
+  const isSensitive = SENSITIVE_PATTERNS.some((p) => cleanMessage.toLowerCase().includes(p.toLowerCase()));
+
+  if (isSensitive || statusCode === 500) {
+    if (isProd || isSensitive) {
+      cleanMessage = statusCode === 500
+        ? 'An internal server error occurred. Please contact system administrator.'
+        : cleanMessage;
+    }
   }
 
-  res.status(statusCode).json({
+  // Never leak stack traces
+  const response = {
     error: err.name || 'InternalServerError',
     message: cleanMessage,
-  });
+  };
+
+  // Only include stack in explicit development mode
+  if (!isProd && process.env.DEBUG_STACK === 'true' && err.stack) {
+    response.stack = err.stack;
+  }
+
+  res.status(statusCode).json(response);
 });
 
 module.exports = app;

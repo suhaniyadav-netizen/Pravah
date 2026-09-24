@@ -7,6 +7,10 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
         pravah: {
           50: '#f0f9ff',
@@ -28,6 +32,11 @@ export default {
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in': 'pageFadeIn 0.4s ease-out',
+        'float': 'float 6s ease-in-out infinite',
+      },
+      backdropBlur: {
+        xs: '2px',
       }
     },
   },

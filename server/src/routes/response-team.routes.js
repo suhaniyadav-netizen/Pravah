@@ -160,6 +160,36 @@ router.post('/assignments', authenticate, authorize('ADMIN', 'RESPONSE_TEAM'), a
 });
 
 /**
+ * POST /api/response-teams/dispatch
+ * Protected (ADMIN, RESPONSE_TEAM): Dispatching teams from IncidentCommand UI.
+ */
+router.post('/dispatch', authenticate, authorize('ADMIN', 'RESPONSE_TEAM'), async (req, res, next) => {
+  try {
+    const incidentId = req.body.incidentId;
+    const responseTeamId = req.body.teamId || req.body.responseTeamId;
+    const notes = req.body.notes || (req.body.equipmentType ? `Equipment: ${req.body.equipmentType}` : 'Emergency dispatch');
+
+    if (!incidentId || !responseTeamId) {
+      return res.status(400).json({
+        error: 'Validation Error',
+        message: 'incidentId and teamId are required for dispatch.',
+      });
+    }
+
+    const result = await assignTeamToIncident({
+      incidentId,
+      responseTeamId,
+      notes,
+      actorUser: req.user,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * PATCH /api/response-teams/assignments/:id/status
  * Protected (ADMIN, RESPONSE_TEAM): Updates assignment progress and synchronizes team status.
  */

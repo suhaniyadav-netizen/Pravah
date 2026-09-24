@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Lock, Shield, Sliders, History, LogOut, CheckCircle2, AlertTriangle, Key } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Lock, Shield, Sliders, History, LogOut, AlertTriangle } from 'lucide-react';
 import { login, getAdminOverview, updateDrainageCapacity, getAuditLogs } from '../services/api';
 
 export default function AdminPortal() {
   const [token, setToken] = useState(sessionStorage.getItem('token') || '');
-  const [currentUser, setCurrentUser] = useState(null);
 
   // Login state
   const [username, setUsername] = useState('admin');
@@ -18,21 +17,21 @@ export default function AdminPortal() {
   const [auditLogs, setAuditLogs] = useState([]);
   const [actionSuccess, setActionSuccess] = useState(null);
 
-  useEffect(() => {
-    if (token) {
-      loadAdminData();
-    }
-  }, [token]);
-
-  const loadAdminData = () => {
+  const loadAdminData = useCallback(() => {
     getAdminOverview()
       .then((data) => setWards(data.wards || []))
       .catch((err) => console.error(err));
 
     getAuditLogs()
-      .then((data) => setAuditLogs(data.logs || []))
+      .then((data) => setAuditLogs(data.auditLogs || data.logs || []))
       .catch((err) => console.error(err));
-  };
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      loadAdminData();
+    }
+  }, [token, loadAdminData]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,8 +71,8 @@ export default function AdminPortal() {
 
   if (!token) {
     return (
-      <div className="max-w-md mx-auto px-4 py-20">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+      <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 page-enter">
+        <div className="w-full max-w-md glass-panel border border-slate-800/80 rounded-3xl p-8 shadow-2xl">
           <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center mx-auto mb-4">
             <Lock className="w-6 h-6" />
           </div>
@@ -129,7 +128,7 @@ export default function AdminPortal() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 page-enter">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -159,7 +158,7 @@ export default function AdminPortal() {
       {/* Operations Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Drainage Update Form */}
-        <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div className="lg:col-span-5 glass-panel border border-slate-800/80 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center space-x-2 mb-4 pb-3 border-b border-slate-800">
             <Sliders className="w-5 h-5 text-cyan-400" />
             <h3 className="text-base font-bold text-white">Adjust Ward Drainage Capacity</h3>
@@ -209,7 +208,7 @@ export default function AdminPortal() {
         </div>
 
         {/* Security Audit Trail */}
-        <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div className="lg:col-span-7 glass-panel border border-slate-800/80 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center space-x-2 mb-4 pb-3 border-b border-slate-800">
             <History className="w-5 h-5 text-amber-400" />
             <h3 className="text-base font-bold text-white">Immutable Administrative Audit Log</h3>

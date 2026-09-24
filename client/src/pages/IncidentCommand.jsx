@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ShieldAlert, Users, Truck, AlertCircle, CheckCircle2, ChevronRight, MapPin, Send } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ShieldAlert, MapPin, Send } from 'lucide-react';
 import { listIncidents, listResponseTeams, getCityTacticalPlan, dispatchResponseTeam } from '../services/api';
 import { subscribeToTelemetry } from '../services/socket';
 
@@ -10,7 +10,19 @@ export default function IncidentCommand() {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [selectedTeamId, setSelectedTeamId] = useState('');
   const [dispatchStatus, setDispatchStatus] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const loadData = useCallback(() => {
+    Promise.all([
+      listIncidents().catch(() => ({ incidents: [] })),
+      listResponseTeams().catch(() => ({ teams: [] })),
+      getCityTacticalPlan().catch(() => null),
+    ])
+      .then(([incData, teamData, plan]) => {
+        setIncidents(incData.incidents || []);
+        setTeams(teamData.teams || []);
+        setTacticalPlan(plan?.topActionPlan || plan?.cityTacticalRoadmap?.topInterventions || plan?.cityTacticalRoadmap || null);
+      });
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -23,21 +35,7 @@ export default function IncidentCommand() {
     ];
 
     return () => unsubs.forEach((fn) => fn && fn());
-  }, []);
-
-  const loadData = () => {
-    Promise.all([
-      listIncidents().catch(() => ({ incidents: [] })),
-      listResponseTeams().catch(() => ({ teams: [] })),
-      getCityTacticalPlan().catch(() => null),
-    ])
-      .then(([incData, teamData, plan]) => {
-        setIncidents(incData.incidents || []);
-        setTeams(teamData.teams || []);
-        setTacticalPlan(plan?.cityTacticalRoadmap || null);
-      })
-      .finally(() => setLoading(false));
-  };
+  }, [loadData]);
 
   const handleDispatch = async (e) => {
     e.preventDefault();
@@ -58,8 +56,12 @@ export default function IncidentCommand() {
     }
   };
 
+  const roadmapItems = Array.isArray(tacticalPlan)
+    ? tacticalPlan
+    : (tacticalPlan?.topInterventions || tacticalPlan?.topActionPlan || []);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 page-enter">
       {/* Header */}
       <div>
         <div className="flex items-center space-x-2 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -80,21 +82,21 @@ export default function IncidentCommand() {
       )}
 
       {/* Top Tactical Actions Roadmap */}
-      {tacticalPlan && tacticalPlan.topInterventions && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+      {roadmapItems.length > 0 && (
+        <div className="glass-panel border border-slate-800/80 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
             <div>
               <h2 className="text-base font-bold text-white">Citywide Tactical Roadmap ("What Should the City Do Now?")</h2>
               <p className="text-xs text-slate-400">Ranked by risk reduction impact and resource feasibility</p>
             </div>
             <span className="text-xs font-bold px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
-              {tacticalPlan.topInterventions.length} Interventions
+              {roadmapItems.length} Interventions
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {tacticalPlan.topInterventions.slice(0, 3).map((item, idx) => (
-              <div key={idx} className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between">
+            {roadmapItems.slice(0, 3).map((item, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 flex flex-col justify-between glass-hover transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono font-bold text-cyan-400">Ward {item.wardCode}</span>
@@ -103,10 +105,10 @@ export default function IncidentCommand() {
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-white mb-1">{item.title}</h4>
-                  <p className="text-[11px] text-slate-400 mb-3">{item.description}</p>
+                  <p className="text-[11px] text-slate-400 mb-3">{item.description || item.reason}</p>
                 </div>
                 <div className="text-[10px] text-slate-500 border-t border-slate-800/80 pt-2 flex justify-between">
-                  <span>Impact: +{item.estimatedImpact?.riskReductionPoints || 15} pts</span>
+                  <span>Impact: +{item.expectedEffect?.projectedRiskScoreReduction || item.estimatedImpact?.riskReductionPoints || 15} pts</span>
                   <span>Est Cost: ₹{item.feasibility?.estimatedCostRupees || '15,000'}</span>
                 </div>
               </div>
@@ -118,7 +120,7 @@ export default function IncidentCommand() {
       {/* Active Incidents & Teams Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Active Incidents List */}
-        <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div className="lg:col-span-7 glass-panel border border-slate-800/80 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
             <h3 className="text-base font-bold text-white">Active Operational Incidents</h3>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold border border-rose-500/30">

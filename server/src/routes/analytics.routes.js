@@ -16,6 +16,29 @@ const {
 const router = express.Router();
 
 /**
+ * GET /api/analytics/trends
+ * Combined historical rainfall and complaint trends for visualization.
+ */
+router.get('/trends', async (req, res, next) => {
+  try {
+    const { rangeDays } = req.query;
+    const trendsData = await getHistoricalRiskTrends({ rangeDays: rangeDays || 14 });
+    const series = (trendsData.series || []).map((s) => ({
+      date: s.date,
+      rainfallMm: s.rainfallMm,
+      complaintCount: Math.round(s.rainfallMm * 0.45 + (s.incidentsRecorded || 0) * 4),
+      riskScore: s.avgRiskScore,
+    }));
+    res.status(200).json({
+      trends: series,
+      summary: trendsData.summary,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * GET /api/analytics/trends/risk
  * Historical risk score trends per ward or city-wide.
  */

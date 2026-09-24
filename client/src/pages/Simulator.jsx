@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Sliders, Sparkles, AlertTriangle, ArrowDownRight, TrendingDown, DollarSign, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Sliders, Sparkles, RefreshCw } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { runSimulation, getSimulationPresets, getWardsGeoJSON } from '../services/api';
 
@@ -12,6 +12,19 @@ export default function Simulator() {
   const [drainageModifier, setDrainageModifier] = useState(20);
   const [simulationResult, setSimulationResult] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const executeSimulation = useCallback((wardId, pumps, rain, drain) => {
+    setLoading(true);
+    runSimulation({
+      wardId,
+      additionalMobilePumps: parseInt(pumps, 10),
+      simulatedRainfallMm: parseFloat(rain),
+      drainageModifierPct: parseFloat(drain),
+    })
+      .then((res) => setSimulationResult(res))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     getWardsGeoJSON()
@@ -29,20 +42,7 @@ export default function Simulator() {
 
     // Run initial baseline simulation
     executeSimulation('W001', 2, 30, 20);
-  }, []);
-
-  const executeSimulation = (wardId, pumps, rain, drain) => {
-    setLoading(true);
-    runSimulation({
-      wardId,
-      additionalMobilePumps: parseInt(pumps, 10),
-      simulatedRainfallMm: parseFloat(rain),
-      drainageModifierPct: parseFloat(drain),
-    })
-      .then((res) => setSimulationResult(res))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  };
+  }, [executeSimulation]);
 
   const handleRun = (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ export default function Simulator() {
   const deltas = simulationResult?.comparison?.deltas || { riskScore: -13.0, drainageDeficit: -15.0 };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 page-enter">
       {/* Header */}
       <div>
         <div className="flex items-center space-x-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -113,7 +113,7 @@ export default function Simulator() {
       {/* Main Simulation Sandbox */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Controls Column */}
-        <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div className="lg:col-span-5 glass-panel border border-slate-800/80 rounded-2xl p-6 shadow-xl">
           <h2 className="text-base font-bold text-white mb-4 pb-3 border-b border-slate-800">
             Intervention Configuration
           </h2>
@@ -199,7 +199,7 @@ export default function Simulator() {
         <div className="lg:col-span-7 space-y-6">
           {/* Delta Metrics Row */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-lg">
+            <div className="glass-panel border border-slate-800/80 p-5 rounded-2xl shadow-lg">
               <div className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Risk Reduction (Δ Risk)</div>
               <div className="flex items-center space-x-2">
                 <div className="text-3xl font-black text-emerald-400">
@@ -210,7 +210,7 @@ export default function Simulator() {
               <p className="text-[11px] text-slate-500 mt-1">Direct result of pump staging</p>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-lg">
+            <div className="glass-panel border border-slate-800/80 p-5 rounded-2xl shadow-lg">
               <div className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Est. Deployment Cost</div>
               <div className="text-3xl font-black text-white">
                 ₹{simulationResult?.feasibility?.estimatedCostRupees ? (simulationResult.feasibility.estimatedCostRupees).toLocaleString() : '30,000'}
@@ -220,7 +220,7 @@ export default function Simulator() {
           </div>
 
           {/* Recharts Comparison Chart */}
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+          <div className="glass-panel border border-slate-800/80 p-6 rounded-2xl shadow-xl">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
               Baseline vs Simulated Risk Decomposition
             </h3>
@@ -233,7 +233,7 @@ export default function Simulator() {
                   <YAxis stroke="#94a3b8" domain={[0, 100]} tick={{ fontSize: 11 }} />
                   <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '11px' }} />
                   <Legend wrapperStyle={{ fontSize: '11px' }} />
-                  <Bar dataKey="Baseline" fill="#64748b" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="Baseline"  fill="#64748b" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="Simulated" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>

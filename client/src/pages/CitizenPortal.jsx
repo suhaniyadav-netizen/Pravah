@@ -93,49 +93,49 @@ export default function CitizenPortal() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 page-enter space-y-10">
       {/* Hero Section */}
-      <div className="text-center max-w-3xl mx-auto mb-10">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-4">
-          <Shield className="w-4 h-4" />
-          <span>Delhi Municipal Citizen Portal</span>
+      <div className="relative text-center max-w-3xl mx-auto space-y-4">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-semibold uppercase tracking-wider shadow-sm">
+          <Shield className="w-4 h-4 text-cyan-400" />
+          <span>Municipal Corporation of Delhi • Citizen Incident Desk</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
           Report Waterlogging in Your Ward
         </h1>
-        <p className="text-slate-400 text-base sm:text-lg">
-          Direct civic telemetry feeds instantly into MCD emergency dispatch pipelines, triggering physical pump deployments and alert broadcasts.
+        <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+          Geotagged reports feed directly into the MCD emergency operations center via PostGIS spatial containment, routing mobile pumps and emergency response teams to vulnerable underpasses.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Form Container */}
-        <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
-          <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-800">
-            <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+        <div className="lg:col-span-7 glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-800/80">
+          <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-800/80">
+            <div className="p-2.5 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-inner">
               <Waves className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Geotagged Waterlogging Incident Form</h2>
-              <p className="text-xs text-slate-400">Mapped via PostGIS Point-in-Polygon directly to municipal teams</p>
+              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">Geotagged Waterlogging Incident Form</h2>
+              <p className="text-xs text-slate-400">SRID 4326 Point-in-Polygon mapped to 250 municipal ward polygons</p>
             </div>
           </div>
 
           {successMsg && (
-            <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm flex items-start space-x-3">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm flex items-start space-x-3">
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-emerald-400" />
               <span>{successMsg}</span>
             </div>
           )}
 
           {errorMsg && (
-            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-start space-x-3">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs sm:text-sm flex items-start space-x-3">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-400" />
               <span>{errorMsg}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
                 Select Municipal Ward
@@ -231,10 +231,13 @@ export default function CitizenPortal() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50"
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:from-cyan-400 hover:via-sky-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50"
             >
               {loading ? (
-                <span>Lodging Incident...</span>
+                <span className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Lodging Incident Telemetry...</span>
+                </span>
               ) : (
                 <>
                   <Send className="w-4 h-4" />
@@ -247,44 +250,53 @@ export default function CitizenPortal() {
 
         {/* Live Feed Sidebar */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-cyan-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">Live Municipal Feed</h3>
+          <div className="glass-panel rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-800/80">
+            <div className="flex items-center justify-between mb-5 pb-4 border-b border-slate-800/80">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white tracking-tight">Live Municipal Civic Feed</h3>
+                  <p className="text-[11px] text-slate-400">Real-time telemetry stream</p>
+                </div>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold animate-pulse">
-                Socket Active
+              <span className="flex items-center space-x-1.5 text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>Socket Live</span>
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               {recentComplaints.length === 0 ? (
-                <div className="text-center py-8 text-slate-500 text-sm">No recent incidents reported.</div>
+                <div className="text-center py-10 text-slate-500 text-xs">No recent incidents reported.</div>
               ) : (
                 recentComplaints.map((item, idx) => (
                   <div
                     key={item.id || idx}
-                    className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 hover:border-slate-700 transition-colors"
+                    className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700/80 hover:bg-slate-900/60 transition-all shadow-sm"
                   >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-bold text-white">Ward {item.wardId || 'W001'}</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white flex items-center space-x-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>Ward {item.wardId || 'W001'}</span>
+                      </span>
                       <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                           item.severity === 'HIGH' || item.severity === 'CRITICAL'
-                            ? 'bg-rose-500/20 text-rose-400'
+                            ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
                             : item.severity === 'MEDIUM'
-                            ? 'bg-amber-500/20 text-amber-400'
-                            : 'bg-emerald-500/20 text-emerald-400'
+                            ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                            : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
                         }`}
                       >
                         {item.severity}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-300 line-clamp-2 mb-2">{item.description || item.address}</p>
-                    <div className="flex items-center justify-between text-[11px] text-slate-500">
-                      <span>Depth: {item.waterDepthCm || 0} cm</span>
-                      <span>{item.timestamp ? new Date(item.timestamp).toLocaleTimeString() : 'Just now'}</span>
+                    <p className="text-xs text-slate-300 line-clamp-2 mb-2.5 leading-relaxed">{item.description || item.address}</p>
+                    <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/50">
+                      <span>Water Depth: <b className="text-cyan-400">{item.waterDepthCm || 0} cm</b></span>
+                      <span className="font-mono text-slate-500">{item.createdAt || item.timestamp ? new Date(item.createdAt || item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}</span>
                     </div>
                   </div>
                 ))
