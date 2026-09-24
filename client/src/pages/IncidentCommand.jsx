@@ -68,8 +68,8 @@ export default function IncidentCommand() {
           <ShieldAlert className="w-4 h-4" />
           <span>Emergency Operational Center</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white">Incident Command & Response Dispatch</h1>
-        <p className="text-slate-400 text-sm">
+        <h1 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight">Incident Command & Response Dispatch</h1>
+        <p className="text-[var(--text-muted)] text-xs mt-1 font-sans">
           Coordinate field response teams, mobile submersible pumps, and road closures across active waterlogging sites.
         </p>
       </div>

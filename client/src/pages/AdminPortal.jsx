@@ -4,6 +4,14 @@ import { login, getAdminOverview, updateDrainageCapacity, getAuditLogs } from '.
 
 export default function AdminPortal() {
   const [token, setToken] = useState(sessionStorage.getItem('token') || '');
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
 
   // Login state
   const [username, setUsername] = useState('admin');
@@ -39,6 +47,7 @@ export default function AdminPortal() {
     try {
       const data = await login({ email: username, password });
       sessionStorage.setItem('token', data.token);
+      if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
       setToken(data.token);
       setCurrentUser(data.user);
     } catch (err) {
@@ -136,7 +145,7 @@ export default function AdminPortal() {
             <Shield className="w-4 h-4" />
             <span>Administrative Control & Governance</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Security & Infrastructure Console</h1>
+          <h1 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight">Security & Infrastructure Console</h1>
         </div>
 
         <button

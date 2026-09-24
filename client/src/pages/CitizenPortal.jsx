@@ -100,10 +100,10 @@ export default function CitizenPortal() {
           <Shield className="w-4 h-4 text-cyan-400" />
           <span>Municipal Corporation of Delhi • Citizen Incident Desk</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-5xl font-serif text-[var(--text-primary)] tracking-tight leading-tight">
           Report Waterlogging in Your Ward
         </h1>
-        <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+        <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed font-sans">
           Geotagged reports feed directly into the MCD emergency operations center via PostGIS spatial containment, routing mobile pumps and emergency response teams to vulnerable underpasses.
         </p>
       </div>

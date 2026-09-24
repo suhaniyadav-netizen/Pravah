@@ -87,8 +87,8 @@ export default function Simulator() {
           <Sliders className="w-4 h-4" />
           <span>Hydrological Digital Twin</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white">What-If Flood Scenario Simulator</h1>
-        <p className="text-slate-400 text-sm">
+        <h1 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight">What-If Flood Scenario Simulator</h1>
+        <p className="text-[var(--text-muted)] text-xs mt-1 font-sans">
           Stress-test high-capacity pump deployments, cloudburst precipitation, and desilting modifiers before executing physical municipal interventions.
         </p>
       </div>

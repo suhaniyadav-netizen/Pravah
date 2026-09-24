@@ -17,15 +17,15 @@
   --bg-subtle: #0D1E30;
 
   /* Surfaces */
-  --surface: rgba(255, 255, 255, 0.05);
+  --surface: rgba(255, 255, 255, 0.04);
   --surface-elevated: #0C1928;
   --surface-soft: #102235;
   --surface-glass: rgba(8, 20, 33, 0.65);
-  --surface-glass-strong: rgba(5, 11, 20, 0.88);
+  --surface-glass-strong: rgba(5, 11, 20, 0.90);
 
   /* Borders */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.18);
   --border-focus: rgba(56, 189, 248, 0.45);
 
   /* Typography */
@@ -34,7 +34,7 @@
   --text-muted: rgba(248, 250, 252, 0.45);
   --text-inverse: #050B14;
 
-  /* Brand Palette (Atmospheric Deep to Azure) */
+  /* Brand Palette */
   --brand: #38BDF8;
   --brand-strong: #0EA5E9;
   --brand-deep: #082F49;
@@ -58,11 +58,12 @@
   --risk-low-bg: rgba(22, 163, 74, 0.12);
   --risk-low-border: rgba(22, 163, 74, 0.30);
 
-  /* Shadows & Depth */
+  /* Shadows & Glow */
   --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.65);
   --shadow-lg: 0 24px 60px -16px rgba(0, 0, 0, 0.85);
-  --hero-glow: 0 0 40px rgba(255, 255, 255, 0.25), 0 0 80px rgba(56, 189, 248, 0.12);
+  --hero-glow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(255, 255, 255, 0.2), 0 0 120px rgba(56, 189, 248, 0.1);
+  --button-glow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
 }
 
 :root[data-theme='light'] {
@@ -75,11 +76,11 @@
   --bg-subtle: #DEEAF0;
 
   /* Surfaces */
-  --surface: rgba(255, 255, 255, 0.70);
+  --surface: rgba(255, 255, 255, 0.75);
   --surface-elevated: #FFFFFF;
   --surface-soft: #EDF5F8;
-  --surface-glass: rgba(255, 255, 255, 0.75);
-  --surface-glass-strong: rgba(255, 255, 255, 0.92);
+  --surface-glass: rgba(255, 255, 255, 0.80);
+  --surface-glass-strong: rgba(255, 255, 255, 0.94);
 
   /* Borders */
   --border: #D8E5EA;
@@ -92,7 +93,7 @@
   --text-muted: rgba(11, 34, 57, 0.45);
   --text-inverse: #FFFFFF;
 
-  /* Brand Palette (Civic Azure to Deep Marine) */
+  /* Brand Palette */
   --brand: #0284C7;
   --brand-strong: #0369A1;
   --brand-deep: #0C4A6E;
@@ -116,11 +117,12 @@
   --risk-low-bg: rgba(22, 163, 74, 0.08);
   --risk-low-border: rgba(22, 163, 74, 0.22);
 
-  /* Shadows & Depth */
+  /* Shadows & Glow */
   --shadow-sm: 0 2px 6px -1px rgba(11, 34, 57, 0.05);
   --shadow-md: 0 10px 24px -6px rgba(11, 34, 57, 0.08);
   --shadow-lg: 0 20px 48px -12px rgba(11, 34, 57, 0.12);
   --hero-glow: none;
+  --button-glow: 0 0 16px rgba(2, 132, 199, 0.2);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -128,25 +130,32 @@
    ───────────────────────────────────────────────────────────── */
 
 @layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    margin: 0;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--bg);
     color: var(--text-primary);
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* Editorial Headings use Instrument Serif */
-  .font-serif,
-  .editorial-heading {
+  .font-instrument {
     font-family: 'Instrument Serif', Georgia, Cambria, 'Times New Roman', Times, serif;
-    font-weight: 400;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
   }
 
   ::selection {
@@ -156,94 +165,112 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   MOTION SITES LIQUID GLASS & VISUAL PRIMITIVES
+   MOTIONSITES LIQUID GLASS & VISUAL PRIMITIVES
    ───────────────────────────────────────────────────────────── */
 
 .liquid-glass {
-  background: var(--surface);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.liquid-glass:hover {
-  border-color: var(--border-strong);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), var(--shadow-md);
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-.liquid-glass-pill {
-  background: var(--surface);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
+.text-glow {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(255, 255, 255, 0.2), 0 0 120px rgba(255, 255, 255, 0.1);
+}
+
+:root[data-theme='light'] .text-glow {
+  text-shadow: none;
+}
+
+.button-glow {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+/* MotionSites Button Component */
+.motionsites-btn-white {
+  background: #FFFFFF;
+  color: #0A0A0C;
+  padding: 0.875rem 2rem;
   border-radius: 9999px;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  transition: all 0.25s ease;
-}
-
-.liquid-glass-pill:hover {
-  border-color: var(--border-strong);
-}
-
-/* Editorial Text Glow (Dark Theme) */
-.hero-glow-text {
-  text-shadow: var(--hero-glow);
-}
-
-/* Clean Button Primitives */
-.btn-pill-primary {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: -0.01em;
-  border-radius: 9999px;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, var(--brand-strong), var(--brand-deep));
-  box-shadow: 0 4px 20px -4px rgba(14, 165, 233, 0.4);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  cursor: pointer;
   text-decoration: none;
+  cursor: pointer;
+  border: none;
 }
 
-.btn-pill-primary:hover {
+.motionsites-btn-white:hover {
+  background: rgba(255, 255, 255, 0.9);
   transform: translateY(-1px);
-  box-shadow: 0 8px 28px -4px rgba(14, 165, 233, 0.55);
 }
 
-.btn-pill-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: -0.01em;
-  border-radius: 9999px;
-  color: var(--text-primary);
-  background: var(--surface);
+:root[data-theme='light'] .motionsites-btn-white {
+  background: #0B2239;
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px -2px rgba(11, 34, 57, 0.25);
+}
+
+:root[data-theme='light'] .motionsites-btn-white:hover {
+  background: #07192A;
+}
+
+.motionsites-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border-strong);
-  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  padding: 0.875rem 2rem;
+  border-radius: 9999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
+  border: 1px solid var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.btn-pill-secondary:hover {
-  background: var(--surface-soft);
+.motionsites-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
   border-color: var(--brand);
   transform: translateY(-1px);
 }
@@ -297,72 +324,7 @@
   letter-spacing: 0.05em;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   EARTH & ATMOSPHERIC CONTINUOUS MOTION
-   ───────────────────────────────────────────────────────────── */
-
-@keyframes earthSlowSpin {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-@keyframes earthFloat {
-  0%, 100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -14px, 0);
-  }
-}
-
-@keyframes cloudDrift {
-  0% {
-    transform: rotate(0deg) scale(1.02);
-  }
-  100% {
-    transform: rotate(360deg) scale(1.02);
-  }
-}
-
-@keyframes atmospherePulse {
-  0%, 100% {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.03);
-  }
-}
-
-.earth-sphere {
-  position: relative;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow:
-    inset -40px -40px 100px rgba(0, 0, 0, 0.95),
-    inset 20px 20px 60px rgba(103, 232, 249, 0.35),
-    0 0 90px rgba(14, 165, 233, 0.28),
-    0 0 160px rgba(14, 165, 233, 0.12);
-  animation: earthFloat 14s ease-in-out infinite;
-  will-change: transform;
-}
-
-.earth-atmosphere-glow {
-  position: absolute;
-  inset: -15%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.08) 55%, transparent 72%);
-  pointer-events: none;
-  animation: atmospherePulse 8s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-/* Custom Scrollbar */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -376,4 +338,12 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--brand);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -147,11 +147,10 @@ export default function Dashboard() {
             <Activity className="w-3.5 h-3.5" />
             <span>MCD Unified Command &amp; Control</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight"
-              style={{ fontFamily: "'Poppins','Inter',sans-serif" }}>
+          <h1 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight">
             Delhi Flood Operations Command
           </h1>
-          <p className="text-slate-400 text-xs mt-1">
+          <p className="text-[var(--text-muted)] text-xs mt-1 font-sans">
             Real-time telemetry · 250 wards · Deterministic mass-balance risk model
           </p>
         </div>

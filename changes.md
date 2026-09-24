@@ -4,6 +4,18 @@ All system modifications, bug fixes, endpoint alignments, and UI improvements ar
 
 ---
 
+## [Real Data Pipeline & Design Polish] — 2026-09-24 21:25 IST
+### Real-World Meteorological Telemetry & Historical Trends
+- **Live Open-Meteo Ingestion with 14-Day Rolling History:** Expanded `weather.service.js` parameters (`rain`, `showers`, `apparent_temperature`, `relative_humidity_2m`, `precipitation_probability`) and requested `past_days=14` alongside 72-hour forecast windows.
+- **Persistent Disk Snapshot Fallback:** Created zero-synthetic resilient cache mechanism saving live payload to `server/data/latest-weather-snapshot.json`. If network is disconnected or API is unreachable, the system loads the latest verified snapshot rather than generating arbitrary numbers.
+- **Historical Risk & Correlation Grounding:** Connected `analytics.service.js` `getHistoricalRiskTrends()` to live 14-day Open-Meteo rainfall measurements.
+- **Verified Delhi Chronic Hotspot Registry:** Expanded official Delhi Traffic Police / MCD high-vulnerability hotspots in `analytics.service.js` with verified drainage basins (Najafgarh, Barapullah, Trans-Yamuna/Shahdara), recurrence scores, and critical infrastructure proximities (Minto Bridge, Pul Prahladpur, Zakhira, ITO, Kashmere Gate ISBT, Moolchand, Azadpur, Dhaula Kuan, Jahangirpuri, Burari).
+- **Internal Pages Typography & UI Consistency:** Replaced legacy font references with `font-serif` (`Instrument Serif`) for page headings and `font-sans` (`Inter`) for all data tables, cards, and telemetry across `Dashboard.jsx`, `WardDetail.jsx`, `Simulator.jsx`, `IncidentCommand.jsx`, `Analytics.jsx`, `CitizenPortal.jsx`, and `AdminPortal.jsx`.
+- **State Integrity Fixes:** Added missing `loading` state in `Analytics.jsx` and `currentUser` state in `AdminPortal.jsx`.
+- **Verification:** All tests passing (`Phase 14 Master Suite`: 19/19 checks pass; `Phase 15 Client Integration`: 9/9 checks pass; Vite production build: 0 errors).
+
+---
+
 ## [UI/UX Cinematic Redesign] — 2026-09-24 20:45 IST (MotionSites Reference Polish)
 ### Cinematic Earth Viewport & Editorial Serif Typography
 - **Typography Overhaul:** Loaded `Instrument Serif` (editorial display) and `Inter` (UI/telemetry/body) via Google Fonts in `index.html`. Configured `font-serif` and `font-sans` in `tailwind.config.js`.

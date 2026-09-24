@@ -6,6 +6,7 @@ import { getAnalyticsHotspots, getAnalyticsTrends } from '../services/api';
 export default function Analytics() {
   const [hotspots, setHotspots] = useState([]);
   const [trendData, setTrendData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
@@ -44,8 +45,8 @@ export default function Analytics() {
             <BarChart3 className="w-4 h-4" />
             <span>Hydrological Telemetry Intelligence</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Historical Analytics & Hotspot Detection</h1>
-          <p className="text-slate-400 text-sm">
+          <h1 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight">Historical Analytics & Hotspot Detection</h1>
+          <p className="text-[var(--text-muted)] text-xs mt-1 font-sans">
             Longitudinal flood recurrence clustering across Delhi municipal drainage basins.
           </p>
         </div>

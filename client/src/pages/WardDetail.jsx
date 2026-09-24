@@ -79,7 +79,7 @@ export default function WardDetail() {
       <div className="glass-panel border border-slate-800/80 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center space-x-3 mb-2">
-            <h1 className="text-3xl font-black text-white">{details?.wardName || `Ward ${id}`}</h1>
+            <h1 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight">{details?.wardName || `Ward ${id}`}</h1>
             <span className="px-2.5 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-400 font-mono font-bold text-sm border border-cyan-500/30">
               {details?.wardCode || id}
             </span>
