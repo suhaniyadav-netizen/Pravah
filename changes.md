@@ -4,6 +4,22 @@ All system modifications, bug fixes, endpoint alignments, and UI improvements ar
 
 ---
 
+## [Design Refinements & Theme Synchronization] — 2026-09-24 21:38 IST
+### Layout, Navigation, and Theme Engine Refinements
+- **Rainbow Asset & Calculation Removed:** Completely removed rainbow image and parallax calculations from `Landing.jsx`.
+- **Bottom-Left Earth Observatory Indicator Removed:** Removed the audio/observatory widget from the bottom left of the landing hero.
+- **Navbar & Header Standardization:**
+  - Standardized `Navbar.jsx` with active route highlighting, telemetry indicator (`250 WARDS LIVE`), `ThemeToggle`, and "Report Incident" CTA.
+  - Linked all main command modules: *City Overview*, *Incident Command*, *Scenario Simulator*, *Historical Analytics*, and *Admin Console*.
+  - Added `pt-20` top spacing to `AppLayout` so fixed navbars never overlap internal page headings or dashboard tools.
+- **Dual-Theme Synchronization & Light/Dark Engine:**
+  - Upgraded `ThemeToggle.jsx` to synchronize state with `CustomEvent('themechange')` and `localStorage` across all pages.
+  - Added semantic light-mode definitions for `.liquid-glass`, `.liquid-glass-pill`, `.glass-panel`, `.glass-hover`, and `.motionsites-btn-white`.
+  - Replaced hardcoded dark background classes in `Landing.jsx` with CSS variables (`bg-[var(--bg)]` and `text-[var(--text-primary)]`), providing clean contrast and readability in both Dark and Light themes.
+- **Verification:** `npm run build` (compiled cleanly in 6.8s), `npm test` (19/19 checks passed), `npm run verify:phase15` (9/9 checks passed).
+
+---
+
 ## [Real Data Pipeline & Design Polish] — 2026-09-24 21:25 IST
 ### Real-World Meteorological Telemetry & Historical Trends
 - **Live Open-Meteo Ingestion with 14-Day Rolling History:** Expanded `weather.service.js` parameters (`rain`, `showers`, `apparent_temperature`, `relative_humidity_2m`, `precipitation_probability`) and requested `past_days=14` alongside 72-hour forecast windows.

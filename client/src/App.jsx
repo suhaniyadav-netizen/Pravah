@@ -31,7 +31,7 @@ function AppLayout() {
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-300">
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pt-20">
         <Routes>
           <Route path="/report" element={<CitizenPortal />} />
           <Route path="/dashboard" element={<Dashboard />} />
