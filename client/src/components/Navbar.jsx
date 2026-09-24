@@ -1,164 +1,140 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Waves, Activity, ShieldAlert, Sliders, BarChart3, Lock,
-  Menu, X, CloudRain,
-} from 'lucide-react';
-import { getSocket } from '../services/socket';
-import { getCurrentWeather } from '../services/api';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const location = useLocation();
-  const [isConnected, setIsConnected] = useState(false);
-  const [weather, setWeather] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const socket = getSocket();
-    setIsConnected(socket.connected);
-
-    const onConnect    = () => setIsConnected(true);
-    const onDisconnect = () => setIsConnected(false);
-
-    socket.on('connect',    onConnect);
-    socket.on('disconnect', onDisconnect);
-
-    getCurrentWeather()
-      .then((data) => setWeather(data))
-      .catch(() => {});
-
-    return () => {
-      socket.off('connect',    onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const navItems = [
-    { label: 'City Intelligence', path: '/dashboard', icon: Activity },
-    { label: 'Incidents & Dispatch', path: '/incidents', icon: ShieldAlert },
-    { label: 'Simulator', path: '/simulator', icon: Sliders },
-    { label: 'Analytics', path: '/analytics', icon: BarChart3 },
-    { label: 'Admin', path: '/admin', icon: Lock },
+    { label: 'City Intelligence', path: '/dashboard' },
+    { label: 'Ward Intelligence', path: '/dashboard' },
+    { label: 'Incidents', path: '/incidents' },
+    { label: 'Analytics', path: '/analytics' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--surface-glass-strong)] backdrop-blur-xl border-b border-[var(--border)] transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-[var(--surface-glass-strong)] backdrop-blur-xl border-b border-[var(--border)] shadow-sm'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-12">
+        <div className="flex items-center justify-between h-20">
 
-          {/* Left: Brand Identity */}
-          <Link to="/" className="flex items-center gap-3 group text-decoration-none">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--brand)] to-[var(--brand-deep)] flex items-center justify-center shadow-md shadow-[var(--brand)]/20 group-hover:scale-105 transition-transform flex-shrink-0 text-white">
-              <Waves className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-base font-extrabold tracking-tight text-[var(--text-primary)] font-heading">
-                  PRAVAH
-                </span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] font-bold border border-[var(--border)] uppercase tracking-wider">
-                  V2
-                </span>
-              </div>
-              <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold leading-none">
-                Delhi Flood Intelligence
-              </p>
-            </div>
+          {/* Left: PRAVAH Brand Wordmark */}
+          <Link to="/" className="flex items-center gap-3 text-decoration-none group">
+            <span className="text-xl font-bold tracking-tight text-[var(--text-primary)] font-sans">
+              PRAVAH
+            </span>
           </Link>
 
-          {/* Center: Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname.startsWith('/wards/'));
+          {/* Center: Minimal Navigation */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navItems.map((item, idx) => {
+              const isActive = location.pathname === item.path;
               return (
                 <Link
-                  key={item.path}
+                  key={idx}
                   to={item.path}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  className={`text-xs font-medium transition-colors tracking-wide ${
                     isActive
-                      ? 'bg-[var(--accent-soft)] text-[var(--brand)] border border-[var(--border-strong)]'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
+                      ? 'text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{item.label}</span>
+                  {item.label}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right: Weather Telemetry, Connection State, Theme Toggle & Report CTA */}
-          <div className="flex items-center gap-2.5">
-            {weather && (
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)]">
-                <CloudRain className="w-3.5 h-3.5 text-[var(--brand)]" />
-                <span>Precip:</span>
-                <span className="font-bold text-[var(--text-primary)]">{weather.rainfallMm ?? 0} mm/h</span>
-              </div>
-            )}
-
-            <div
-              className={`hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold border ${
-                isConnected
-                  ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
-                  : 'bg-rose-500/10 text-rose-500 border-rose-500/25'
-              }`}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-              <span>{isConnected ? 'Live Telemetry' : 'Offline'}</span>
+          {/* Right: Live Pulse, Theme Toggle, Report Incident Pill */}
+          <div className="flex items-center gap-4">
+            {/* Live System Indicator */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full liquid-glass-pill text-[11px] font-medium text-[var(--text-secondary)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="tracking-wide">LIVE</span>
             </div>
 
-            <ThemeToggle compact />
+            {/* Sun/Moon Icon Theme Toggle */}
+            <ThemeToggle />
 
+            {/* Report Incident CTA */}
             <Link
               to="/report"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--brand)] text-white hover:opacity-90 transition-opacity text-xs font-bold shadow-sm"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full liquid-glass text-xs font-medium text-[var(--text-primary)] hover:border-[var(--brand)] transition-all"
             >
               <span>Report Incident</span>
             </Link>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Hamburger Toggle */}
             <button
-              className="lg:hidden p-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)] border border-[var(--border)] transition-colors"
+              className="lg:hidden p-2 rounded-full liquid-glass text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle navigation menu"
             >
-              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile Slide-in Drawer */}
         {mobileOpen && (
-          <div className="lg:hidden py-3 border-t border-[var(--border)] space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
+          <div
+            className="lg:hidden fixed inset-y-0 right-0 w-[85%] max-w-[340px] bg-[var(--surface-glass-strong)] backdrop-blur-2xl border-l border-[var(--border)] p-6 flex flex-col justify-between shadow-2xl z-50 transition-transform duration-300"
+            style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
+          >
+            <div className="space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
+                <span className="text-lg font-bold text-[var(--text-primary)]">PRAVAH</span>
+                <button
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold ${
-                    isActive
-                      ? 'bg-[var(--accent-soft)] text-[var(--brand)]'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
-                  }`}
+                  className="p-1.5 rounded-full liquid-glass text-[var(--text-secondary)]"
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-            <Link
-              to="/report"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-1.5 px-3 py-2.5 mt-2 rounded-xl bg-[var(--brand)] text-white text-xs font-bold text-center"
-            >
-              <span>Report Waterlogging Incident</span>
-            </Link>
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                {navItems.map((item, idx) => (
+                  <Link
+                    key={idx}
+                    to={item.path}
+                    onClick={() => setMobileOpen(false)}
+                    className="block py-2.5 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    style={{ transitionDelay: `${idx * 75}ms` }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-6 border-t border-[var(--border)]">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-[var(--text-muted)]">Theme</span>
+                <ThemeToggle />
+              </div>
+              <Link
+                to="/report"
+                onClick={() => setMobileOpen(false)}
+                className="w-full py-3 rounded-full btn-pill-primary text-xs font-semibold flex items-center justify-center gap-2"
+              >
+                <span>Report Incident</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
         )}
       </div>

@@ -25,12 +25,13 @@ export default function ThemeToggle({ compact = false }) {
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface-glass)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] backdrop-blur-md transition-all text-xs font-medium cursor-pointer"
+      className="inline-flex items-center justify-center w-9 h-9 rounded-full liquid-glass text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
     >
-      <span className="w-5 h-5 grid place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--brand)]">
-        {theme === 'dark' ? <Moon size={13} strokeWidth={2.2} /> : <Sun size={13} strokeWidth={2.2} />}
-      </span>
-      {!compact && <span className="capitalize">{theme}</span>}
+      {theme === 'dark' ? (
+        <Sun size={15} strokeWidth={1.75} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
+      ) : (
+        <Moon size={15} strokeWidth={1.75} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
+      )}
     </button>
   );
 }

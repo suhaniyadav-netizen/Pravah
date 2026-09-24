@@ -4,6 +4,22 @@ All system modifications, bug fixes, endpoint alignments, and UI improvements ar
 
 ---
 
+## [UI/UX Cinematic Redesign] — 2026-09-24 20:45 IST (MotionSites Reference Polish)
+### Cinematic Earth Viewport & Editorial Serif Typography
+- **Typography Overhaul:** Loaded `Instrument Serif` (editorial display) and `Inter` (UI/telemetry/body) via Google Fonts in `index.html`. Configured `font-serif` and `font-sans` in `tailwind.config.js`.
+- **Dual-Theme Design Tokens:** Implemented semantic CSS variables (`--bg`, `--surface`, `--border`, `--text-primary`, `--brand`, `--accent`, `--hero-glow`) in `index.css` supporting smooth Dark/Light transitions.
+- **Sun/Moon Icon Theme Toggle:** Redesigned `ThemeToggle.jsx` with minimal circular liquid-glass container and Lucide `Sun`/`Moon` icons without text labels, with `localStorage` (`pravah-theme`) persistence.
+- **Minimal Fixed Navbar:** Redesigned `Navbar.jsx` with generous horizontal spacing (`px-6 md:px-10 lg:px-12`), live system indicator, compact theme toggle, and slide-in drawer on mobile.
+- **Live Earth Viewport Hero:** Built a full-viewport (`100svh`) cinematic Earth observatory with layered atmospheric glow, satellite relief, cloud rotation, and subtle Delhi coordinate marker (`28.61°N 77.20°E`).
+- **Required Editorial Copy Grounded:**
+  - Hero Heading: *"Know the risk. Before the water rises."* (Instrument Serif)
+  - Hero Supporting Copy: *"Unified command for municipal engineers, disaster response officers, and citizens across the National Capital Territory."*
+  - Second Statement: *"When the rain changes, PRAVAH changes with it."*
+- **Second Full-Screen Section:** Layered deep ocean/sky gradient, abstract hydrological flow lines, and transition grid leading directly to the City Intelligence platform.
+- **Verification:** `npm run build` (compiled in 3.5s with 0 errors), `npm test` (19/19 passed), `npm run verify:phase15` (9/9 passed).
+
+---
+
 ## [UI/UX Phase B–J] — 2026-09-19 20:57 IST (Full UI & Map Overhaul)
 > Session run directly by parent agent after subagent hit write-permission timeouts (`agy --dangerously-skip-permissions` noted for future sessions).
 
