@@ -1,174 +1,139 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Waves, ShieldAlert, Activity, Sliders, BarChart3, Lock,
-  Home, FileText,
-} from 'lucide-react';
-import { getSocket } from '../services/socket';
-import { getCurrentWeather } from '../services/api';
+import { Menu, X, ArrowRight } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const location = useLocation();
-  const [isConnected, setIsConnected] = useState(false);
-  const [weather, setWeather] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const socket = getSocket();
-    setIsConnected(socket.connected);
-
-    const onConnect    = () => setIsConnected(true);
-    const onDisconnect = () => setIsConnected(false);
-
-    socket.on('connect',    onConnect);
-    socket.on('disconnect', onDisconnect);
-
-    getCurrentWeather()
-      .then((data) => setWeather(data))
-      .catch(() => {});
-
-    return () => {
-      socket.off('connect',    onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const navItems = [
-    { label: 'Report',      path: '/report',     icon: FileText },
-    { label: 'Dashboard',   path: '/dashboard',  icon: Activity },
-    { label: 'Dispatch',    path: '/incidents',  icon: ShieldAlert },
-    { label: 'Simulator',   path: '/simulator',  icon: Sliders },
-    { label: 'Analytics',   path: '/analytics',  icon: BarChart3 },
-    { label: 'Admin',       path: '/admin',      icon: Lock },
+    { label: 'City Intelligence', path: '/dashboard' },
+    { label: 'Ward Intelligence', path: '/dashboard' },
+    { label: 'Incidents', path: '/incidents' },
+    { label: 'Analytics', path: '/analytics' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/70 shadow-lg shadow-black/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-[var(--surface-glass-strong)] backdrop-blur-xl border-b border-[var(--border)] shadow-sm'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-12">
+        <div className="flex items-center justify-between h-20">
 
-          {/* Left: Home arrow + Brand */}
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/"
-              className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800/60 transition-colors"
-              title="Back to Home"
-            >
-              <Home className="w-4 h-4" />
-            </Link>
+          {/* Left: PRAVAH Brand Wordmark */}
+          <Link to="/" className="flex items-center gap-3 text-decoration-none group">
+            <span className="text-xl font-bold tracking-tight text-[var(--text-primary)] font-sans">
+              PRAVAH
+            </span>
+          </Link>
 
-            <Link to="/dashboard" className="flex items-center space-x-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 via-sky-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/25 group-hover:scale-105 transition-all flex-shrink-0">
-                <Waves className="w-4 h-4 text-white" />
-              </div>
-              <div className="hidden sm:block">
-                <div className="flex items-center space-x-1.5">
-                  <span
-                    className="text-[15px] font-black tracking-tight text-white"
-                    style={{ fontFamily: "'Poppins','Inter',sans-serif", letterSpacing: '-0.02em' }}
-                  >
-                    Pravah
-                  </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 font-bold border border-cyan-500/25">
-                    V2
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider font-medium leading-none">
-                  MCD Flood Ops
-                </p>
-              </div>
-            </Link>
-          </div>
-
-          {/* Center: Nav links */}
-          <nav className="hidden lg:flex items-center space-x-0.5">
-            {navItems.map((item) => {
-              const Icon = item.icon;
+          {/* Center: Minimal Navigation */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navItems.map((item, idx) => {
               const isActive = location.pathname === item.path;
               return (
                 <Link
-                  key={item.path}
+                  key={idx}
                   to={item.path}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                  className={`text-xs font-medium transition-colors tracking-wide ${
                     isActive
-                      ? 'bg-cyan-500/12 text-cyan-300 border border-cyan-500/25'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      ? 'text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{item.label}</span>
+                  {item.label}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right: Weather + Connection */}
-          <div className="flex items-center space-x-2.5">
-            {weather && (
-              <div className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-[11px]">
-                <span className="text-slate-500">Precip:</span>
-                <span className="font-bold text-cyan-400">{weather.rainfallMm ?? 0} mm/h</span>
-              </div>
-            )}
-
-            <div
-              className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
-                isConnected
-                  ? 'bg-emerald-500/8 text-emerald-300 border-emerald-500/25'
-                  : 'bg-rose-500/8 text-rose-300 border-rose-500/25'
-              }`}
-            >
-              {isConnected ? (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="hidden sm:inline">Live</span>
-                </>
-              ) : (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                  <span className="hidden sm:inline">Offline</span>
-                </>
-              )}
+          {/* Right: Live Pulse, Theme Toggle, Report Incident Pill */}
+          <div className="flex items-center gap-4">
+            {/* Live System Indicator */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full liquid-glass-pill text-[11px] font-medium text-[var(--text-secondary)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="tracking-wide">LIVE</span>
             </div>
 
-            {/* Mobile menu toggle */}
-            <button
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
+            {/* Sun/Moon Icon Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Report Incident CTA */}
+            <Link
+              to="/report"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full liquid-glass text-xs font-medium text-[var(--text-primary)] hover:border-[var(--brand)] transition-all"
             >
-              <div className="space-y-1">
-                <span className="block w-4 h-0.5 bg-current" />
-                <span className="block w-4 h-0.5 bg-current" />
-                <span className="block w-3 h-0.5 bg-current" />
-              </div>
+              <span>Report Incident</span>
+            </Link>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              className="lg:hidden p-2 rounded-full liquid-glass text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile nav dropdown */}
+        {/* Mobile Slide-in Drawer */}
         {mobileOpen && (
-          <div className="lg:hidden pb-3 pt-1 border-t border-slate-800/60">
-            <div className="grid grid-cols-3 gap-1 pt-2">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                return (
+          <div
+            className="lg:hidden fixed inset-y-0 right-0 w-[85%] max-w-[340px] bg-[var(--surface-glass-strong)] backdrop-blur-2xl border-l border-[var(--border)] p-6 flex flex-col justify-between shadow-2xl z-50 transition-transform duration-300"
+            style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
+          >
+            <div className="space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
+                <span className="text-lg font-bold text-[var(--text-primary)]">PRAVAH</span>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-1.5 rounded-full liquid-glass text-[var(--text-secondary)]"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                {navItems.map((item, idx) => (
                   <Link
-                    key={item.path}
+                    key={idx}
                     to={item.path}
                     onClick={() => setMobileOpen(false)}
-                    className={`flex flex-col items-center space-y-1 px-2 py-2.5 rounded-xl text-[10px] font-semibold transition-all ${
-                      isActive
-                        ? 'bg-cyan-500/12 text-cyan-300'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                    }`}
+                    className="block py-2.5 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    style={{ transitionDelay: `${idx * 75}ms` }}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.label}</span>
+                    {item.label}
                   </Link>
-                );
-              })}
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-6 border-t border-[var(--border)]">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-[var(--text-muted)]">Theme</span>
+                <ThemeToggle />
+              </div>
+              <Link
+                to="/report"
+                onClick={() => setMobileOpen(false)}
+                className="w-full py-3 rounded-full btn-pill-primary text-xs font-semibold flex items-center justify-center gap-2"
+              >
+                <span>Report Incident</span>
+                <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
         )}

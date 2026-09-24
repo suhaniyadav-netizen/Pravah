@@ -2,162 +2,378 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+   PRAVAH V2 SEMANTIC DESIGN TOKENS (DUAL THEME)
+   ───────────────────────────────────────────────────────────── */
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Atmospheric Backgrounds */
+  --bg: #050B14;
+  --bg-deep: #02060C;
+  --bg-soft: #081421;
+  --bg-subtle: #0D1E30;
+
+  /* Surfaces */
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-elevated: #0C1928;
+  --surface-soft: #102235;
+  --surface-glass: rgba(8, 20, 33, 0.65);
+  --surface-glass-strong: rgba(5, 11, 20, 0.88);
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-focus: rgba(56, 189, 248, 0.45);
+
+  /* Typography */
+  --text-primary: #F8FAFC;
+  --text-secondary: rgba(248, 250, 252, 0.70);
+  --text-muted: rgba(248, 250, 252, 0.45);
+  --text-inverse: #050B14;
+
+  /* Brand Palette (Atmospheric Deep to Azure) */
+  --brand: #38BDF8;
+  --brand-strong: #0EA5E9;
+  --brand-deep: #082F49;
+  --accent: #67E8F9;
+  --accent-soft: rgba(103, 232, 249, 0.10);
+
+  /* Risk Severity Color System */
+  --risk-critical: #DC2626;
+  --risk-critical-bg: rgba(220, 38, 38, 0.12);
+  --risk-critical-border: rgba(220, 38, 38, 0.30);
+
+  --risk-high: #EA580C;
+  --risk-high-bg: rgba(234, 88, 12, 0.12);
+  --risk-high-border: rgba(234, 88, 12, 0.30);
+
+  --risk-moderate: #CA8A04;
+  --risk-moderate-bg: rgba(202, 138, 4, 0.12);
+  --risk-moderate-border: rgba(202, 138, 4, 0.30);
+
+  --risk-low: #16A34A;
+  --risk-low-bg: rgba(22, 163, 74, 0.12);
+  --risk-low-border: rgba(22, 163, 74, 0.30);
+
+  /* Shadows & Depth */
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.65);
+  --shadow-lg: 0 24px 60px -16px rgba(0, 0, 0, 0.85);
+  --hero-glow: 0 0 40px rgba(255, 255, 255, 0.25), 0 0 80px rgba(56, 189, 248, 0.12);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Atmospheric Backgrounds */
+  --bg: #F4F8FA;
+  --bg-deep: #EAF2F6;
+  --bg-soft: #EDF5F8;
+  --bg-subtle: #DEEAF0;
+
+  /* Surfaces */
+  --surface: rgba(255, 255, 255, 0.70);
+  --surface-elevated: #FFFFFF;
+  --surface-soft: #EDF5F8;
+  --surface-glass: rgba(255, 255, 255, 0.75);
+  --surface-glass-strong: rgba(255, 255, 255, 0.92);
+
+  /* Borders */
+  --border: #D8E5EA;
+  --border-strong: #BCCFD8;
+  --border-focus: rgba(2, 132, 199, 0.45);
+
+  /* Typography */
+  --text-primary: #0B2239;
+  --text-secondary: rgba(11, 34, 57, 0.68);
+  --text-muted: rgba(11, 34, 57, 0.45);
+  --text-inverse: #FFFFFF;
+
+  /* Brand Palette (Civic Azure to Deep Marine) */
+  --brand: #0284C7;
+  --brand-strong: #0369A1;
+  --brand-deep: #0C4A6E;
+  --accent: #0891B2;
+  --accent-soft: rgba(8, 145, 178, 0.08);
+
+  /* Risk Severity Color System */
+  --risk-critical: #DC2626;
+  --risk-critical-bg: rgba(220, 38, 38, 0.08);
+  --risk-critical-border: rgba(220, 38, 38, 0.22);
+
+  --risk-high: #EA580C;
+  --risk-high-bg: rgba(234, 88, 12, 0.08);
+  --risk-high-border: rgba(234, 88, 12, 0.22);
+
+  --risk-moderate: #CA8A04;
+  --risk-moderate-bg: rgba(202, 138, 4, 0.08);
+  --risk-moderate-border: rgba(202, 138, 4, 0.22);
+
+  --risk-low: #16A34A;
+  --risk-low-bg: rgba(22, 163, 74, 0.08);
+  --risk-low-border: rgba(22, 163, 74, 0.22);
+
+  /* Shadows & Depth */
+  --shadow-sm: 0 2px 6px -1px rgba(11, 34, 57, 0.05);
+  --shadow-md: 0 10px 24px -6px rgba(11, 34, 57, 0.08);
+  --shadow-lg: 0 20px 48px -12px rgba(11, 34, 57, 0.12);
+  --hero-glow: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL BASE & EDITORIAL TYPOGRAPHY
+   ───────────────────────────────────────────────────────────── */
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-cyan-500 selection:text-white;
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  /* Editorial Headings use Instrument Serif */
+  .font-serif,
+  .editorial-heading {
+    font-family: 'Instrument Serif', Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-weight: 400;
+  }
+
+  ::selection {
+    background-color: var(--brand-strong);
+    color: #FFFFFF;
   }
 }
 
-/* =========================================================
-   Page Transitions
-   ========================================================= */
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.page-enter {
-  animation: pageFadeIn 0.35s ease-out forwards;
-}
+/* ─────────────────────────────────────────────────────────────
+   MOTION SITES LIQUID GLASS & VISUAL PRIMITIVES
+   ───────────────────────────────────────────────────────────── */
 
-/* =========================================================
-   Floating Orb Animation (Landing Page)
-   ========================================================= */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-22px); }
-}
-
-/* =========================================================
-   Stat Number Subtle Pulse
-   ========================================================= */
-@keyframes statPulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.82; }
-}
-.stat-live {
-  animation: statPulse 3.5s ease-in-out infinite;
-}
-
-/* =========================================================
-   Glass Card Hover Lift
-   ========================================================= */
-.glass-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.glass-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.07);
-}
-
-/* =========================================================
-   Inline Risk Badge Variants
-   ========================================================= */
-.risk-critical { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3);  border-radius: 0.5rem; }
-.risk-high     { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); border-radius: 0.5rem; }
-.risk-moderate { background: rgba(234,179,8,0.15);  color: #fbbf24; border: 1px solid rgba(234,179,8,0.3);  border-radius: 0.5rem; }
-.risk-low      { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3);  border-radius: 0.5rem; }
-
-/* =========================================================
-   Dark Input Base
-   ========================================================= */
-.input-dark {
-  background: rgba(2, 6, 23, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f1f5f9;
-  border-radius: 0.75rem;
-  padding: 0.625rem 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  outline: none;
-  width: 100%;
-}
-.input-dark:focus {
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
-}
-.input-dark::placeholder {
-  color: #475569;
-}
-
-/* =========================================================
-   Leaflet Dark Mode
-   ========================================================= */
-.leaflet-container {
-  background: #090d16 !important;
-  font-family: inherit;
-}
-.leaflet-control-zoom {
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(15, 23, 42, 0.85) !important;
+.liquid-glass {
+  background: var(--surface);
   backdrop-filter: blur(8px);
-}
-.leaflet-control-zoom a {
-  background: transparent !important;
-  color: #94a3b8 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-.leaflet-control-zoom a:hover {
-  color: #38bdf8 !important;
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* =========================================================
-   Pulse animation for high-risk flood hotspots
-   ========================================================= */
-@keyframes floodPulse {
-  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-  70%  { transform: scale(1.1);  box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+.liquid-glass:hover {
+  border-color: var(--border-strong);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), var(--shadow-md);
 }
-.ward-pulse-marker {
+
+.liquid-glass-pill {
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.25s ease;
+}
+
+.liquid-glass-pill:hover {
+  border-color: var(--border-strong);
+}
+
+/* Editorial Text Glow (Dark Theme) */
+.hero-glow-text {
+  text-shadow: var(--hero-glow);
+}
+
+/* Clean Button Primitives */
+.btn-pill-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--brand-strong), var(--brand-deep));
+  box-shadow: 0 4px 20px -4px rgba(14, 165, 233, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-pill-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px -4px rgba(14, 165, 233, 0.55);
+}
+
+.btn-pill-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  color: var(--text-primary);
+  background: var(--surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-pill-secondary:hover {
+  background: var(--surface-soft);
+  border-color: var(--brand);
+  transform: translateY(-1px);
+}
+
+/* Severity Risk Badges */
+.badge-risk-critical {
+  background-color: var(--risk-critical-bg);
+  color: var(--risk-critical);
+  border: 1px solid var(--risk-critical-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-risk-high {
+  background-color: var(--risk-high-bg);
+  color: var(--risk-high);
+  border: 1px solid var(--risk-high-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-risk-moderate {
+  background-color: var(--risk-moderate-bg);
+  color: var(--risk-moderate);
+  border: 1px solid var(--risk-moderate-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-risk-low {
+  background-color: var(--risk-low-bg);
+  color: var(--risk-low);
+  border: 1px solid var(--risk-low-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   EARTH & ATMOSPHERIC CONTINUOUS MOTION
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes earthSlowSpin {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes earthFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes cloudDrift {
+  0% {
+    transform: rotate(0deg) scale(1.02);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.02);
+  }
+}
+
+@keyframes atmospherePulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+.earth-sphere {
+  position: relative;
   border-radius: 50%;
-  animation: floodPulse 2s infinite;
+  overflow: hidden;
+  box-shadow:
+    inset -40px -40px 100px rgba(0, 0, 0, 0.95),
+    inset 20px 20px 60px rgba(103, 232, 249, 0.35),
+    0 0 90px rgba(14, 165, 233, 0.28),
+    0 0 160px rgba(14, 165, 233, 0.12);
+  animation: earthFloat 14s ease-in-out infinite;
+  will-change: transform;
 }
 
-/* =========================================================
-   Dark Leaflet Popup
-   ========================================================= */
-.dark-leaflet-popup .leaflet-popup-content-wrapper {
-  background: rgba(15, 23, 42, 0.97) !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.5) !important;
-  border-radius: 14px !important;
-  backdrop-filter: blur(14px) !important;
-  color: #f8fafc !important;
-  padding: 4px !important;
-}
-.dark-leaflet-popup .leaflet-popup-tip {
-  background: rgba(15, 23, 42, 0.97) !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
-}
-.dark-leaflet-popup a.leaflet-popup-close-button {
-  color: #94a3b8 !important;
-  padding: 6px 8px !important;
-}
-.dark-leaflet-popup a.leaflet-popup-close-button:hover {
-  color: #38bdf8 !important;
+.earth-atmosphere-glow {
+  position: absolute;
+  inset: -15%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.08) 55%, transparent 72%);
+  pointer-events: none;
+  animation: atmospherePulse 8s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
-/* =========================================================
-   Custom Sleek Scrollbar
-   ========================================================= */
-::-webkit-scrollbar       { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #020617; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #334155; }
-
-/* =========================================================
-   Premium Glassmorphism Utilities
-   ========================================================= */
-.glass-panel {
-  background: linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(2,6,23,0.88) 100%);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-.glass-panel-glow {
-  background: linear-gradient(135deg, rgba(15,23,42,0.82) 0%, rgba(2,6,23,0.92) 100%);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  box-shadow: 0 0 28px -5px rgba(14, 165, 233, 0.15);
+::-webkit-scrollbar-track {
+  background-color: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--brand);
 }
