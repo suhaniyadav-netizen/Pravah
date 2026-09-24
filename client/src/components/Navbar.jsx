@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  Waves, ShieldAlert, Activity, Sliders, BarChart3, Lock,
-  Home, FileText,
+  Waves, Activity, ShieldAlert, Sliders, BarChart3, Lock,
+  Menu, X, CloudRain,
 } from 'lucide-react';
 import { getSocket } from '../services/socket';
 import { getCurrentWeather } from '../services/api';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const location = useLocation();
@@ -34,65 +35,51 @@ export default function Navbar() {
   }, []);
 
   const navItems = [
-    { label: 'Report',      path: '/report',     icon: FileText },
-    { label: 'Dashboard',   path: '/dashboard',  icon: Activity },
-    { label: 'Dispatch',    path: '/incidents',  icon: ShieldAlert },
-    { label: 'Simulator',   path: '/simulator',  icon: Sliders },
-    { label: 'Analytics',   path: '/analytics',  icon: BarChart3 },
-    { label: 'Admin',       path: '/admin',      icon: Lock },
+    { label: 'City Intelligence', path: '/dashboard', icon: Activity },
+    { label: 'Incidents & Dispatch', path: '/incidents', icon: ShieldAlert },
+    { label: 'Simulator', path: '/simulator', icon: Sliders },
+    { label: 'Analytics', path: '/analytics', icon: BarChart3 },
+    { label: 'Admin', path: '/admin', icon: Lock },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/70 shadow-lg shadow-black/20">
+    <header className="sticky top-0 z-50 bg-[var(--surface-glass-strong)] backdrop-blur-xl border-b border-[var(--border)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-16">
 
-          {/* Left: Home arrow + Brand */}
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/"
-              className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800/60 transition-colors"
-              title="Back to Home"
-            >
-              <Home className="w-4 h-4" />
-            </Link>
-
-            <Link to="/dashboard" className="flex items-center space-x-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 via-sky-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/25 group-hover:scale-105 transition-all flex-shrink-0">
-                <Waves className="w-4 h-4 text-white" />
+          {/* Left: Brand Identity */}
+          <Link to="/" className="flex items-center gap-3 group text-decoration-none">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--brand)] to-[var(--brand-deep)] flex items-center justify-center shadow-md shadow-[var(--brand)]/20 group-hover:scale-105 transition-transform flex-shrink-0 text-white">
+              <Waves className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-base font-extrabold tracking-tight text-[var(--text-primary)] font-heading">
+                  PRAVAH
+                </span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] font-bold border border-[var(--border)] uppercase tracking-wider">
+                  V2
+                </span>
               </div>
-              <div className="hidden sm:block">
-                <div className="flex items-center space-x-1.5">
-                  <span
-                    className="text-[15px] font-black tracking-tight text-white"
-                    style={{ fontFamily: "'Poppins','Inter',sans-serif", letterSpacing: '-0.02em' }}
-                  >
-                    Pravah
-                  </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 font-bold border border-cyan-500/25">
-                    V2
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider font-medium leading-none">
-                  MCD Flood Ops
-                </p>
-              </div>
-            </Link>
-          </div>
+              <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold leading-none">
+                Delhi Flood Intelligence
+              </p>
+            </div>
+          </Link>
 
-          {/* Center: Nav links */}
-          <nav className="hidden lg:flex items-center space-x-0.5">
+          {/* Center: Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+              const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname.startsWith('/wards/'));
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-cyan-500/12 text-cyan-300 border border-cyan-500/25'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      ? 'bg-[var(--accent-soft)] text-[var(--brand)] border border-[var(--border-strong)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -102,74 +89,76 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Right: Weather + Connection */}
-          <div className="flex items-center space-x-2.5">
+          {/* Right: Weather Telemetry, Connection State, Theme Toggle & Report CTA */}
+          <div className="flex items-center gap-2.5">
             {weather && (
-              <div className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-[11px]">
-                <span className="text-slate-500">Precip:</span>
-                <span className="font-bold text-cyan-400">{weather.rainfallMm ?? 0} mm/h</span>
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)]">
+                <CloudRain className="w-3.5 h-3.5 text-[var(--brand)]" />
+                <span>Precip:</span>
+                <span className="font-bold text-[var(--text-primary)]">{weather.rainfallMm ?? 0} mm/h</span>
               </div>
             )}
 
             <div
-              className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
+              className={`hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold border ${
                 isConnected
-                  ? 'bg-emerald-500/8 text-emerald-300 border-emerald-500/25'
-                  : 'bg-rose-500/8 text-rose-300 border-rose-500/25'
+                  ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                  : 'bg-rose-500/10 text-rose-500 border-rose-500/25'
               }`}
             >
-              {isConnected ? (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="hidden sm:inline">Live</span>
-                </>
-              ) : (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                  <span className="hidden sm:inline">Offline</span>
-                </>
-              )}
+              <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+              <span>{isConnected ? 'Live Telemetry' : 'Offline'}</span>
             </div>
 
-            {/* Mobile menu toggle */}
-            <button
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
+            <ThemeToggle compact />
+
+            <Link
+              to="/report"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--brand)] text-white hover:opacity-90 transition-opacity text-xs font-bold shadow-sm"
             >
-              <div className="space-y-1">
-                <span className="block w-4 h-0.5 bg-current" />
-                <span className="block w-4 h-0.5 bg-current" />
-                <span className="block w-3 h-0.5 bg-current" />
-              </div>
+              <span>Report Incident</span>
+            </Link>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="lg:hidden p-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)] border border-[var(--border)] transition-colors"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile nav dropdown */}
+        {/* Mobile Dropdown */}
         {mobileOpen && (
-          <div className="lg:hidden pb-3 pt-1 border-t border-slate-800/60">
-            <div className="grid grid-cols-3 gap-1 pt-2">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex flex-col items-center space-y-1 px-2 py-2.5 rounded-xl text-[10px] font-semibold transition-all ${
-                      isActive
-                        ? 'bg-cyan-500/12 text-cyan-300'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
+          <div className="lg:hidden py-3 border-t border-[var(--border)] space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold ${
+                    isActive
+                      ? 'bg-[var(--accent-soft)] text-[var(--brand)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+            <Link
+              to="/report"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-center gap-1.5 px-3 py-2.5 mt-2 rounded-xl bg-[var(--brand)] text-white text-xs font-bold text-center"
+            >
+              <span>Report Waterlogging Incident</span>
+            </Link>
           </div>
         )}
       </div>

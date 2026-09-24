@@ -2,162 +2,398 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+   PRAVAH V2 SEMANTIC DESIGN TOKENS (DUAL THEME)
+   ───────────────────────────────────────────────────────────── */
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Atmospheric Backgrounds */
+  --bg: #07111F;
+  --bg-soft: #0A1726;
+  --bg-subtle: #0E1E31;
+
+  /* Surfaces */
+  --surface: #0C1928;
+  --surface-elevated: #102235;
+  --surface-soft: #14283E;
+  --surface-glass: rgba(12, 25, 40, 0.72);
+  --surface-glass-strong: rgba(7, 17, 31, 0.88);
+
+  /* Borders */
+  --border: rgba(148, 163, 184, 0.14);
+  --border-strong: rgba(148, 163, 184, 0.24);
+  --border-focus: rgba(56, 189, 248, 0.45);
+
+  /* Typography */
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-inverse: #07111F;
+
+  /* Brand Palette (Hydrological Deep to Sky) */
+  --brand: #38BDF8;
+  --brand-strong: #0EA5E9;
+  --brand-deep: #082F49;
+  --accent: #67E8F9;
+  --accent-soft: rgba(103, 232, 249, 0.12);
+
+  /* Risk Severity Color System */
+  --risk-critical: #DC2626;
+  --risk-critical-bg: rgba(220, 38, 38, 0.12);
+  --risk-critical-border: rgba(220, 38, 38, 0.32);
+
+  --risk-high: #EA580C;
+  --risk-high-bg: rgba(234, 88, 12, 0.12);
+  --risk-high-border: rgba(234, 88, 12, 0.32);
+
+  --risk-moderate: #CA8A04;
+  --risk-moderate-bg: rgba(202, 138, 4, 0.12);
+  --risk-moderate-border: rgba(202, 138, 4, 0.32);
+
+  --risk-low: #16A34A;
+  --risk-low-bg: rgba(22, 163, 74, 0.12);
+  --risk-low-border: rgba(22, 163, 74, 0.32);
+
+  /* Shadows & Atmospheric Grids */
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.65);
+  --shadow-lg: 0 24px 60px -16px rgba(0, 0, 0, 0.85);
+  --hero-overlay: linear-gradient(180deg, rgba(7, 17, 31, 0.4) 0%, rgba(7, 17, 31, 0.85) 75%, #07111F 100%);
+  --hero-grid: rgba(56, 189, 248, 0.05);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Atmospheric Backgrounds */
+  --bg: #F4F8FA;
+  --bg-soft: #EAF2F6;
+  --bg-subtle: #DEEAF0;
+
+  /* Surfaces */
+  --surface: #FFFFFF;
+  --surface-elevated: #F8FBFC;
+  --surface-soft: #EDF5F8;
+  --surface-glass: rgba(255, 255, 255, 0.78);
+  --surface-glass-strong: rgba(255, 255, 255, 0.92);
+
+  /* Borders */
+  --border: #D8E5EA;
+  --border-strong: #BCCFD8;
+  --border-focus: rgba(2, 132, 199, 0.5);
+
+  /* Typography */
+  --text-primary: #102A43;
+  --text-secondary: #526777;
+  --text-muted: #7B8D99;
+  --text-inverse: #FFFFFF;
+
+  /* Brand Palette (Civic Deep Blue to Sapphire) */
+  --brand: #0284C7;
+  --brand-strong: #0369A1;
+  --brand-deep: #0C4A6E;
+  --accent: #0891B2;
+  --accent-soft: rgba(8, 145, 178, 0.1);
+
+  /* Risk Severity Color System */
+  --risk-critical: #DC2626;
+  --risk-critical-bg: rgba(220, 38, 38, 0.08);
+  --risk-critical-border: rgba(220, 38, 38, 0.25);
+
+  --risk-high: #EA580C;
+  --risk-high-bg: rgba(234, 88, 12, 0.08);
+  --risk-high-border: rgba(234, 88, 12, 0.25);
+
+  --risk-moderate: #CA8A04;
+  --risk-moderate-bg: rgba(202, 138, 4, 0.08);
+  --risk-moderate-border: rgba(202, 138, 4, 0.25);
+
+  --risk-low: #16A34A;
+  --risk-low-bg: rgba(22, 163, 74, 0.08);
+  --risk-low-border: rgba(22, 163, 74, 0.25);
+
+  /* Shadows & Atmospheric Grids */
+  --shadow-sm: 0 2px 6px -1px rgba(16, 42, 67, 0.06);
+  --shadow-md: 0 10px 24px -6px rgba(16, 42, 67, 0.1);
+  --shadow-lg: 0 20px 48px -12px rgba(16, 42, 67, 0.15);
+  --hero-overlay: linear-gradient(180deg, rgba(244, 248, 250, 0.4) 0%, rgba(244, 248, 250, 0.88) 75%, #F4F8FA 100%);
+  --hero-grid: rgba(2, 132, 199, 0.06);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL BASE & TYPOGRAPHY
+   ───────────────────────────────────────────────────────────── */
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-cyan-500 selection:text-white;
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: var(--brand-strong);
+    color: #FFFFFF;
   }
 }
 
-/* =========================================================
-   Page Transitions
-   ========================================================= */
+/* ─────────────────────────────────────────────────────────────
+   REUSABLE VISUAL PRIMITIVES & UTILITIES
+   ───────────────────────────────────────────────────────────── */
+
+/* Clean Surfaces */
+.surface-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.surface-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.surface-elevated {
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* Measured Glass Panels */
+.glass-panel {
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-panel-strong {
+  background-color: var(--surface-glass-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+  box-shadow: 0 4px 16px -4px rgba(14, 165, 233, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -4px rgba(14, 165, 233, 0.5);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  color: var(--text-primary);
+  background-color: var(--surface-soft);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-elevated);
+  border-color: var(--brand);
+  color: var(--brand);
+  transform: translateY(-1px);
+}
+
+/* Severity Risk Badges */
+.badge-risk-critical {
+  background-color: var(--risk-critical-bg);
+  color: var(--risk-critical);
+  border: 1px solid var(--risk-critical-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-risk-high {
+  background-color: var(--risk-high-bg);
+  color: var(--risk-high);
+  border: 1px solid var(--risk-high-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-risk-moderate {
+  background-color: var(--risk-moderate-bg);
+  color: var(--risk-moderate);
+  border: 1px solid var(--risk-moderate-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-risk-low {
+  background-color: var(--risk-low-bg);
+  color: var(--risk-low);
+  border: 1px solid var(--risk-low-border);
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Dark Input Fields */
+.input-dark {
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-dark:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+.input-dark::placeholder {
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ATMOSPHERIC HERO & ANIMATIONS
+   ───────────────────────────────────────────────────────────── */
+
 @keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
 .page-enter {
   animation: pageFadeIn 0.35s ease-out forwards;
 }
 
-/* =========================================================
-   Floating Orb Animation (Landing Page)
-   ========================================================= */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-22px); }
+@keyframes rainGlide {
+  0%   { transform: translate3d(0, -50px, 0); opacity: 0; }
+  25%  { opacity: 0.25; }
+  100% { transform: translate3d(-15px, 80px, 0); opacity: 0; }
 }
 
-/* =========================================================
-   Stat Number Subtle Pulse
-   ========================================================= */
-@keyframes statPulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.82; }
-}
-.stat-live {
-  animation: statPulse 3.5s ease-in-out infinite;
-}
-
-/* =========================================================
-   Glass Card Hover Lift
-   ========================================================= */
-.glass-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.glass-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.07);
+.rain-canvas {
+  background-image: repeating-linear-gradient(
+    105deg,
+    transparent 0,
+    transparent 40px,
+    rgba(56, 189, 248, 0.07) 41px,
+    transparent 42px 85px
+  );
+  animation: rainGlide 4s linear infinite;
 }
 
-/* =========================================================
-   Inline Risk Badge Variants
-   ========================================================= */
-.risk-critical { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3);  border-radius: 0.5rem; }
-.risk-high     { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); border-radius: 0.5rem; }
-.risk-moderate { background: rgba(234,179,8,0.15);  color: #fbbf24; border: 1px solid rgba(234,179,8,0.3);  border-radius: 0.5rem; }
-.risk-low      { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3);  border-radius: 0.5rem; }
-
-/* =========================================================
-   Dark Input Base
-   ========================================================= */
-.input-dark {
-  background: rgba(2, 6, 23, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f1f5f9;
-  border-radius: 0.75rem;
-  padding: 0.625rem 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  outline: none;
-  width: 100%;
-}
-.input-dark:focus {
-  border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
-}
-.input-dark::placeholder {
-  color: #475569;
-}
-
-/* =========================================================
-   Leaflet Dark Mode
-   ========================================================= */
+/* Leaflet Overrides */
 .leaflet-container {
-  background: #090d16 !important;
+  background-color: var(--bg) !important;
   font-family: inherit;
 }
+
 .leaflet-control-zoom {
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(15, 23, 42, 0.85) !important;
-  backdrop-filter: blur(8px);
+  border: 1px solid var(--border) !important;
+  background-color: var(--surface-glass) !important;
+  backdrop-filter: blur(10px);
 }
+
 .leaflet-control-zoom a {
-  background: transparent !important;
-  color: #94a3b8 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background-color: transparent !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 1px solid var(--border) !important;
 }
+
 .leaflet-control-zoom a:hover {
-  color: #38bdf8 !important;
+  color: var(--brand) !important;
 }
 
-/* =========================================================
-   Pulse animation for high-risk flood hotspots
-   ========================================================= */
-@keyframes floodPulse {
-  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-  70%  { transform: scale(1.1);  box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-}
-.ward-pulse-marker {
-  border-radius: 50%;
-  animation: floodPulse 2s infinite;
-}
-
-/* =========================================================
-   Dark Leaflet Popup
-   ========================================================= */
 .dark-leaflet-popup .leaflet-popup-content-wrapper {
-  background: rgba(15, 23, 42, 0.97) !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.5) !important;
-  border-radius: 14px !important;
-  backdrop-filter: blur(14px) !important;
-  color: #f8fafc !important;
+  background-color: var(--surface-glass-strong) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 1rem !important;
+  backdrop-filter: blur(16px) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
   padding: 4px !important;
 }
+
 .dark-leaflet-popup .leaflet-popup-tip {
-  background: rgba(15, 23, 42, 0.97) !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
-}
-.dark-leaflet-popup a.leaflet-popup-close-button {
-  color: #94a3b8 !important;
-  padding: 6px 8px !important;
-}
-.dark-leaflet-popup a.leaflet-popup-close-button:hover {
-  color: #38bdf8 !important;
+  background-color: var(--surface-glass-strong) !important;
+  border: 1px solid var(--border-strong) !important;
 }
 
-/* =========================================================
-   Custom Sleek Scrollbar
-   ========================================================= */
-::-webkit-scrollbar       { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #020617; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #334155; }
-
-/* =========================================================
-   Premium Glassmorphism Utilities
-   ========================================================= */
-.glass-panel {
-  background: linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(2,6,23,0.88) 100%);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-.glass-panel-glow {
-  background: linear-gradient(135deg, rgba(15,23,42,0.82) 0%, rgba(2,6,23,0.92) 100%);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  box-shadow: 0 0 28px -5px rgba(14, 165, 233, 0.15);
+::-webkit-scrollbar-track {
+  background-color: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--brand);
 }

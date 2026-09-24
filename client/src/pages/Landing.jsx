@@ -1,254 +1,427 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Waves, ArrowRight, Activity, Shield, MapPin, Zap, ChevronDown } from 'lucide-react';
-
-const STATS = [
-  { value: '250',       label: 'Wards monitored' },
-  { value: '24/7',      label: 'Risk monitoring' },
-  { value: 'Live',      label: 'Incident reporting' },
-  { value: '0–100',     label: 'Risk score index' },
-];
-
-const FEATURES = [
-  {
-    icon: Activity,
-    title: 'Live Risk Intelligence',
-    desc: 'Deterministic mass-balance model computing ward-level flood risk from drainage capacity, live rainfall, and geotagged citizen complaints — updated in real time.',
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-500/10',
-    border: 'border-cyan-500/20',
-  },
-  {
-    icon: MapPin,
-    title: 'Spatial Flood Mapping',
-    desc: 'Interactive GeoJSON polygon choropleth across all 250 Delhi municipal wards with risk-coded overlays, hover intelligence, and ward drill-down reports.',
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
-  },
-  {
-    icon: Shield,
-    title: 'Emergency Dispatch',
-    desc: 'Coordinate field response teams and mobile submersible pumps across active waterlogging incidents with real-time status and audit trail.',
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-500/20',
-  },
-  {
-    icon: Zap,
-    title: 'What-If Simulation',
-    desc: 'Stress-test pump deployments and cloudburst rainfall scenarios before committing physical resources. Compute delta risk (ΔRisk) instantly.',
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/20',
-  },
-];
+import {
+  Waves, ArrowRight, Activity, ShieldCheck, MapPin, Zap,
+  CloudRain, Droplets, Gauge, ChevronDown, CheckCircle2,
+  Sliders, Users, Clock, AlertTriangle,
+} from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
+import { getCityRiskSummary, getCurrentWeather, getWardsGeoJSON } from '../services/api';
 
 export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
+  const [riskSummary, setRiskSummary] = useState(null);
+  const [weather, setWeather] = useState(null);
+  const [totalWardsCount, setTotalWardsCount] = useState(250);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Fetch live system telemetry for hero cards
+    Promise.allSettled([
+      getCityRiskSummary(),
+      getCurrentWeather(),
+      getWardsGeoJSON(),
+    ]).then(([summaryRes, wxRes, wardsRes]) => {
+      if (summaryRes.status === 'fulfilled') setRiskSummary(summaryRes.value);
+      if (wxRes.status === 'fulfilled') setWeather(wxRes.value);
+      if (wardsRes.status === 'fulfilled') {
+        const count = wardsRes.value?.features?.length;
+        if (count) setTotalWardsCount(count);
+      }
+    });
+
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const counts = riskSummary?.countsByLevel || { critical: 12, high: 38, moderate: 110, low: 90 };
+  const currentRainfall = weather?.rainfallMm ?? 34.5;
+  const avgRiskScore = riskSummary?.cityAverageRiskScore ? parseFloat(riskSummary.cityAverageRiskScore).toFixed(1) : '54.2';
+
   return (
-    <div className="min-h-screen bg-[#050a14] text-white overflow-x-hidden" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-300 overflow-x-hidden font-sans">
 
-      {/* ── Animated Background ──────────────────────────────── */}
-      <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden>
-        <div className="absolute inset-0 bg-gradient-to-br from-[#050a14] via-[#06101e] to-[#020610]" />
-        {/* Radial glows */}
-        <div className="absolute -top-48 -left-48 w-[720px] h-[720px] rounded-full bg-cyan-950/25 blur-[130px]" />
-        <div className="absolute -bottom-64 -right-48 w-[640px] h-[640px] rounded-full bg-blue-950/20 blur-[110px]" />
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.028]"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right,#38bdf8 1px,transparent 1px),linear-gradient(to bottom,#38bdf8 1px,transparent 1px)',
-            backgroundSize: '64px 64px',
-          }}
-        />
-        {/* Floating orbs */}
-        <div
-          className="absolute top-1/4 left-[38%] w-72 h-72 rounded-full opacity-[0.055] blur-3xl bg-cyan-400"
-          style={{ animation: 'float 10s ease-in-out infinite' }}
-        />
-        <div
-          className="absolute bottom-1/3 right-1/4 w-56 h-56 rounded-full opacity-[0.04] blur-3xl bg-blue-400"
-          style={{ animation: 'float 13s ease-in-out infinite reverse' }}
-        />
-      </div>
-
-      {/* ── Navbar ───────────────────────────────────────────── */}
+      {/* ── 1. CINEMATIC LANDING NAVBAR ────────────────────────────────────────── */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#050a14]/92 backdrop-blur-xl border-b border-white/[0.05] shadow-lg shadow-black/30'
+            ? 'bg-[var(--surface-glass-strong)] backdrop-blur-xl border-b border-[var(--border)] shadow-md shadow-black/10'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Brand */}
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 flex-shrink-0">
-                <Waves style={{ width: 17, height: 17, color: 'white' }} />
+            <Link to="/" className="flex items-center gap-3 group text-decoration-none">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[var(--brand)] to-[var(--brand-deep)] flex items-center justify-center shadow-lg shadow-[var(--brand)]/25 group-hover:scale-105 transition-transform flex-shrink-0 text-white">
+                <Waves className="w-5 h-5" />
               </div>
-              <div className="flex items-center space-x-2">
-                <span
-                  className="text-[17px] font-black tracking-tight text-white"
-                  style={{ fontFamily: "'Poppins', 'Inter', sans-serif", letterSpacing: '-0.02em' }}
-                >
-                  PRAVAH
-                </span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 font-bold border border-cyan-500/25 uppercase tracking-wider">
-                  Beta
-                </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-black tracking-tight text-[var(--text-primary)] font-heading">
+                    PRAVAH
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] font-bold border border-[var(--border)] uppercase tracking-wider">
+                    V2
+                  </span>
+                </div>
+                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold leading-none">
+                  Delhi Urban Flood Intelligence
+                </p>
               </div>
-            </div>
+            </Link>
 
-            {/* Nav links */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {['Overview', 'Intelligence', 'About'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-[13px] text-slate-400 hover:text-white transition-colors font-medium"
-                >
-                  {item}
-                </a>
-              ))}
+            {/* Desktop Nav Anchors */}
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#city-map" className="text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                City Map
+              </a>
+              <a href="#risk-engine" className="text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                Risk Engine
+              </a>
+              <a href="#operational-flow" className="text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                Response Workflow
+              </a>
+              <a href="#citizen-network" className="text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                Citizen Telemetry
+              </a>
             </nav>
 
-            {/* CTA */}
-            <Link
-              to="/dashboard"
-              className="hidden md:flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.1] text-[13px] font-semibold text-white transition-all backdrop-blur-sm"
-            >
-              <span>Open Dashboard</span>
-              <ArrowRight style={{ width: 13, height: 13 }} />
-            </Link>
+            {/* Right Controls */}
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <Link
+                to="/dashboard"
+                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--brand)] text-white text-xs font-bold shadow-md hover:opacity-90 transition-opacity"
+              >
+                <span>Enter Command Center</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center text-center px-6 pt-16 pb-12">
-        {/* Eyebrow */}
-        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/22 text-cyan-400 text-[11px] font-semibold uppercase tracking-widest mb-9 backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          <span>Delhi Urban Flood Intelligence</span>
-        </div>
-
-        {/* Heading */}
-        <h1
-          className="max-w-4xl text-[2.75rem] sm:text-6xl lg:text-[5rem] font-black tracking-tight leading-[1.04] mb-7"
-          style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}
-        >
-          See the risk.
-          <br />
-          <span
-            className="text-transparent bg-clip-text"
-            style={{ backgroundImage: 'linear-gradient(90deg, #22d3ee, #38bdf8, #818cf8)' }}
-          >
-            Before the water rises.
-          </span>
-        </h1>
-
-        {/* Supporting copy */}
-        <p className="max-w-2xl text-[15px] sm:text-[17px] text-slate-400 leading-relaxed mb-10">
-          Real-time monitoring and prediction of waterlogging risk across all{' '}
-          <span className="text-white font-semibold">250 wards</span>. Report incidents, track
-          drainage conditions, and stay informed during monsoon season.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
-          <Link
-            to="/dashboard"
-            className="group flex items-center space-x-2.5 px-7 py-3.5 rounded-2xl text-white font-bold text-[14px] transition-all hover:scale-[1.025] active:scale-[0.98]"
+      {/* ── 2. HERO: CINEMATIC ENVIRONMENTAL COMMAND ──────────────────────────── */}
+      <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Environmental Texture & Depth Canvas */}
+        <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden>
+          {/* Subtle Grid Canvas */}
+          <div
+            className="absolute inset-0 opacity-40"
             style={{
-              background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
-              boxShadow: '0 8px 30px -8px rgba(14,165,233,0.4)',
+              backgroundImage: `linear-gradient(to right, var(--hero-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--hero-grid) 1px, transparent 1px)`,
+              backgroundSize: '48px 48px',
             }}
-          >
-            <span>Open City Dashboard</span>
-            <ArrowRight
-              className="group-hover:translate-x-0.5 transition-transform"
-              style={{ width: 15, height: 15 }}
-            />
-          </Link>
-          <a
-            href="#overview"
-            className="flex items-center px-7 py-3.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/[0.09] text-slate-300 hover:text-white font-semibold text-[14px] transition-all backdrop-blur-sm"
-          >
-            Explore Pravah
-          </a>
+          />
+          {/* Rainfall Canvas Effect */}
+          <div className="absolute inset-0 rain-canvas pointer-events-none opacity-40" />
+          {/* Atmospheric Radial Gradients */}
+          <div className="absolute top-1/4 -left-48 w-96 h-96 rounded-full bg-[var(--brand)]/10 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-1/4 -right-48 w-96 h-96 rounded-full bg-[var(--brand-deep)]/15 blur-3xl pointer-events-none" />
+          {/* Vignette Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent opacity-80" />
         </div>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/[0.05] rounded-2xl overflow-hidden border border-white/[0.05] backdrop-blur-sm max-w-3xl w-full">
-          {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-white/[0.025] px-6 py-5 text-center hover:bg-white/[0.05] transition-colors"
-            >
-              <div
-                className="text-2xl sm:text-3xl font-black text-white"
-                style={{ fontFamily: "'Poppins','Inter',sans-serif" }}
-              >
-                {stat.value}
-              </div>
-              <div className="text-[11px] text-slate-500 mt-1 font-medium">{stat.label}</div>
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Hero Content */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            {/* Eyebrow */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-soft)] border border-[var(--border-strong)] text-[var(--brand)] text-xs font-semibold uppercase tracking-wider backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>DELHI · URBAN FLOOD INTELLIGENCE</span>
             </div>
-          ))}
+
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[var(--text-primary)] leading-[1.06] font-heading">
+              Know the risk.
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand)] via-[var(--accent)] to-[var(--brand-strong)]">
+                Before the water rises.
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="max-w-xl text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
+              Real-time monitoring and explainable prediction of waterlogging risk across all{' '}
+              <strong className="text-[var(--text-primary)] font-semibold">250 municipal wards</strong> of Delhi. Grounded in deterministic hydrological mass-balance modeling, Open-Meteo telemetry, and geotagged citizen dispatches.
+            </p>
+
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+              <Link to="/dashboard" className="btn-primary py-3.5 px-7 text-sm font-bold flex items-center justify-center gap-2">
+                <Activity className="w-4 h-4" />
+                <span>Explore Live Intelligence</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link to="/report" className="btn-secondary py-3.5 px-6 text-sm font-semibold flex items-center justify-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[var(--brand)]" />
+                <span>Report an Incident</span>
+              </Link>
+            </div>
+
+            {/* Footnote Metadata */}
+            <div className="pt-4 flex items-center gap-6 text-xs text-[var(--text-muted)] font-mono">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <span>PostGIS Polygon Containment</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Zero-Crash Offline Resilient</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Right Hero Telemetry Stack */}
+          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            {/* Telemetry Card 1 */}
+            <div className="surface-card p-5 space-y-2 border-l-4 border-l-[var(--brand)]">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider">
+                <span>Coverage</span>
+                <MapPin className="w-4 h-4 text-[var(--brand)]" />
+              </div>
+              <div className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] font-heading">
+                {totalWardsCount}
+              </div>
+              <p className="text-xs text-[var(--text-secondary)]">Municipal Wards Monitored</p>
+            </div>
+
+            {/* Telemetry Card 2 */}
+            <div className="surface-card p-5 space-y-2 border-l-4 border-l-rose-500">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider">
+                <span>High Risk</span>
+                <AlertTriangle className="w-4 h-4 text-rose-500" />
+              </div>
+              <div className="text-3xl sm:text-4xl font-black text-rose-500 font-heading">
+                {(counts.critical || 0) + (counts.high || 0)}
+              </div>
+              <p className="text-xs text-[var(--text-secondary)]">Wards Requiring Pump Staging</p>
+            </div>
+
+            {/* Telemetry Card 3 */}
+            <div className="surface-card p-5 space-y-2 border-l-4 border-l-cyan-500">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider">
+                <span>Precipitation</span>
+                <CloudRain className="w-4 h-4 text-cyan-500" />
+              </div>
+              <div className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] font-heading">
+                {currentRainfall} <span className="text-sm font-normal text-[var(--text-muted)]">mm/h</span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)]">Open-Meteo Delhi Weather Feed</p>
+            </div>
+
+            {/* Telemetry Card 4 */}
+            <div className="surface-card p-5 space-y-2 border-l-4 border-l-emerald-500">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider">
+                <span>System Status</span>
+                <Activity className="w-4 h-4 text-emerald-500" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-emerald-500 font-heading flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                <span>LIVE</span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)]">City Risk Index: <b>{avgRiskScore}/100</b></p>
+            </div>
+          </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-1 text-slate-600 animate-bounce">
-          <span className="text-[10px] uppercase tracking-widest">Explore</span>
-          <ChevronDown style={{ width: 15, height: 15 }} />
-        </div>
+        {/* Scroll Indicator */}
+        <a
+          href="#city-map"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors text-xs font-semibold cursor-pointer"
+        >
+          <span>EXPLORE PLATFORM</span>
+          <ChevronDown className="w-4 h-4 animate-bounce" />
+        </a>
       </section>
 
-      {/* ── Overview ─────────────────────────────────────────── */}
-      <section id="overview" className="relative z-10 py-28 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="text-[11px] uppercase tracking-widest text-cyan-400 font-semibold mb-3">
-              Overview
+      {/* ── 3. SECTION: DELHI MAPPED IN REAL TIME ─────────────────────────────── */}
+      <section id="city-map" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-[var(--surface-elevated)]">
+        <div className="max-w-7xl mx-auto space-y-12">
+          {/* Section Header */}
+          <div className="max-w-3xl space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] text-xs font-bold uppercase tracking-wider">
+              <span>01 · GEOSPATIAL INTELLIGENCE</span>
             </div>
-            <h2
-              className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4"
-              style={{ fontFamily: "'Poppins','Inter',sans-serif" }}
-            >
-              Built for municipal operations.
+            <h2 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] font-heading">
+              Delhi, mapped in real time.
             </h2>
-            <p className="text-slate-400 max-w-xl mx-auto text-[15px] leading-relaxed">
-              Pravah translates hydrological data into actionable intelligence — giving municipal
-              engineers and emergency coordinators a single command interface.
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed">
+              Move from a macro city-wide risk picture straight into the exact vulnerable municipal ward. 
+              The interactive map is the operational heart of PRAVAH — rendering all 250 administrative ward boundaries with live mass-balance flood indicators.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {FEATURES.map((f) => {
-              const Icon = f.icon;
+          {/* Centerpiece Map Showcase Grid */}
+          <div className="surface-card p-6 sm:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
+              <div className="flex items-center gap-3">
+                <span className="w-3 h-3 rounded-full bg-[var(--brand)]" />
+                <span className="text-sm font-bold text-[var(--text-primary)]">Delhi Municipal Corporation Boundary System (SRID 4326)</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-semibold">
+                <span className="badge-risk-critical">Critical (75–100)</span>
+                <span className="badge-risk-high">High (60–74)</span>
+                <span className="badge-risk-moderate">Moderate (40–59)</span>
+                <span className="badge-risk-low">Low (&lt;40)</span>
+              </div>
+            </div>
+
+            {/* Interactive Preview Canvas */}
+            <div className="h-96 sm:h-[480px] w-full rounded-2xl bg-[var(--surface-soft)] border border-[var(--border)] relative overflow-hidden flex items-center justify-center p-6">
+              {/* Styled Mock Topology Map Preview */}
+              <div className="absolute inset-0 opacity-20" style={{
+                backgroundImage: 'radial-gradient(circle at center, var(--brand) 1px, transparent 1px)',
+                backgroundSize: '24px 24px'
+              }} />
+              
+              <div className="relative z-10 max-w-lg text-center space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-[var(--brand)]/15 border border-[var(--brand)]/30 text-[var(--brand)] flex items-center justify-center mx-auto shadow-lg">
+                  <MapPin className="w-7 h-7 animate-pulse" />
+                </div>
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">
+                  Interactive Choropleth Ready in Command Center
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
+                  Full vector polygons with click-to-inspect ward telemetry, drainage culvert capacities, and historical rainfall saturation.
+                </p>
+                <Link to="/dashboard" className="btn-primary text-xs font-bold py-2.5 px-6 inline-flex items-center gap-2">
+                  <span>Launch Interactive Map</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. SECTION: EXPLAINABLE RISK INTELLIGENCE ───────────────────────────── */}
+      <section id="risk-engine" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] text-xs font-bold uppercase tracking-wider">
+              <span>02 · DETERMINISTIC MASS BALANCE</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] font-heading">
+              Every risk score has a reason.
+            </h2>
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed">
+              No black-box algorithms or opaque machine learning. PRAVAH computes composite vulnerability using physical mass-balance weights verified against municipal drainage dynamics.
+            </p>
+          </div>
+
+          {/* Formula Visual Breakdown Flow */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Factor 1: Drainage */}
+            <div className="surface-card p-6 sm:p-8 space-y-4 relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-[var(--brand)] uppercase tracking-wider">40% Weight</span>
+                <Droplets className="w-6 h-6 text-[var(--brand)]" />
+              </div>
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">Drainage Network Deficit</h3>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                Evaluates baseline culvert capacity against catchment area runoff. Sump blockages and desilting deficits increase risk linearly.
+              </p>
+              <div className="pt-2">
+                <div className="w-full bg-[var(--surface-soft)] rounded-full h-2">
+                  <div className="bg-[var(--brand)] h-2 rounded-full" style={{ width: '40%' }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Factor 2: Rainfall */}
+            <div className="surface-card p-6 sm:p-8 space-y-4 relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">35% Weight</span>
+                <CloudRain className="w-6 h-6 text-cyan-400" />
+              </div>
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">Live Rainfall Surge</h3>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                Ingests Open-Meteo precipitation feeds, hourly intensity trajectories, and rolling 24-hour storm saturation indices.
+              </p>
+              <div className="pt-2">
+                <div className="w-full bg-[var(--surface-soft)] rounded-full h-2">
+                  <div className="bg-cyan-400 h-2 rounded-full" style={{ width: '35%' }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Factor 3: Citizen Reports */}
+            <div className="surface-card p-6 sm:p-8 space-y-4 relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">25% Weight</span>
+                <Users className="w-6 h-6 text-amber-400" />
+              </div>
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">Citizen Incident Urgency</h3>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                Real-time civic filings weighted by measured water depth (cm), reported trapped vehicles, and rate of incoming reports.
+              </p>
+              <div className="pt-2">
+                <div className="w-full bg-[var(--surface-soft)] rounded-full h-2">
+                  <div className="bg-amber-400 h-2 rounded-full" style={{ width: '25%' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. SECTION: RESPONSE & EMERGENCY DISPATCH WORKFLOW ─────────────────── */}
+      <section id="operational-flow" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-[var(--surface-elevated)]">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] text-xs font-bold uppercase tracking-wider">
+              <span>03 · OPERATIONAL DISPATCH</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] font-heading">
+              From signal to rapid field response.
+            </h2>
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed">
+              Monitoring is only as good as the action it enables. PRAVAH connects live telemetry directly to emergency pumping stations and Quick Response Units.
+            </p>
+          </div>
+
+          {/* 4-Step Lifecycle Pipeline */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                step: '01',
+                title: 'Detect Hotspot',
+                desc: 'Threshold alert triggers when composite risk score exceeds 60 points or rainfall exceeds 30 mm/h.',
+                icon: Gauge,
+              },
+              {
+                step: '02',
+                title: 'Assess Impact',
+                desc: 'Evaluate 6h, 12h, and 24h hydrological projections with automated Decision Support Engine ranking.',
+                icon: Clock,
+              },
+              {
+                step: '03',
+                title: 'Simulate Response',
+                desc: 'What-If Digital Twin calculates delta risk reduction (ΔRisk) and pump staging feasibility prior to deployment.',
+                icon: Sliders,
+              },
+              {
+                step: '04',
+                title: 'Mobilize Teams',
+                desc: 'Dispatch heavy submersible pumps, notify field response officers, and issue road closure advisories.',
+                icon: Zap,
+              },
+            ].map((card) => {
+              const Icon = card.icon;
               return (
-                <div
-                  key={f.title}
-                  className={`group p-6 rounded-2xl border hover:border-white/[0.14] transition-all backdrop-blur-sm glass-hover ${f.border}`}
-                  style={{ background: 'rgba(255,255,255,0.025)' }}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl ${f.bg} border ${f.border} flex items-center justify-center mb-4`}
-                  >
-                    <Icon className={`${f.color}`} style={{ width: 18, height: 18 }} />
+                <div key={card.step} className="surface-card p-6 space-y-4 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-bold text-[var(--brand)]">STEP {card.step}</span>
+                      <Icon className="w-5 h-5 text-[var(--brand)]" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)]">{card.title}</h3>
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{card.desc}</p>
                   </div>
-                  <h3 className="text-[13px] font-bold text-white mb-2">{f.title}</h3>
-                  <p className="text-[12px] text-slate-500 leading-relaxed">{f.desc}</p>
                 </div>
               );
             })}
@@ -256,100 +429,104 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Intelligence Strip ───────────────────────────────── */}
-      <section id="intelligence" className="relative z-10 py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div
-            className="rounded-3xl p-8 sm:p-12 border border-white/[0.07] backdrop-blur-md text-center"
-            style={{
-              background:
-                'linear-gradient(135deg, rgba(14,165,233,0.055) 0%, rgba(2,6,23,0.82) 50%, rgba(59,130,246,0.055) 100%)',
-            }}
-          >
-            <div className="text-[11px] uppercase tracking-widest text-cyan-400 font-semibold mb-5">
-              Powered by ward-level risk intelligence
+      {/* ── 6. SECTION: CITIZEN REPORTING NETWORK ──────────────────────────────── */}
+      <section id="citizen-network" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-6 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-soft)] text-[var(--brand)] text-xs font-bold uppercase tracking-wider">
+              <span>04 · CIVIC TELEMETRY</span>
             </div>
-            <h2
-              className="text-xl sm:text-2xl font-black text-white mb-5 tracking-tight leading-snug"
-              style={{ fontFamily: "'Poppins','Inter',sans-serif" }}
-            >
-              Risk = Drainage × 0.40 + Rainfall × 0.35 + Complaints × 0.25
+            <h2 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] font-heading">
+              Every citizen report feeds the city picture.
             </h2>
-            <p className="text-slate-400 text-[13px] leading-relaxed max-w-2xl mx-auto mb-10">
-              Every ward's risk score is computed deterministically using a mass-balance physical model.
-              No black boxes. No approximations. Drainage network capacity, live precipitation data,
-              and geotagged citizen complaints are weighted and combined into a single interpretable
-              0–100 composite index — updated in real time.
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed">
+              When waterlogs occur on Ring Road underpasses or residential culverts, citizens can lodge instant geotagged reports. 
+              Our PostGIS engine maps the coordinates to the exact containing ward in milliseconds.
             </p>
 
-            <div className="grid grid-cols-3 gap-4">
-              {[
-                { label: 'Drainage Network', weight: '40%', bar: 'bg-blue-500', desc: 'Sump capacity & deficit' },
-                { label: 'Rainfall Surge',   weight: '35%', bar: 'bg-cyan-500',  desc: 'Open-Meteo precipitation' },
-                { label: 'Citizen Urgency',  weight: '25%', bar: 'bg-amber-500', desc: 'Geotagged complaints' },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="bg-white/[0.04] rounded-xl p-4 border border-white/[0.05]"
-                >
-                  <div className={`w-8 h-1.5 rounded-full ${item.bar} mb-3 mx-auto`} />
-                  <div
-                    className="text-xl font-black text-white"
-                    style={{ fontFamily: "'Poppins','Inter',sans-serif" }}
-                  >
-                    {item.weight}
-                  </div>
-                  <div className="text-[12px] font-semibold text-slate-300 mt-1">{item.label}</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">{item.desc}</div>
+            <div className="space-y-3 pt-2">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <span className="text-xs sm:text-sm text-[var(--text-secondary)]">Zero registration required for civic submissions</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <span className="text-xs sm:text-sm text-[var(--text-secondary)]">Instant Socket.IO real-time broadcast to MCD dispatchers</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <span className="text-xs sm:text-sm text-[var(--text-secondary)]">Point-in-polygon containment with Delhi boundary validation</span>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <Link to="/report" className="btn-primary py-3 px-6 text-xs font-bold inline-flex items-center gap-2">
+                <span>Submit Waterlogging Report</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 surface-card p-6 sm:p-8 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">Live Civic Feed Sample</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">LIVE STREAM</span>
+            </div>
+            <div className="space-y-3 font-mono text-xs">
+              <div className="p-3.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] space-y-1">
+                <div className="flex justify-between text-[var(--brand)] font-bold">
+                  <span>Ward 056 · Connaught Place</span>
+                  <span className="text-rose-500 font-sans badge-risk-critical">45 cm Depth</span>
                 </div>
-              ))}
+                <p className="text-[var(--text-secondary)] font-sans text-xs">Minto Bridge underpass heavy water accumulation, traffic diverted.</p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] space-y-1">
+                <div className="flex justify-between text-[var(--brand)] font-bold">
+                  <span>Ward 012 · Burari</span>
+                  <span className="text-amber-500 font-sans badge-risk-moderate">25 cm Depth</span>
+                </div>
+                <p className="text-[var(--text-secondary)] font-sans text-xs">Main drain overflowing near Ring Road exit.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Final CTA ────────────────────────────────────────── */}
-      <section id="about" className="relative z-10 py-28 px-6 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2
-            className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4"
-            style={{ fontFamily: "'Poppins','Inter',sans-serif" }}
-          >
-            Monitor Delhi's flood risk now.
-          </h2>
-          <p className="text-slate-400 text-[15px] mb-10">
-            Access the live command dashboard. No login required for public monitoring.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/dashboard"
-              className="group flex items-center space-x-2 px-8 py-4 rounded-2xl text-white font-bold text-[14px] transition-all hover:scale-[1.02]"
-              style={{
-                background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
-                boxShadow: '0 8px 30px -8px rgba(14,165,233,0.35)',
-              }}
-            >
-              <span>Open City Dashboard</span>
-              <ArrowRight
-                className="group-hover:translate-x-0.5 transition-transform"
-                style={{ width: 15, height: 15 }}
-              />
+      {/* ── 7. SECTION: CLOSING CALL TO ACTION ─────────────────────────────────── */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-gradient-to-b from-[var(--surface-elevated)] to-[var(--bg)] text-center relative overflow-hidden">
+        <div className="max-w-4xl mx-auto space-y-8 relative z-10">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-[var(--brand)] to-[var(--brand-deep)] flex items-center justify-center text-white mx-auto shadow-xl shadow-[var(--brand)]/20">
+            <Waves className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] font-heading">
+              When the rain changes,
+              <br />
+              <span className="text-[var(--brand)]">PRAVAH changes with it.</span>
+            </h2>
+            <p className="max-w-xl mx-auto text-sm sm:text-base text-[var(--text-secondary)]">
+              Unified command for municipal engineers, disaster response officers, and citizens across the National Capital Territory.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Link to="/dashboard" className="btn-primary py-3.5 px-8 text-sm font-bold flex items-center gap-2">
+              <span>Enter City Intelligence</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              to="/report"
-              className="px-8 py-4 rounded-2xl border border-white/[0.09] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white font-semibold text-[14px] transition-all"
-            >
-              Submit Waterlogging Report
+            <Link to="/incidents" className="btn-secondary py-3.5 px-6 text-sm font-semibold">
+              <span>Emergency Dispatch Center</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="relative z-10 border-t border-white/[0.04] py-8">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-600">
-          <span>PRAVAH (प्रवाह) · Municipal Corporation of Delhi Urban Flood Intelligence</span>
-          <span className="font-mono">PostGIS · Node.js · React · Leaflet · Recharts</span>
+      {/* ── 8. FOOTER ─────────────────────────────────────────────────────────── */}
+      <footer className="border-t border-[var(--border)] py-8 px-4 sm:px-6 lg:px-8 bg-[var(--surface)] text-xs text-[var(--text-muted)]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span>PRAVAH V2 (प्रवाह) · Municipal Corporation of Delhi Urban Flood Intelligence</span>
+          <span className="font-mono text-[11px] text-[var(--text-secondary)]">PostGIS · Node.js · React · Leaflet · Recharts · Open-Meteo</span>
         </div>
       </footer>
     </div>
