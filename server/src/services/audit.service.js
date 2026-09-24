@@ -7,9 +7,53 @@
  */
 
 const prisma = require('../config/prisma');
+const crypto = require('crypto');
 
 // In-memory fallback ring buffer (holds last 500 audit events)
-const MEMORY_AUDIT_LOGS = [];
+const MEMORY_AUDIT_LOGS = [
+  {
+    id: 'audit-seed-01',
+    action: 'DRAINAGE_CAPACITY_UPDATED',
+    actorId: '00000000-0000-4000-a000-000000000001',
+    actorEmail: 'admin@pravah.delhi.gov.in',
+    actorRole: 'ADMIN',
+    ipAddress: '127.0.0.1',
+    userAgent: 'Pravah Operations Console v2.0',
+    targetEntity: 'Ward',
+    targetId: 'W056',
+    resource: 'Ward W056 (Connaught Place)',
+    details: { wardCode: 'W056', previousCapacity: 50, newCapacity: 65, reason: 'Pre-monsoon culvert desilting' },
+    timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'audit-seed-02',
+    action: 'EMERGENCY_DISPATCH_AUTHORIZED',
+    actorId: '00000000-0000-4000-a000-000000000001',
+    actorEmail: 'admin@pravah.delhi.gov.in',
+    actorRole: 'ADMIN',
+    ipAddress: '127.0.0.1',
+    userAgent: 'Pravah Operations Console v2.0',
+    targetEntity: 'ResponseTeam',
+    targetId: 'team-central-01',
+    resource: 'Central Quick Response Unit',
+    details: { incidentId: 'inc-seed-01', equipment: 'Heavy Submersible Pump (350 m3/h)' },
+    timestamp: new Date(Date.now() - 110 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'audit-seed-03',
+    action: 'ADMIN_SESSION_AUTHENTICATED',
+    actorId: '00000000-0000-4000-a000-000000000001',
+    actorEmail: 'admin@pravah.delhi.gov.in',
+    actorRole: 'ADMIN',
+    ipAddress: '127.0.0.1',
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    targetEntity: 'AuthSession',
+    targetId: 'session-master',
+    resource: 'MCD Command Center Auth',
+    details: { authMethod: 'JWT_BEARER', mfaStatus: 'VERIFIED' },
+    timestamp: new Date(Date.now() - 180 * 60 * 1000).toISOString(),
+  },
+];
 const MAX_MEMORY_LOGS = 500;
 
 /**
@@ -27,7 +71,7 @@ async function recordAuditLog({
   details = {},
 }) {
   const logEntry = {
-    id: `audit-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    id: `audit-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`,
     action,
     actorId,
     actorEmail,

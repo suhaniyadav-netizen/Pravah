@@ -17,12 +17,16 @@ const wardSimulationSchema = z.object({
   wardId: z.string().min(1),
   presetId: z.string().optional().nullable(),
   rainfallMm: z.number().min(0).max(500).optional().nullable(),
+  simulatedRainfallMm: z.number().min(0).max(500).optional().nullable(),
   rainfallMultiplier: z.number().min(0.05).max(10.0).optional().nullable(),
   drainageModifierPct: z.number().min(-90).max(200).optional().default(0),
   additionalMobilePumps: z.number().int().min(0).max(20).optional().default(0),
   complaintSpike: z.number().int().min(0).max(500).optional().default(0),
   waterDepthCm: z.number().min(0).max(300).optional().nullable(),
-});
+}).transform((data) => ({
+  ...data,
+  rainfallMm: data.rainfallMm ?? data.simulatedRainfallMm ?? null,
+}));
 
 const citySimulationSchema = z.object({
   presetId: z.string().optional().nullable(),

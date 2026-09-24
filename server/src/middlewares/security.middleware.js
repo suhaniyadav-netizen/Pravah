@@ -28,7 +28,7 @@ const authLimiter = rateLimit({
   handler: (req, res, next, options) => {
     recordAuditLog({
       action: 'RATE_LIMIT_EXCEEDED',
-      ipAddress: req.ip || req.connection.remoteAddress,
+      ipAddress: req.ip || req.socket?.remoteAddress,
       userAgent: req.headers['user-agent'],
       details: { path: req.originalUrl, method: req.method },
     }).catch(() => {});

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, Download, TrendingUp, AlertTriangle, ShieldCheck, Flame } from 'lucide-react';
+import { BarChart3, Download, Flame } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { getAnalyticsHotspots, getAnalyticsTrends } from '../services/api';
 
 export default function Analytics() {
   const [hotspots, setHotspots] = useState([]);
   const [trendData, setTrendData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
@@ -17,8 +16,8 @@ export default function Analytics() {
         setHotspots(hotspotRes.hotspots || []);
         const trends = (trendRes.trends || []).map((t, idx) => ({
           day: t.date || `Day ${idx + 1}`,
-          Rainfall: t.rainfallMm || Math.floor(Math.random() * 40 + 10),
-          Complaints: t.complaintCount || Math.floor(Math.random() * 20 + 2),
+          Rainfall: t.rainfallMm || parseFloat((15 + Math.sin(idx * 0.7) * 12).toFixed(1)),
+          Complaints: t.complaintCount || Math.max(1, Math.round(8 + Math.cos(idx * 0.7) * 6)),
         }));
         setTrendData(trends);
       })
@@ -38,7 +37,7 @@ export default function Analytics() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 page-enter">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -61,7 +60,7 @@ export default function Analytics() {
       </div>
 
       {/* 14-Day Correlation Trend Chart */}
-      <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+      <div className="glass-panel border border-slate-800/80 p-6 rounded-2xl shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-base font-bold text-white">Rainfall Surge vs Citizen Complaint Urgency</h3>
@@ -79,7 +78,7 @@ export default function Analytics() {
               <YAxis yAxisId="right" orientation="right" stroke="#f97316" tick={{ fontSize: 11 }} />
               <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '11px' }} />
               <Legend wrapperStyle={{ fontSize: '11px' }} />
-              <Line yAxisId="left" type="monotone" dataKey="Rainfall" stroke="#0ea5e9" strokeWidth={2} dot={{ r: 3 }} name="Precipitation (mm)" />
+              <Line yAxisId="left"  type="monotone" dataKey="Rainfall"   stroke="#0ea5e9" strokeWidth={2} dot={{ r: 3 }} name="Precipitation (mm)" />
               <Line yAxisId="right" type="monotone" dataKey="Complaints" stroke="#f97316" strokeWidth={2} dot={{ r: 3 }} name="Complaints Filed" />
             </LineChart>
           </ResponsiveContainer>
@@ -87,7 +86,7 @@ export default function Analytics() {
       </div>
 
       {/* Recurrent Hotspot Registry Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+      <div className="glass-panel border border-slate-800/80 rounded-2xl p-6 shadow-xl">
         <div className="flex items-center space-x-2 mb-4 pb-3 border-b border-slate-800">
           <Flame className="w-5 h-5 text-rose-500" />
           <h3 className="text-base font-bold text-white">Top Chronic Flood Hotspots in Delhi</h3>
@@ -95,17 +94,17 @@ export default function Analytics() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {hotspots.slice(0, 6).map((h, idx) => (
-            <div key={idx} className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-start justify-between">
+            <div key={idx} className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 flex items-start justify-between glass-hover transition-all">
               <div>
                 <div className="flex items-center space-x-2 mb-1">
                   <span className="font-mono font-bold text-xs text-cyan-400">{h.wardCode || `W0${idx + 1}`}</span>
                   <span className="text-xs font-bold text-white">{h.wardName || 'Narela / Burari Basin'}</span>
                 </div>
                 <div className="text-[11px] text-slate-400">Recurrence: <b className="text-rose-400">{h.recurrenceCount || 5} Major Events</b></div>
-                <div className="text-[11px] text-slate-400">Average Historical Risk: <b className="text-amber-400">{h.avgRiskScore || 74.5}/100</b></div>
+                <div className="text-[11px] text-slate-400">Avg Risk: <b className="text-amber-400">{h.avgRiskScore || 74.5}/100</b></div>
               </div>
-              <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-bold">
-                Rank #{idx + 1}
+              <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-bold flex-shrink-0">
+                #{idx + 1}
               </div>
             </div>
           ))}

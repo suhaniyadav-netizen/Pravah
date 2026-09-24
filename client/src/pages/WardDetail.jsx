@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShieldAlert, Droplets, CloudRain, Users, Clock, Zap, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Droplets, CloudRain, Users, Clock, Zap } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 import { getWardRiskDetails, getWardForecast, getWardTacticalPlan } from '../services/api';
 
@@ -66,7 +66,7 @@ export default function WardDetail() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 page-enter">
       {/* Back Link */}
       <div>
         <Link to="/dashboard" className="inline-flex items-center space-x-2 text-xs text-slate-400 hover:text-white transition-colors">
@@ -76,7 +76,7 @@ export default function WardDetail() {
       </div>
 
       {/* Ward Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="glass-panel border border-slate-800/80 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center space-x-3 mb-2">
             <h1 className="text-3xl font-black text-white">{details?.wardName || `Ward ${id}`}</h1>
@@ -85,11 +85,11 @@ export default function WardDetail() {
             </span>
           </div>
           <p className="text-slate-400 text-sm">
-            Zone: <span className="text-white font-medium">{details?.zone || 'Central Delhi'}</span> • Baseline Drainage Capacity: <span className="text-white font-medium">{details?.drainageCapacity || 50} m³/s</span>
+            Zone: <span className="text-white font-medium">{details?.zone || 'Central Delhi'}</span> · Baseline Drainage: <span className="text-white font-medium">{details?.drainageCapacity || 50} m³/s</span>
           </p>
         </div>
 
-        <div className="flex items-center space-x-4 bg-slate-950 px-6 py-4 rounded-xl border border-slate-800">
+        <div className="flex items-center space-x-4 bg-slate-950/60 px-6 py-4 rounded-xl border border-slate-800">
           <div className="text-right">
             <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Composite Risk</div>
             <div className="text-3xl font-black text-white">{evalData.riskScore} <span className="text-sm font-normal text-slate-400">/100</span></div>
@@ -107,7 +107,7 @@ export default function WardDetail() {
       {/* Explainable Factor Decomposition Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Factor 1: Drainage */}
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+        <div className="glass-panel glass-hover border border-slate-800/80 p-6 rounded-2xl transition-all">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Drainage Deficit (40%)</span>
             <Droplets className="w-5 h-5 text-blue-400" />
@@ -120,7 +120,7 @@ export default function WardDetail() {
         </div>
 
         {/* Factor 2: Rainfall */}
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+        <div className="glass-panel glass-hover border border-slate-800/80 p-6 rounded-2xl transition-all">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Rainfall Surge (35%)</span>
             <CloudRain className="w-5 h-5 text-cyan-400" />
@@ -133,13 +133,13 @@ export default function WardDetail() {
         </div>
 
         {/* Factor 3: Urgency */}
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+        <div className="glass-panel glass-hover border border-slate-800/80 p-6 rounded-2xl transition-all">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Citizen Urgency (25%)</span>
             <Users className="w-5 h-5 text-amber-400" />
           </div>
           <div className="text-2xl font-black text-white mb-1">+{contrib.complaints || 10} pts</div>
-          <p className="text-xs text-slate-400 mb-4">Complaint Vol & Depth: {comp.complaintScore || 40} / 100</p>
+          <p className="text-xs text-slate-400 mb-4">Complaint Vol &amp; Depth: {comp.complaintScore || 40} / 100</p>
           <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
             <div className="bg-amber-500 h-full rounded-full" style={{ width: `${comp.complaintScore || 40}%` }} />
           </div>
@@ -149,7 +149,7 @@ export default function WardDetail() {
       {/* Multi-Horizon Projections & Decision Support Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Multi-Horizon Chart */}
-        <div className="lg:col-span-6 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+        <div className="lg:col-span-6 glass-panel border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -209,7 +209,11 @@ export default function WardDetail() {
                     </span>
                   </div>
                   <h4 className="text-sm font-bold text-white mb-1">{action.actionTitle || action.title}</h4>
-                  <p className="text-xs text-slate-400 mb-3">{action.actionDescription || action.description}</p>
+                  <p className="text-xs text-slate-400 mb-3">{action.actionDescription || action.description || action.reason}</p>
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 mb-2 text-[11px] text-slate-500">
+                    <span>Target: <b>Ward {action.wardCode || id}</b></span>
+                    <span>Urgency: <b>{action.urgencyWindowMinutes || 30} mins</b></span>
+                  </div>
                   <Link
                     to="/incidents"
                     className="inline-flex items-center space-x-1.5 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"

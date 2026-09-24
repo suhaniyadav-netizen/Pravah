@@ -175,12 +175,15 @@ async function assignTeamToIncident({ incidentId, responseTeamId, notes = '', ac
   // Real-time broadcast
   try {
     const { broadcastTeamDispatched } = require('../config/socket');
+    // Resolve the actual ward from the assignment or memory store
+    const assignedIncident = MEMORY_ASSIGNMENTS.find((a) => a.incidentId === incidentId);
+    const broadcastWardId = assignedIncident?.wardId || 'CITY';
     broadcastTeamDispatched({
       assignmentId: assignment.id,
       teamId: team.id,
       teamName: team.name,
       incidentId,
-      wardId: 'W056',
+      wardId: broadcastWardId,
       status: 'DISPATCHED',
       timestamp: new Date().toISOString(),
     });

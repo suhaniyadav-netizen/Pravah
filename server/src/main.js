@@ -25,16 +25,18 @@ server.listen(PORT, () => {
 // Graceful shutdown handling
 function gracefulShutdown(signal) {
   console.log(`\nReceived ${signal}. Shutting down gracefully...`);
-  server.close(() => {
-    console.log('HTTP server closed.');
-    process.exit(0);
-  });
 
-  // Force close if graceful shutdown hangs
-  setTimeout(() => {
+  // Force close after 5 seconds if graceful shutdown hangs
+  const forceExitTimer = setTimeout(() => {
     console.error('Forced shutdown after timeout.');
     process.exit(1);
   }, 5000);
+
+  server.close(() => {
+    clearTimeout(forceExitTimer);
+    console.log('HTTP server closed.');
+    process.exit(0);
+  });
 }
 
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));

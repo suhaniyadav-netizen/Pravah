@@ -18,9 +18,14 @@ let cachedDemoFeatureCollection = null;
 
 function getCachedDemoGeoJSON() {
   if (!cachedDemoFeatureCollection) {
-    if (fs.existsSync(DEMO_BOUNDARIES_PATH)) {
-      cachedDemoFeatureCollection = JSON.parse(fs.readFileSync(DEMO_BOUNDARIES_PATH, 'utf-8'));
-    } else {
+    try {
+      if (fs.existsSync(DEMO_BOUNDARIES_PATH)) {
+        cachedDemoFeatureCollection = JSON.parse(fs.readFileSync(DEMO_BOUNDARIES_PATH, 'utf-8'));
+      } else {
+        cachedDemoFeatureCollection = { type: 'FeatureCollection', features: [] };
+      }
+    } catch (parseErr) {
+      console.error('[WardService] Failed to parse demo-ward-boundaries.json:', parseErr.message);
       cachedDemoFeatureCollection = { type: 'FeatureCollection', features: [] };
     }
   }

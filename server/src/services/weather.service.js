@@ -200,7 +200,8 @@ async function getCurrentWeather(forceRefresh = false) {
       warning: 'Live weather API unreachable. Showing simulated baseline.',
       forecast: Array.from({ length: 24 }, (_, i) => ({
         time: new Date(now + i * 3600 * 1000).toISOString(),
-        rainfallMm: i < 6 ? parseFloat((Math.random() * 15 + 5).toFixed(1)) : 0.0,
+        // Deterministic sinusoidal pattern — no Math.random() so responses are stable
+        rainfallMm: i < 6 ? parseFloat((8.0 + Math.sin(i * 0.8) * 6.0).toFixed(1)) : 0.0,
         precipitationProbability: i < 6 ? 0.8 : 0.2,
         temperatureC: 27.0,
       })),

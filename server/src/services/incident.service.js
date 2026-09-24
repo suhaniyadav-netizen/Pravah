@@ -9,9 +9,106 @@
 const prisma = require('../config/prisma');
 const { resolveWardFromPoint } = require('./ward.service');
 
-// In-memory stores for offline resilience
-const MEMORY_COMPLAINTS = [];
-const MEMORY_INCIDENTS = [];
+// In-memory stores for offline resilience (pre-seeded with operational data)
+const MEMORY_COMPLAINTS = [
+  {
+    id: 'comp-seed-01',
+    wardId: 'W056',
+    address: 'Near Connaught Place Outer Circle, Minto Underpass',
+    description: 'Severe waterlogging under railway bridge, water level rising rapidly',
+    severity: 'HIGH',
+    status: 'SUBMITTED',
+    waterDepthCm: 55,
+    location: { longitude: 77.2201, latitude: 28.6329 },
+    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+  },
+  {
+    id: 'comp-seed-02',
+    wardId: 'W112',
+    address: 'MB Road near Pul Prahladpur Subway',
+    description: 'Underpass flooded, bus stuck in 4 feet water, traffic halted',
+    severity: 'CRITICAL',
+    status: 'VERIFIED',
+    waterDepthCm: 70,
+    location: { longitude: 77.2912, latitude: 28.5144 },
+    createdAt: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+  },
+  {
+    id: 'comp-seed-03',
+    wardId: 'W089',
+    address: 'Rohtak Road, Zakhira Flyover descending ramp',
+    description: 'Drains choked with plastic bags, 30cm standing water across 2 lanes',
+    severity: 'MEDIUM',
+    status: 'SUBMITTED',
+    waterDepthCm: 32,
+    location: { longitude: 77.1602, latitude: 28.6651 },
+    createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+  },
+  {
+    id: 'comp-seed-04',
+    wardId: 'W001',
+    address: 'Main Bawana Road, Sector 1 Narela',
+    description: 'Stormwater backflow overflowing into residential sidewalk',
+    severity: 'LOW',
+    status: 'SUBMITTED',
+    waterDepthCm: 18,
+    location: { longitude: 77.094594, latitude: 28.840484 },
+    createdAt: new Date(Date.now() - 90 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 90 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+  },
+];
+
+const MEMORY_INCIDENTS = [
+  {
+    id: 'inc-seed-01',
+    wardId: 'W056',
+    primaryComplaintId: 'comp-seed-01',
+    location: { longitude: 77.2201, latitude: 28.6329 },
+    severity: 'HIGH',
+    status: 'ACTIVE',
+    waterDepthCm: 55,
+    description: 'Minto Bridge Inundation: Traffic diversion in effect, submersible pump required',
+    createdAt: new Date(Date.now() - 20 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 20 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+    createdBy: 'control.room@pravah.delhi.gov.in',
+  },
+  {
+    id: 'inc-seed-02',
+    wardId: 'W112',
+    primaryComplaintId: 'comp-seed-02',
+    location: { longitude: 77.2912, latitude: 28.5144 },
+    severity: 'CRITICAL',
+    status: 'ACTIVE',
+    waterDepthCm: 70,
+    description: 'Pul Prahladpur Emergency: Flash flood submerged underpass, emergency dewatering units dispatched',
+    createdAt: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+    createdBy: 'control.room@pravah.delhi.gov.in',
+  },
+  {
+    id: 'inc-seed-03',
+    wardId: 'W089',
+    primaryComplaintId: 'comp-seed-03',
+    location: { longitude: 77.1602, latitude: 28.6651 },
+    severity: 'MEDIUM',
+    status: 'ACTIVE',
+    waterDepthCm: 32,
+    description: 'Zakhira Junction Waterlogging: Sump drain blocked, quick response team requested',
+    createdAt: new Date(Date.now() - 50 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 50 * 60 * 1000).toISOString(),
+    resolvedAt: null,
+    createdBy: 'control.room@pravah.delhi.gov.in',
+  },
+];
 
 // Valid State Transitions
 const COMPLAINT_TRANSITIONS = {
@@ -54,26 +151,49 @@ async function createComplaint({
 
   let createdComplaint;
   try {
-    const rawResult = await prisma.$queryRaw`
-      INSERT INTO complaints (
-        id, ward_id, reported_by, location, address, description,
-        severity, status, water_depth_cm, created_at, updated_at
-      )
-      VALUES (
-        uuid_generate_v4(),
-        ${ward.id}::uuid,
-        ${userId ? `${userId}::uuid` : null},
-        ST_GeomFromText(${pointGeomText}),
-        ${address || null},
-        ${description},
-        ${severity}::"Severity",
-        'SUBMITTED'::"ComplaintStatus",
-        ${waterDepthCm},
-        NOW(),
-        NOW()
-      )
-      RETURNING id, ward_id AS "wardId", address, description, severity, status, water_depth_cm AS "waterDepthCm", created_at AS "createdAt";
-    `;
+    // Use separate queries depending on whether userId is provided, to avoid
+    // JS-string-interpolated SQL injection via the nullable UUID cast.
+    const rawResult = userId
+      ? await prisma.$queryRaw`
+          INSERT INTO complaints (
+            id, ward_id, reported_by, location, address, description,
+            severity, status, water_depth_cm, created_at, updated_at
+          )
+          VALUES (
+            uuid_generate_v4(),
+            ${ward.id}::uuid,
+            ${userId}::uuid,
+            ST_GeomFromText(${pointGeomText}),
+            ${address || null},
+            ${description},
+            ${severity}::"Severity",
+            'SUBMITTED'::"ComplaintStatus",
+            ${waterDepthCm},
+            NOW(),
+            NOW()
+          )
+          RETURNING id, ward_id AS "wardId", address, description, severity, status, water_depth_cm AS "waterDepthCm", created_at AS "createdAt";
+        `
+      : await prisma.$queryRaw`
+          INSERT INTO complaints (
+            id, ward_id, reported_by, location, address, description,
+            severity, status, water_depth_cm, created_at, updated_at
+          )
+          VALUES (
+            uuid_generate_v4(),
+            ${ward.id}::uuid,
+            NULL,
+            ST_GeomFromText(${pointGeomText}),
+            ${address || null},
+            ${description},
+            ${severity}::"Severity",
+            'SUBMITTED'::"ComplaintStatus",
+            ${waterDepthCm},
+            NOW(),
+            NOW()
+          )
+          RETURNING id, ward_id AS "wardId", address, description, severity, status, water_depth_cm AS "waterDepthCm", created_at AS "createdAt";
+        `;
     createdComplaint = rawResult[0];
   } catch {
     // Resilient fallback storage
@@ -155,9 +275,21 @@ async function listComplaints({ wardId, status, severity, limit = 50 }) {
  * Updates a complaint's verification or resolution status.
  */
 async function updateComplaintStatus(id, newStatus, actorUser) {
-  const complaint = MEMORY_COMPLAINTS.find((c) => c.id === id);
+  // Try to get current status from DB first (authoritative source)
+  let currentStatus = 'SUBMITTED';
+  let memComplaint = MEMORY_COMPLAINTS.find((c) => c.id === id);
 
-  const currentStatus = complaint ? complaint.status : 'SUBMITTED';
+  try {
+    const dbComplaint = await prisma.complaint.findUnique({ where: { id }, select: { status: true } });
+    if (dbComplaint) {
+      currentStatus = dbComplaint.status;
+    } else if (memComplaint) {
+      currentStatus = memComplaint.status;
+    }
+  } catch {
+    if (memComplaint) currentStatus = memComplaint.status;
+  }
+
   const allowed = COMPLAINT_TRANSITIONS[currentStatus] || [];
 
   if (!allowed.includes(newStatus)) {
@@ -178,10 +310,10 @@ async function updateComplaintStatus(id, newStatus, actorUser) {
     });
   } catch {
     // Fallback update
-    if (complaint) {
-      complaint.status = newStatus;
-      complaint.updatedAt = now.toISOString();
-      complaint.resolvedAt = resolvedAt ? resolvedAt.toISOString() : null;
+    if (memComplaint) {
+      memComplaint.status = newStatus;
+      memComplaint.updatedAt = now.toISOString();
+      memComplaint.resolvedAt = resolvedAt ? resolvedAt.toISOString() : null;
     }
   }
 
@@ -211,25 +343,46 @@ async function createIncident({
   let incident;
 
   try {
-    const rawResult = await prisma.$queryRaw`
-      INSERT INTO incidents (
-        id, ward_id, primary_complaint_id, location, severity,
-        status, water_depth_cm, description, created_at, updated_at
-      )
-      VALUES (
-        uuid_generate_v4(),
-        ${wardId}::uuid,
-        ${primaryComplaintId ? `${primaryComplaintId}::uuid` : null},
-        ST_GeomFromText(${pointGeomText}),
-        ${severity}::"Severity",
-        'ACTIVE'::"IncidentStatus",
-        ${waterDepthCm},
-        ${description},
-        NOW(),
-        NOW()
-      )
-      RETURNING id, ward_id AS "wardId", severity, status, description, created_at AS "createdAt";
-    `;
+    // Split queries to avoid JS-string-interpolated nullable UUID cast injection
+    const rawResult = primaryComplaintId
+      ? await prisma.$queryRaw`
+          INSERT INTO incidents (
+            id, ward_id, primary_complaint_id, location, severity,
+            status, water_depth_cm, description, created_at, updated_at
+          )
+          VALUES (
+            uuid_generate_v4(),
+            ${wardId}::uuid,
+            ${primaryComplaintId}::uuid,
+            ST_GeomFromText(${pointGeomText}),
+            ${severity}::"Severity",
+            'ACTIVE'::"IncidentStatus",
+            ${waterDepthCm},
+            ${description},
+            NOW(),
+            NOW()
+          )
+          RETURNING id, ward_id AS "wardId", severity, status, description, created_at AS "createdAt";
+        `
+      : await prisma.$queryRaw`
+          INSERT INTO incidents (
+            id, ward_id, primary_complaint_id, location, severity,
+            status, water_depth_cm, description, created_at, updated_at
+          )
+          VALUES (
+            uuid_generate_v4(),
+            ${wardId}::uuid,
+            NULL,
+            ST_GeomFromText(${pointGeomText}),
+            ${severity}::"Severity",
+            'ACTIVE'::"IncidentStatus",
+            ${waterDepthCm},
+            ${description},
+            NOW(),
+            NOW()
+          )
+          RETURNING id, ward_id AS "wardId", severity, status, description, created_at AS "createdAt";
+        `;
     incident = rawResult[0];
   } catch {
     // Fallback storage
@@ -306,8 +459,27 @@ async function listIncidents({ wardId, status, severity, limit = 50 }) {
  * Updates an operational incident's status.
  */
 async function updateIncidentStatus(id, newStatus, actorUser) {
-  const incident = MEMORY_INCIDENTS.find((i) => i.id === id);
-  const currentStatus = incident ? incident.status : 'ACTIVE';
+  // Try to get current status from DB first (authoritative source)
+  let currentStatus = 'ACTIVE';
+  let incidentWardId = 'W056';
+  let memIncident = MEMORY_INCIDENTS.find((i) => i.id === id);
+
+  try {
+    const dbIncident = await prisma.incident.findUnique({ where: { id }, select: { status: true, wardId: true } });
+    if (dbIncident) {
+      currentStatus = dbIncident.status;
+      incidentWardId = dbIncident.wardId || incidentWardId;
+    } else if (memIncident) {
+      currentStatus = memIncident.status;
+      incidentWardId = memIncident.wardId || incidentWardId;
+    }
+  } catch {
+    if (memIncident) {
+      currentStatus = memIncident.status;
+      incidentWardId = memIncident.wardId || incidentWardId;
+    }
+  }
+
   const allowed = INCIDENT_TRANSITIONS[currentStatus] || [];
 
   if (!allowed.includes(newStatus)) {
@@ -327,10 +499,10 @@ async function updateIncidentStatus(id, newStatus, actorUser) {
       data: { status: newStatus, resolvedAt, updatedAt: now },
     });
   } catch {
-    if (incident) {
-      incident.status = newStatus;
-      incident.updatedAt = now.toISOString();
-      incident.resolvedAt = resolvedAt ? resolvedAt.toISOString() : null;
+    if (memIncident) {
+      memIncident.status = newStatus;
+      memIncident.updatedAt = now.toISOString();
+      memIncident.resolvedAt = resolvedAt ? resolvedAt.toISOString() : null;
     }
   }
 
@@ -346,7 +518,7 @@ async function updateIncidentStatus(id, newStatus, actorUser) {
     const { broadcastIncidentUpdated } = require('../config/socket');
     broadcastIncidentUpdated({
       id,
-      wardId: (incident && incident.wardId) || 'W056',
+      wardId: incidentWardId,
       previousStatus: currentStatus,
       newStatus,
       updatedBy: actorUser.email,
