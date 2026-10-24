@@ -39,7 +39,7 @@ const MEMORY_USERS = [
     id: '11111111-1111-4111-a111-111111111111',
     email: 'admin@pravah.delhi.gov.in',
     passwordHash: DEMO_PASSWORD_HASH,
-    name: 'Municipal Commissioner (Admin)',
+    name: 'Municipal Administrator',
     role: 'ADMIN',
     isActive: true,
   },

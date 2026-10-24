@@ -65,7 +65,12 @@ export default function AdminPortal() {
 
   const [token, setToken] = useState(() => {
     const savedToken = sessionStorage.getItem('token') || '';
-    if (savedToken.startsWith('DEMO_')) {
+    const rawUser = sessionStorage.getItem('user') || '';
+    if (
+      savedToken.startsWith('DEMO_') ||
+      rawUser.includes('admin.google') ||
+      rawUser.includes('Municipal Commissioner')
+    ) {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
       return '';
@@ -74,8 +79,17 @@ export default function AdminPortal() {
   });
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = sessionStorage.getItem('user');
-      return saved ? JSON.parse(saved) : null;
+      const rawUser = sessionStorage.getItem('user');
+      if (
+        !rawUser ||
+        rawUser.includes('admin.google') ||
+        rawUser.includes('Municipal Commissioner')
+      ) {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        return null;
+      }
+      return JSON.parse(rawUser);
     } catch {
       return null;
     }
