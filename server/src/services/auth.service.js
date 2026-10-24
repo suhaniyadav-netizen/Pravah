@@ -215,7 +215,7 @@ async function loginUser({ email, password }) {
  * Authenticates an administrator via Google OAuth (ID token / GIS).
  * Verifies token cryptographically using Google's public keys.
  */
-async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent = 'Google Auth Web' }) {
+async function loginWithGoogle({ credential, clientId, ipAddress = '127.0.0.1', userAgent = 'Google Auth Web' }) {
   if (!credential) {
     const err = new Error('Google credential token is missing.');
     err.statusCode = 400;
@@ -226,9 +226,14 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
 
   // 1. Genuine Google ID Token Verification using google-auth-library
   try {
+    const audienceList = [
+      process.env.GOOGLE_CLIENT_ID,
+      clientId,
+    ].filter(Boolean);
+
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID ? process.env.GOOGLE_CLIENT_ID.split(',') : undefined,
+      audience: audienceList.length > 0 ? audienceList : undefined,
     });
     const payload = ticket.getPayload();
     if (payload && payload.email) {

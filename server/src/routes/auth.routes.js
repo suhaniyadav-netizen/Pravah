@@ -89,6 +89,7 @@ router.post('/google', async (req, res, next) => {
 
     const { user, token } = await loginWithGoogle({
       credential: parseResult.data.credential,
+      clientId: parseResult.data.clientId,
       ipAddress,
       userAgent,
     });

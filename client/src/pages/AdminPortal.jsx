@@ -232,7 +232,10 @@ export default function AdminPortal() {
     setLoginError(null);
     setGoogleLoading(true);
     try {
-      const data = await loginWithGoogle({ credential: credentialResponse.credential });
+      const data = await loginWithGoogle({
+        credential: credentialResponse.credential,
+        clientId: googleClientId,
+      });
       sessionStorage.setItem('token', data.token);
       if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
       setToken(data.token);
