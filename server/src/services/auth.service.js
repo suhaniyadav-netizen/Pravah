@@ -224,7 +224,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
 
   let googleUser = null;
 
-  // 1. Attempt genuine Google ID token verification using google-auth-library
+  // 1. Genuine Google ID Token Verification using google-auth-library
   try {
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
@@ -242,59 +242,42 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
       };
     }
   } catch (verifyErr) {
-    // 2. Resilient Fallback for local development or demo credentials
-    // If not production and credential contains decoded payload or demo signature
-    if (process.env.NODE_ENV !== 'production') {
-      try {
-        // Try decoding JWT without verification for demo testing
-        const decoded = jwt.decode(credential);
-        if (decoded && (decoded.email || decoded.sub)) {
-          googleUser = {
-            email: decoded.email || 'suhani.yadavmicro@gmail.com',
-            name: decoded.name || 'Municipal Google Administrator',
-            picture: decoded.picture || null,
-            sub: decoded.sub || 'google-demo-sub-12345',
-            emailVerified: true,
-            authProvider: 'GOOGLE_DEV_DECODED',
-          };
-        }
-      } catch {
-        // Ignore decode error
+    // Only allow test runner verification script
+    if (process.env.NODE_ENV === 'test' && credential.startsWith('test_google_')) {
+      if (credential.includes('unauthorized')) {
+        googleUser = {
+          email: 'unauthorized.user@gmail.com',
+          name: 'Unauthorized User',
+          picture: null,
+          sub: 'test-unauthorized-id',
+          emailVerified: true,
+          authProvider: 'TEST_UNAUTHORIZED',
+        };
+      } else {
+        googleUser = {
+          email: 'suhani.yadavmicro@gmail.com',
+          name: 'Suhani Yadav',
+          picture: null,
+          sub: 'test-suhani-id',
+          emailVerified: true,
+          authProvider: 'TEST_AUTHORIZED',
+        };
       }
-
-      // If still null, check if it's a test string like "demo_google_token"
-      if (!googleUser && credential.startsWith('demo_google_')) {
-        if (credential.includes('unauthorized') || credential.includes('random')) {
-          googleUser = {
-            email: 'unauthorized.user@gmail.com',
-            name: 'Unauthorized User',
-            picture: null,
-            sub: 'unauthorized-user-id',
-            emailVerified: true,
-            authProvider: 'GOOGLE_SANDBOX_UNAUTHORIZED',
-          };
-        } else {
-          googleUser = {
-            email: 'suhani.yadavmicro@gmail.com',
-            name: 'Suhani Yadav',
-            picture: null,
-            sub: 'google-suhani-yadav-id',
-            emailVerified: true,
-            authProvider: 'GOOGLE_SANDBOX_SIMULATION',
-          };
-        }
-      }
-    }
-
-    if (!googleUser) {
-      const err = new Error(`Google token verification failed: ${verifyErr.message}`);
+    } else {
+      const err = new Error(`Google authentication failed: ${verifyErr.message || 'Invalid or unverified Google token.'}`);
       err.statusCode = 401;
       throw err;
     }
   }
 
-  // 3. Strict Administrator Whitelist Verification
-  // Only suhani.yadavmicro@gmail.com is authorized to access the Municipal Admin Portal via Google.
+  if (!googleUser || !googleUser.email) {
+    const err = new Error('Google token did not contain a valid email address.');
+    err.statusCode = 401;
+    throw err;
+  }
+
+  // 2. Strict Administrator Whitelist Verification
+  // Only suhani.yadavmicro@gmail.com is authorized to access the Municipal Admin Portal.
   const AUTHORIZED_ADMIN_EMAIL = 'suhani.yadavmicro@gmail.com';
   const userEmail = (googleUser.email || '').trim().toLowerCase();
 
@@ -309,7 +292,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
       targetId: `unauthorized-${Date.now()}`,
       details: {
         attemptedMethod: 'GOOGLE_OAUTH_GIS',
-        reason: `Access Denied: Google account (${googleUser.email}) is not authorized. Only ${AUTHORIZED_ADMIN_EMAIL} is authorized.`,
+        reason: `Access Denied: Google account (${googleUser.email}) is not authorized.`,
       },
     }).catch(() => {});
 
@@ -320,15 +303,14 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
     throw err;
   }
 
-  // 4. Find existing user or auto-provision administrator
+  // 3. Find existing user or auto-provision administrator
   let user = await findUserByEmail(googleUser.email);
   if (!user) {
-    // Provision new municipal administrator profile
     try {
       user = await prisma.user.create({
         data: {
           email: googleUser.email,
-          name: googleUser.name,
+          name: googleUser.name || 'Suhani Yadav',
           passwordHash: bcrypt.hashSync(`PravahGoogleAuth@${Date.now()}`, 10),
           role: 'ADMIN',
           isActive: true,
@@ -338,7 +320,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
       user = {
         id: `google-${googleUser.sub || Date.now()}`,
         email: googleUser.email,
-        name: googleUser.name,
+        name: googleUser.name || 'Suhani Yadav',
         role: 'ADMIN',
         isActive: true,
         createdAt: new Date(),
@@ -348,7 +330,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
   }
 
   if (!user.isActive) {
-    const err = new Error('This administrative Google account has been deactivated.');
+    const err = new Error('This administrative account has been deactivated.');
     err.statusCode = 403;
     throw err;
   }

@@ -1,17 +1,18 @@
 /**
  * Verification Script: Strict Whitelist Google Authentication
- * Verifies that ONLY the authorized administrator can obtain Admin access,
- * and any unauthorized account is blocked with HTTP 403 Forbidden.
+ * Tests that only the authorized administrator email can pass,
+ * and any other account is blocked with HTTP 403 Forbidden.
  */
+process.env.NODE_ENV = 'test';
 const { loginWithGoogle } = require('../services/auth.service');
 
 async function run() {
-  console.log('Testing Google Auth Verification...');
+  console.log('Testing Strict Google Auth Verification...');
 
   // 1. Test Authorized User: suhani.yadavmicro@gmail.com
   try {
     const authResult = await loginWithGoogle({
-      credential: 'demo_google_auth',
+      credential: 'test_google_suhani',
       ipAddress: '127.0.0.1',
       userAgent: 'Verification Agent',
     });
@@ -30,7 +31,7 @@ async function run() {
   // 2. Test Unauthorized User (MUST BE REJECTED WITH 403)
   try {
     await loginWithGoogle({
-      credential: 'demo_google_unauthorized',
+      credential: 'test_google_unauthorized',
       ipAddress: '127.0.0.1',
       userAgent: 'Verification Agent',
     });
@@ -46,7 +47,26 @@ async function run() {
     }
   }
 
-  console.log('🎉 ALL GOOGLE AUTH CHECKS PASSED!');
+  // 3. Test Invalid Token without test flag (MUST FAIL WITH 401)
+  process.env.NODE_ENV = 'development';
+  try {
+    await loginWithGoogle({
+      credential: 'invalid_fake_token',
+      ipAddress: '127.0.0.1',
+      userAgent: 'Verification Agent',
+    });
+    console.error('❌ Check 3 FAILED: Invalid token was not rejected!');
+    process.exit(1);
+  } catch (err) {
+    if (err.statusCode === 401) {
+      console.log('✅ Check 3 PASSED: Unverified / fake Google token strictly rejected with HTTP 401.');
+    } else {
+      console.error('❌ Check 3 FAILED: Unexpected error for fake token', err);
+      process.exit(1);
+    }
+  }
+
+  console.log('🎉 ALL GOOGLE AUTH SECURITY CHECKS PASSED!');
 }
 
 run();

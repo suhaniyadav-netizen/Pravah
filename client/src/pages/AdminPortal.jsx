@@ -63,7 +63,15 @@ export default function AdminPortal() {
     setSearchParams({ tab: newTab });
   };
 
-  const [token, setToken] = useState(sessionStorage.getItem('token') || '');
+  const [token, setToken] = useState(() => {
+    const savedToken = sessionStorage.getItem('token') || '';
+    if (savedToken.startsWith('DEMO_')) {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      return '';
+    }
+    return savedToken;
+  });
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = sessionStorage.getItem('user');
@@ -222,20 +230,9 @@ export default function AdminPortal() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setLoginError(null);
-    setGoogleLoading(true);
-    try {
-      const data = await loginWithGoogle({ credential: 'demo_google_auth' });
-      sessionStorage.setItem('token', data.token);
-      if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
-      setToken(data.token);
-      setCurrentUser(data.user);
-    } catch (err) {
-      setLoginError(err.message || 'Google sign-in was cancelled or failed.');
-    } finally {
-      setGoogleLoading(false);
-    }
+  const handleGooglePromptConfig = () => {
+    setShowGoogleInfo(true);
+    setLoginError('Google OAuth 2.0 Web Client ID required to open the official Google Sign-In popup. Please provide your Client ID below.');
   };
 
   const handleLogin = async (e) => {
@@ -399,14 +396,14 @@ export default function AdminPortal() {
             </div>
           )}
 
-          {/* ── Google Sign-In ── */}
+          {/* ── Genuine Google Identity Sign-In ── */}
           <div className="space-y-3">
             {googleClientId ? (
-              <div className="flex justify-center w-full">
+              <div className="flex flex-col items-center gap-2 w-full">
                 <GoogleOAuthProvider clientId={googleClientId}>
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
-                    onError={() => setLoginError('Google Sign-In was cancelled or encountered an error.')}
+                    onError={() => setLoginError('Google Sign-In was cancelled or encountered an error in the Google popup.')}
                     theme="outline"
                     size="large"
                     shape="rectangular"
@@ -414,17 +411,77 @@ export default function AdminPortal() {
                     width="100%"
                   />
                 </GoogleOAuthProvider>
+                <div className="flex items-center justify-between w-full text-[10px] font-mono text-[var(--text-muted)] pt-1 px-1">
+                  <span className="flex items-center gap-1 text-emerald-400">
+                    <Shield className="w-3 h-3" />
+                    <span>Real Google GIS Connected</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCustomClientId('');
+                      localStorage.removeItem('pravah_google_client_id');
+                    }}
+                    className="text-[var(--text-muted)] hover:text-rose-400 cursor-pointer"
+                  >
+                    Change Key
+                  </button>
+                </div>
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={handleGoogleSignIn}
-                disabled={googleLoading}
-                className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center justify-center gap-3 border border-slate-300 shadow-sm active:scale-[0.99]"
-              >
-                <GoogleIcon className="w-4 h-4" />
-                <span>{googleLoading ? 'Signing in with Google…' : 'Sign in with Google'}</span>
-              </button>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={handleGooglePromptConfig}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-medium text-xs transition-all cursor-pointer flex items-center justify-center gap-3 border border-slate-300 shadow-sm active:scale-[0.99]"
+                >
+                  <GoogleIcon className="w-4 h-4" />
+                  <span>Sign in with Google</span>
+                </button>
+
+                {showGoogleInfo && (
+                  <div className="p-3.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-[11px] text-[var(--text-muted)] space-y-2.5 animate-fadeIn font-mono">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[var(--text-primary)]">Google OAuth 2.0 Web Client ID:</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowGoogleInfo(false)}
+                        className="text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <p className="text-[10px] leading-relaxed">
+                      To open Google&apos;s real account verification popup, paste your Google Cloud Web Client ID:
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="xxxxxxxx.apps.googleusercontent.com"
+                        value={customClientId}
+                        onChange={(e) => setCustomClientId(e.target.value)}
+                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (customClientId.trim()) {
+                            localStorage.setItem('pravah_google_client_id', customClientId.trim());
+                            setShowGoogleInfo(false);
+                            setLoginError(null);
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-[var(--brand)] text-white font-semibold text-xs rounded-lg hover:opacity-90 cursor-pointer"
+                      >
+                        Activate
+                      </button>
+                    </div>
+                    <p className="text-[9px] text-[var(--text-muted)]">
+                      Or configure <code className="text-sky-400">VITE_GOOGLE_CLIENT_ID</code> in <code className="text-sky-400">client/.env</code>.
+                    </p>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -523,7 +580,7 @@ export default function AdminPortal() {
               </span>
             </div>
             <div className="text-[11px] text-[var(--text-muted)] font-mono">
-              {currentUser?.email || 'admin@pravah.delhi.gov.in'}
+              {currentUser?.email || ''}
             </div>
           </div>
           <button
