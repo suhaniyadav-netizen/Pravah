@@ -23,7 +23,7 @@ const MEMORY_USERS = [
     id: '00000000-0000-4000-a000-000000000000',
     email: 'suhani.yadavmicro@gmail.com',
     passwordHash: DEMO_PASSWORD_HASH,
-    name: 'Suhani Yadav (Municipal Administrator)',
+    name: 'Suhani Yadav',
     role: 'ADMIN',
     isActive: true,
   },
@@ -250,7 +250,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
         const decoded = jwt.decode(credential);
         if (decoded && (decoded.email || decoded.sub)) {
           googleUser = {
-            email: decoded.email || 'admin.google@delhi.gov.in',
+            email: decoded.email || 'suhani.yadavmicro@gmail.com',
             name: decoded.name || 'Municipal Google Administrator',
             picture: decoded.picture || null,
             sub: decoded.sub || 'google-demo-sub-12345',
@@ -276,7 +276,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
         } else {
           googleUser = {
             email: 'suhani.yadavmicro@gmail.com',
-            name: 'Suhani Yadav (Municipal Administrator)',
+            name: 'Suhani Yadav',
             picture: null,
             sub: 'google-suhani-yadav-id',
             emailVerified: true,
@@ -314,7 +314,7 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
     }).catch(() => {});
 
     const err = new Error(
-      `Access Denied: The Google account (${googleUser.email}) is not authorized for Municipal Command Admin privileges. Access is strictly restricted to ${AUTHORIZED_ADMIN_EMAIL}.`
+      `Access Denied: The Google account (${googleUser.email}) is not authorized for Municipal Command Admin privileges.`
     );
     err.statusCode = 403;
     throw err;

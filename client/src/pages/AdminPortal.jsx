@@ -222,29 +222,17 @@ export default function AdminPortal() {
     }
   };
 
-  const handleGoogleDemo = async () => {
+  const handleGoogleSignIn = async () => {
     setLoginError(null);
     setGoogleLoading(true);
     try {
-      const data = await loginWithGoogle({ credential: 'demo_google_suhani' });
+      const data = await loginWithGoogle({ credential: 'demo_google_auth' });
       sessionStorage.setItem('token', data.token);
       if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
       setToken(data.token);
       setCurrentUser(data.user);
     } catch (err) {
-      setLoginError(err.message || 'Google authentication failed.');
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
-
-  const handleTestUnauthorized = async () => {
-    setLoginError(null);
-    setGoogleLoading(true);
-    try {
-      await loginWithGoogle({ credential: 'demo_google_unauthorized' });
-    } catch (err) {
-      setLoginError(err.message || 'Access Denied: The Google account is not authorized.');
+      setLoginError(err.message || 'Google sign-in was cancelled or failed.');
     } finally {
       setGoogleLoading(false);
     }
@@ -411,81 +399,32 @@ export default function AdminPortal() {
             </div>
           )}
 
-          {/* ── Primary Authentication: Google SSO ── */}
+          {/* ── Google Sign-In ── */}
           <div className="space-y-3">
-            {/* Strict Whitelist Notice */}
-            <div className="p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center gap-2 text-xs text-sky-300 font-mono">
-              <Shield className="w-4 h-4 text-sky-400 shrink-0" />
-              <div className="text-[11px] leading-tight">
-                <span className="text-[var(--text-muted)] block text-[10px]">AUTHORIZED ADMINISTRATOR:</span>
-                <span className="font-bold text-white tracking-wide">suhani.yadavmicro@gmail.com</span>
-              </div>
-            </div>
-
             {googleClientId ? (
-              <div className="flex flex-col items-center gap-2 w-full">
+              <div className="flex justify-center w-full">
                 <GoogleOAuthProvider clientId={googleClientId}>
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
-                    onError={() => setLoginError('Google Login was cancelled or encountered an error.')}
-                    theme="filled_blue"
-                    shape="pill"
+                    onError={() => setLoginError('Google Sign-In was cancelled or encountered an error.')}
+                    theme="outline"
+                    size="large"
+                    shape="rectangular"
                     text="signin_with"
                     width="100%"
                   />
                 </GoogleOAuthProvider>
-                <span className="text-[10px] font-mono text-[var(--text-muted)]">
-                  Live GIS Connected · Only suhani.yadavmicro@gmail.com permitted
-                </span>
               </div>
             ) : (
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={handleGoogleDemo}
-                  disabled={googleLoading}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center justify-center gap-2.5 border border-slate-300 shadow-sm active:scale-[0.99]"
-                >
-                  <GoogleIcon className="w-4 h-4" />
-                  <span>{googleLoading ? 'Authenticating with Google…' : 'Sign in as suhani.yadavmicro@gmail.com'}</span>
-                </button>
-
-                <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] px-1">
-                  <button
-                    type="button"
-                    onClick={handleTestUnauthorized}
-                    disabled={googleLoading}
-                    className="text-rose-400 hover:underline cursor-pointer flex items-center gap-1"
-                    title="Simulate login with unauthorized Google ID to verify 403 Forbidden enforcement"
-                  >
-                    <span>Test Other ID (Verify 403 Reject)</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowGoogleInfo(!showGoogleInfo)}
-                    className="text-[var(--brand)] hover:underline cursor-pointer"
-                  >
-                    {showGoogleInfo ? 'Hide OAuth Key' : 'Enter Client ID'}
-                  </button>
-                </div>
-
-                {showGoogleInfo && (
-                  <div className="p-3 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-[10px] text-[var(--text-muted)] space-y-2 animate-fadeIn font-mono">
-                    <p className="font-semibold text-[var(--text-secondary)]">Google Cloud OAuth 2.0 Client ID:</p>
-                    <input
-                      type="text"
-                      placeholder="xxxxxxxx.apps.googleusercontent.com"
-                      value={customClientId}
-                      onChange={(e) => {
-                        setCustomClientId(e.target.value);
-                        localStorage.setItem('pravah_google_client_id', e.target.value);
-                      }}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
-                    />
-                    <p className="text-[9px]">Or configure <code className="text-sky-400">VITE_GOOGLE_CLIENT_ID</code> in client .env.</p>
-                  </div>
-                )}
-              </div>
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={googleLoading}
+                className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center justify-center gap-3 border border-slate-300 shadow-sm active:scale-[0.99]"
+              >
+                <GoogleIcon className="w-4 h-4" />
+                <span>{googleLoading ? 'Signing in with Google…' : 'Sign in with Google'}</span>
+              </button>
             )}
           </div>
 
@@ -580,7 +519,7 @@ export default function AdminPortal() {
             <div className="text-xs font-semibold text-[var(--text-primary)] flex items-center justify-end gap-1.5">
               <span>{currentUser?.name || 'Administrator'}</span>
               <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase font-semibold">
-                {currentUser?.picture || currentUser?.email?.includes('google') ? 'Google SSO' : 'Admin'}
+                Admin
               </span>
             </div>
             <div className="text-[11px] text-[var(--text-muted)] font-mono">
