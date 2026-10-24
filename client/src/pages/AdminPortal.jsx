@@ -80,7 +80,8 @@ export default function AdminPortal() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showGoogleInfo, setShowGoogleInfo] = useState(false);
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  const [customClientId, setCustomClientId] = useState(() => localStorage.getItem('pravah_google_client_id') || '');
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || customClientId || '';
 
   // Admin Data State
   const [wards, setWards] = useState([]);
@@ -225,23 +226,25 @@ export default function AdminPortal() {
     setLoginError(null);
     setGoogleLoading(true);
     try {
-      const data = await loginWithGoogle({ credential: 'demo_google_admin_token' });
+      const data = await loginWithGoogle({ credential: 'demo_google_suhani' });
       sessionStorage.setItem('token', data.token);
       if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
       setToken(data.token);
       setCurrentUser(data.user);
-    } catch {
-      const fallbackToken = 'DEMO_GOOGLE_ADMIN_TOKEN';
-      const fallbackUser = {
-        email: 'admin.google@pravah.delhi.gov.in',
-        role: 'ADMIN',
-        name: 'Municipal Commissioner (Google SSO)',
-        picture: null,
-      };
-      sessionStorage.setItem('token', fallbackToken);
-      sessionStorage.setItem('user', JSON.stringify(fallbackUser));
-      setToken(fallbackToken);
-      setCurrentUser(fallbackUser);
+    } catch (err) {
+      setLoginError(err.message || 'Google authentication failed.');
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleTestUnauthorized = async () => {
+    setLoginError(null);
+    setGoogleLoading(true);
+    try {
+      await loginWithGoogle({ credential: 'demo_google_unauthorized' });
+    } catch (err) {
+      setLoginError(err.message || 'Access Denied: The Google account is not authorized.');
     } finally {
       setGoogleLoading(false);
     }
@@ -409,9 +412,18 @@ export default function AdminPortal() {
           )}
 
           {/* ── Primary Authentication: Google SSO ── */}
-          <div className="space-y-2.5">
+          <div className="space-y-3">
+            {/* Strict Whitelist Notice */}
+            <div className="p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center gap-2 text-xs text-sky-300 font-mono">
+              <Shield className="w-4 h-4 text-sky-400 shrink-0" />
+              <div className="text-[11px] leading-tight">
+                <span className="text-[var(--text-muted)] block text-[10px]">AUTHORIZED ADMINISTRATOR:</span>
+                <span className="font-bold text-white tracking-wide">suhani.yadavmicro@gmail.com</span>
+              </div>
+            </div>
+
             {googleClientId ? (
-              <div className="flex justify-center w-full">
+              <div className="flex flex-col items-center gap-2 w-full">
                 <GoogleOAuthProvider clientId={googleClientId}>
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
@@ -422,6 +434,9 @@ export default function AdminPortal() {
                     width="100%"
                   />
                 </GoogleOAuthProvider>
+                <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                  Live GIS Connected · Only suhani.yadavmicro@gmail.com permitted
+                </span>
               </div>
             ) : (
               <div className="space-y-2">
@@ -432,25 +447,42 @@ export default function AdminPortal() {
                   className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center justify-center gap-2.5 border border-slate-300 shadow-sm active:scale-[0.99]"
                 >
                   <GoogleIcon className="w-4 h-4" />
-                  <span>{googleLoading ? 'Authenticating with Google…' : 'Sign in with Google'}</span>
+                  <span>{googleLoading ? 'Authenticating with Google…' : 'Sign in as suhani.yadavmicro@gmail.com'}</span>
                 </button>
+
                 <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] px-1">
-                  <span className="flex items-center gap-1 text-sky-500">
-                    <Shield className="w-3 h-3" />
-                    <span>Google Identity Services (GIS)</span>
-                  </span>
+                  <button
+                    type="button"
+                    onClick={handleTestUnauthorized}
+                    disabled={googleLoading}
+                    className="text-rose-400 hover:underline cursor-pointer flex items-center gap-1"
+                    title="Simulate login with unauthorized Google ID to verify 403 Forbidden enforcement"
+                  >
+                    <span>Test Other ID (Verify 403 Reject)</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => setShowGoogleInfo(!showGoogleInfo)}
                     className="text-[var(--brand)] hover:underline cursor-pointer"
                   >
-                    {showGoogleInfo ? 'Hide setup' : 'Setup OAuth key'}
+                    {showGoogleInfo ? 'Hide OAuth Key' : 'Enter Client ID'}
                   </button>
                 </div>
+
                 {showGoogleInfo && (
-                  <div className="p-2.5 rounded-lg bg-[var(--surface-soft)] border border-[var(--border)] text-[10px] text-[var(--text-muted)] space-y-1 animate-fadeIn">
-                    <p className="font-semibold text-[var(--text-secondary)]">Production Google OAuth Setup:</p>
-                    <p>Add <code className="text-sky-400 font-mono">VITE_GOOGLE_CLIENT_ID=&quot;your-id.apps.googleusercontent.com&quot;</code> to your client environment. The direct button above authenticates via Pravah Google Auth API.</p>
+                  <div className="p-3 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-[10px] text-[var(--text-muted)] space-y-2 animate-fadeIn font-mono">
+                    <p className="font-semibold text-[var(--text-secondary)]">Google Cloud OAuth 2.0 Client ID:</p>
+                    <input
+                      type="text"
+                      placeholder="xxxxxxxx.apps.googleusercontent.com"
+                      value={customClientId}
+                      onChange={(e) => {
+                        setCustomClientId(e.target.value);
+                        localStorage.setItem('pravah_google_client_id', e.target.value);
+                      }}
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
+                    />
+                    <p className="text-[9px]">Or configure <code className="text-sky-400">VITE_GOOGLE_CLIENT_ID</code> in client .env.</p>
                   </div>
                 )}
               </div>

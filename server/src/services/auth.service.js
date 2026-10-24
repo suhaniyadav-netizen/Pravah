@@ -20,6 +20,14 @@ const DEMO_PASSWORD_HASH = bcrypt.hashSync('PravahDev@2026', 10);
 const DEMO_ADMIN123_HASH = bcrypt.hashSync('admin123', 10);
 const MEMORY_USERS = [
   {
+    id: '00000000-0000-4000-a000-000000000000',
+    email: 'suhani.yadavmicro@gmail.com',
+    passwordHash: DEMO_PASSWORD_HASH,
+    name: 'Suhani Yadav (Municipal Administrator)',
+    role: 'ADMIN',
+    isActive: true,
+  },
+  {
     id: '00000000-0000-4000-a000-000000000001',
     email: 'admin',
     passwordHash: DEMO_ADMIN123_HASH,
@@ -256,14 +264,25 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
 
       // If still null, check if it's a test string like "demo_google_token"
       if (!googleUser && credential.startsWith('demo_google_')) {
-        googleUser = {
-          email: 'admin.google@pravah.delhi.gov.in',
-          name: 'Municipal Commissioner (Google SSO)',
-          picture: null,
-          sub: 'google-demo-user-id',
-          emailVerified: true,
-          authProvider: 'GOOGLE_SANDBOX_SIMULATION',
-        };
+        if (credential.includes('unauthorized') || credential.includes('random')) {
+          googleUser = {
+            email: 'unauthorized.user@gmail.com',
+            name: 'Unauthorized User',
+            picture: null,
+            sub: 'unauthorized-user-id',
+            emailVerified: true,
+            authProvider: 'GOOGLE_SANDBOX_UNAUTHORIZED',
+          };
+        } else {
+          googleUser = {
+            email: 'suhani.yadavmicro@gmail.com',
+            name: 'Suhani Yadav (Municipal Administrator)',
+            picture: null,
+            sub: 'google-suhani-yadav-id',
+            emailVerified: true,
+            authProvider: 'GOOGLE_SANDBOX_SIMULATION',
+          };
+        }
       }
     }
 
@@ -274,7 +293,34 @@ async function loginWithGoogle({ credential, ipAddress = '127.0.0.1', userAgent 
     }
   }
 
-  // 3. Find existing user or auto-provision administrator
+  // 3. Strict Administrator Whitelist Verification
+  // Only suhani.yadavmicro@gmail.com is authorized to access the Municipal Admin Portal via Google.
+  const AUTHORIZED_ADMIN_EMAIL = 'suhani.yadavmicro@gmail.com';
+  const userEmail = (googleUser.email || '').trim().toLowerCase();
+
+  if (userEmail !== AUTHORIZED_ADMIN_EMAIL) {
+    await recordAuditLog({
+      action: 'UNAUTHORIZED_ADMIN_ACCESS_ATTEMPT',
+      actorEmail: googleUser.email,
+      actorRole: 'UNAUTHORIZED_GOOGLE_USER',
+      ipAddress,
+      userAgent,
+      targetEntity: 'AuthSession',
+      targetId: `unauthorized-${Date.now()}`,
+      details: {
+        attemptedMethod: 'GOOGLE_OAUTH_GIS',
+        reason: `Access Denied: Google account (${googleUser.email}) is not authorized. Only ${AUTHORIZED_ADMIN_EMAIL} is authorized.`,
+      },
+    }).catch(() => {});
+
+    const err = new Error(
+      `Access Denied: The Google account (${googleUser.email}) is not authorized for Municipal Command Admin privileges. Access is strictly restricted to ${AUTHORIZED_ADMIN_EMAIL}.`
+    );
+    err.statusCode = 403;
+    throw err;
+  }
+
+  // 4. Find existing user or auto-provision administrator
   let user = await findUserByEmail(googleUser.email);
   if (!user) {
     // Provision new municipal administrator profile
