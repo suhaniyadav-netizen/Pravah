@@ -5,6 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js",
+    "vercel-build": "prisma generate || true",
     "dev": "node src/main.js",
     "dev:all": "npm run dev --prefix ..",
     "verify:db": "node src/scripts/verify-db.js",

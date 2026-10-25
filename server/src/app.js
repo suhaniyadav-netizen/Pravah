@@ -55,11 +55,22 @@ app.use(
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN
-      ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
-      : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5000'],
+    origin: (origin, callback) => {
+      // Allow server-to-server or non-browser requests
+      if (!origin) return callback(null, true);
+      if (process.env.CORS_ORIGIN) {
+        const allowed = process.env.CORS_ORIGIN.split(',').map((o) => o.trim());
+        if (allowed.includes('*') || allowed.includes(origin)) return callback(null, true);
+      }
+      // Allow all Vercel preview & production deployments and local testing
+      if (origin.endsWith('.vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   })
 );
 

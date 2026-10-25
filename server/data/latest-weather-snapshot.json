@@ -9,8 +9,8 @@
   "windSpeedKmh": 6,
   "weatherCode": 0,
   "condition": "Clear sky",
-  "observedAt": "2026-10-25T09:30:00.000Z",
-  "fetchedAt": "2026-10-25T09:41:39.767Z",
+  "observedAt": "2026-10-25T09:45:00.000Z",
+  "fetchedAt": "2026-10-25T09:54:50.227Z",
   "isStale": false,
   "forecast": [
     {
