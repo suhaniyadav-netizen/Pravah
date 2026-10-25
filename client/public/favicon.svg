@@ -1,85 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <defs>
-    <!-- Vibrant Aqua-to-Ocean Water Volume Gradient -->
-    <linearGradient id="waterDrop" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stopColor="#38bdf8" />
-      <stop offset="35%" stopColor="#0ea5e9" />
-      <stop offset="70%" stopColor="#0284c7" />
-      <stop offset="100%" stopColor="#0369a1" />
+    <!-- Brilliant Aqua-to-Ocean Water Volume Gradient -->
+    <linearGradient id="dropGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#48CAE4" />
+      <stop offset="40%" stop-color="#0096C7" />
+      <stop offset="100%" stop-color="#023E8A" />
     </linearGradient>
 
-    <!-- Deep River Undercurrent Gradient -->
-    <linearGradient id="riverWaveDeep" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stopColor="#0284c7" />
-      <stop offset="50%" stopColor="#0369a1" />
-      <stop offset="100%" stopColor="#075985" />
+    <!-- Mid River Flow Wave Gradient -->
+    <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0077B6" />
+      <stop offset="50%" stop-color="#0096C7" />
+      <stop offset="100%" stop-color="#00B4D8" />
     </linearGradient>
 
-    <!-- Turquoise River Surge Gradient -->
-    <linearGradient id="waveAqua" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#22d3ee" />
-      <stop offset="50%" stopColor="#06b6d4" />
-      <stop offset="100%" stopColor="#0284c7" />
-    </linearGradient>
-
-    <!-- Surface Foam & Rapid Highlight Gradient -->
-    <linearGradient id="riverWaveCrest" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stopColor="#e0f2fe" />
-      <stop offset="50%" stopColor="#bae6fd" />
-      <stop offset="100%" stopColor="#ffffff" />
+    <!-- Cyan River Surge Wave Gradient -->
+    <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00B4D8" />
+      <stop offset="50%" stop-color="#48CAE4" />
+      <stop offset="100%" stop-color="#90E0EF" />
     </linearGradient>
   </defs>
 
-  <!-- Pure Water Droplet Body (Transparent Background - No Dark Box) -->
+  <!-- 1. Pure Water Droplet Body (Bright Vibrant Cyan & Blue - No Black Anywhere) -->
   <path
-    d="M32 3 C29 8, 10 27, 10 42 C10 54.15, 19.85 62, 32 62 C44.15 62, 54 54.15, 54 42 C54 27, 35 8, 32 3 Z"
-    fill="url(#waterDrop)"
+    d="M32 4 C30 8, 11 26, 11 41 C11 52.6, 20.4 62, 32 62 C43.6 62, 53 52.6, 53 41 C53 26, 34 8, 32 4 Z"
+    fill="url(#dropGradient)"
   />
 
-  <!-- Deep River Current Wave Inside Drop -->
+  <!-- 2. Lower Deep Water Volume Flow -->
   <path
-    d="M10.8 44 C15 37, 24 35, 31 39 C38 43, 47 41, 53.2 35 C53.8 37.3, 54 39.6, 54 42 C54 54.15, 44.15 62, 32 62 C22.6 62, 14.7 56.1, 11.8 47.7 C11.3 46.5, 11 45.3, 10.8 44 Z"
-    fill="url(#riverWaveDeep)"
+    d="M12 43 C17 36, 24 35, 32 39 C40 43, 47 41, 52 35 C52.7 37, 53 39, 53 41 C53 52.6, 43.6 62, 32 62 C20.4 62, 11 52.6, 11 41 C11 40.5, 11 40, 11.1 39.5 C11.3 40.8, 11.6 42, 12 43 Z"
+    fill="url(#waveGradient1)"
   />
 
-  <!-- Aqua Mid-Current Swell (Pravah Flow) -->
+  <!-- 3. Cyan River Wave Current (Pravah Motion) -->
   <path
-    d="M11 39 C17 32, 25 31, 32 35 C39 39, 47 37, 53 30 C53.5 32.5, 53.8 35, 53.6 37 C47 43, 38 44, 31 40 C24 36, 16 38, 11.5 44 C11.2 42.3, 11 40.7, 11 39 Z"
-    fill="url(#waveAqua)"
-    opacity="0.92"
+    d="M12.5 39 C18 33, 25 32, 32 36 C39 40, 46 38, 51.5 33 C52.2 35, 52.6 37.2, 52.6 39.5 C46.5 44, 39 44.5, 32 41 C25 37.5, 18 39, 13 44 C12.7 42.5, 12.5 40.8, 12.5 39 Z"
+    fill="url(#waveGradient2)"
   />
 
-  <!-- White Foaming River Wave Crest Streamline -->
+  <!-- 4. Water Rapid Foam Line (Crisp White) -->
   <path
-    d="M13 38 C19 32, 26 31.5, 32 35 C38 38.5, 45 37, 51 31"
-    stroke="url(#riverWaveCrest)"
-    stroke-width="2.2"
+    d="M14 38 C20 32.5, 26 32, 32 35.5 C38 39, 44 37.5, 50 32"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
     stroke-linecap="round"
   />
 
-  <!-- Secondary Water Ripple Streak -->
+  <!-- 5. Secondary Lower Wave Ripple -->
   <path
-    d="M18 47 C23 43, 28 43, 33 46 C38 49, 44 48, 48 43"
-    stroke="#ffffff"
-    stroke-width="1.4"
+    d="M18 48 C23 44, 28 44, 33 47 C38 50, 43 49, 47 45"
+    stroke="#CAF0F8"
+    stroke-width="1.8"
     stroke-linecap="round"
-    stroke-opacity="0.65"
+    stroke-opacity="0.8"
   />
 
-  <!-- Crystalline Water Sunlight Reflection Arc -->
+  <!-- 6. Sunlight Reflection Arc on Droplet -->
   <path
-    d="M30 8 C23 18, 17 28, 16 37 C15.5 31, 19 20, 27 12 Z"
-    fill="#ffffff"
-    opacity="0.65"
+    d="M30 8 C23 18, 17 27, 16 35 C15.5 30, 18.5 20, 26 12 Z"
+    fill="#FFFFFF"
+    opacity="0.75"
   />
 
-  <!-- Specular Sunlight Glint Dot -->
-  <circle cx="27" cy="18" r="2.8" fill="#ffffff" opacity="0.9" />
-
-  <!-- Ambient Rim Glow -->
-  <path
-    d="M44 52 C48 48, 51 43, 52 38 C52.5 42, 50 48, 45 53 Z"
-    fill="#ffffff"
-    opacity="0.35"
-  />
+  <!-- 7. Bright Sparkle Highlights -->
+  <circle cx="26.5" cy="18" r="3" fill="#FFFFFF" />
+  <circle cx="34" cy="24" r="1.5" fill="#FFFFFF" opacity="0.6" />
 </svg>
