@@ -2,168 +2,163 @@
   "source": "Open-Meteo",
   "stationName": "Delhi Central (IMD Safdarjung Reference)",
   "rainfallMm": 0,
-  "precipitationProbability": 0.04,
-  "temperatureC": 24.7,
-  "apparentTemperatureC": 25.6,
-  "relativeHumidity": 57,
-  "windSpeedKmh": 7,
+  "precipitationProbability": 0,
+  "temperatureC": 28.4,
+  "apparentTemperatureC": 29.9,
+  "relativeHumidity": 41,
+  "windSpeedKmh": 4.2,
   "weatherCode": 0,
   "condition": "Clear sky",
-  "observedAt": "2026-10-24T14:45:00.000Z",
-  "fetchedAt": "2026-10-24T14:54:17.364Z",
+  "observedAt": "2026-10-25T07:00:00.000Z",
+  "fetchedAt": "2026-10-25T07:06:27.894Z",
   "isStale": false,
   "forecast": [
-    {
-      "time": "2026-10-24T21:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0.04,
-      "temperatureC": 23.7
-    },
-    {
-      "time": "2026-10-24T22:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0.02,
-      "temperatureC": 22.6
-    },
-    {
-      "time": "2026-10-24T23:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 21.9
-    },
-    {
-      "time": "2026-10-25T00:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 21.5
-    },
-    {
-      "time": "2026-10-25T01:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 21.1
-    },
-    {
-      "time": "2026-10-25T02:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 20.9
-    },
-    {
-      "time": "2026-10-25T03:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 20.7
-    },
-    {
-      "time": "2026-10-25T04:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 20.6
-    },
-    {
-      "time": "2026-10-25T05:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 20.4
-    },
-    {
-      "time": "2026-10-25T06:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 20.1
-    },
-    {
-      "time": "2026-10-25T07:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 20.9
-    },
-    {
-      "time": "2026-10-25T08:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 22.6
-    },
-    {
-      "time": "2026-10-25T09:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 24.6
-    },
-    {
-      "time": "2026-10-25T10:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 26.7
-    },
-    {
-      "time": "2026-10-25T11:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 28.6
-    },
-    {
-      "time": "2026-10-25T12:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 29.8
-    },
     {
       "time": "2026-10-25T13:00",
       "rainfallMm": 0,
       "precipitationProbability": 0,
-      "temperatureC": 30.5
+      "temperatureC": 29.2
     },
     {
       "time": "2026-10-25T14:00",
       "rainfallMm": 0,
       "precipitationProbability": 0,
-      "temperatureC": 30.6
+      "temperatureC": 29.5
     },
     {
       "time": "2026-10-25T15:00",
       "rainfallMm": 0,
-      "precipitationProbability": 0.01,
-      "temperatureC": 30.4
+      "precipitationProbability": 0,
+      "temperatureC": 29.3
     },
     {
       "time": "2026-10-25T16:00",
       "rainfallMm": 0,
-      "precipitationProbability": 0.02,
-      "temperatureC": 29.5
+      "precipitationProbability": 0,
+      "temperatureC": 28.3
     },
     {
       "time": "2026-10-25T17:00",
       "rainfallMm": 0,
-      "precipitationProbability": 0.02,
-      "temperatureC": 27.5
+      "precipitationProbability": 0,
+      "temperatureC": 26.3
     },
     {
       "time": "2026-10-25T18:00",
       "rainfallMm": 0,
-      "precipitationProbability": 0.02,
-      "temperatureC": 26
+      "precipitationProbability": 0,
+      "temperatureC": 25.4
     },
     {
       "time": "2026-10-25T19:00",
       "rainfallMm": 0,
-      "precipitationProbability": 0.01,
-      "temperatureC": 25.3
+      "precipitationProbability": 0,
+      "temperatureC": 24.5
     },
     {
       "time": "2026-10-25T20:00",
       "rainfallMm": 0,
       "precipitationProbability": 0,
-      "temperatureC": 24.6
+      "temperatureC": 23.5
+    },
+    {
+      "time": "2026-10-25T21:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 22.5
+    },
+    {
+      "time": "2026-10-25T22:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 21.8
+    },
+    {
+      "time": "2026-10-25T23:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 21.1
+    },
+    {
+      "time": "2026-10-26T00:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 20.5
+    },
+    {
+      "time": "2026-10-26T01:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 19.9
+    },
+    {
+      "time": "2026-10-26T02:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 19.3
+    },
+    {
+      "time": "2026-10-26T03:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 18.9
+    },
+    {
+      "time": "2026-10-26T04:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 18.5
+    },
+    {
+      "time": "2026-10-26T05:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 18.3
+    },
+    {
+      "time": "2026-10-26T06:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 18
+    },
+    {
+      "time": "2026-10-26T07:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 19.1
+    },
+    {
+      "time": "2026-10-26T08:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 21
+    },
+    {
+      "time": "2026-10-26T09:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 23.3
+    },
+    {
+      "time": "2026-10-26T10:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 25.7
+    },
+    {
+      "time": "2026-10-26T11:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 27.7
+    },
+    {
+      "time": "2026-10-26T12:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 28.8
     }
   ],
   "past14Days": [
-    {
-      "date": "2026-10-10",
-      "rainfallMm": 0.2,
-      "avgTemperatureC": 27.5
-    },
     {
       "date": "2026-10-11",
       "rainfallMm": 0.3,
@@ -233,6 +228,11 @@
       "date": "2026-10-24",
       "rainfallMm": 0,
       "avgTemperatureC": 25.5
+    },
+    {
+      "date": "2026-10-25",
+      "rainfallMm": 0.8,
+      "avgTemperatureC": 22.1
     }
   ]
 }

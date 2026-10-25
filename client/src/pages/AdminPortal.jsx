@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import {
-  Lock, Shield, Sliders, LogOut, AlertTriangle,
+  Shield, Sliders, LogOut, AlertTriangle,
   CheckCircle2, ArrowRight, RefreshCw,
   Users, Droplets, ChevronRight, Search, Gauge,
   ExternalLink, RotateCcw, TrendingDown, TrendingUp,
   Check, Layers, Info, Filter, ArrowUpRight,
-  Radio, Terminal
+  Radio, Terminal, Ban, X
 } from 'lucide-react';
 import {
-  login,
   loginWithGoogle,
   getAdminOverview,
   updateDrainageCapacity,
@@ -95,15 +94,13 @@ export default function AdminPortal() {
     }
   });
 
-  // Login form state
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  // Login state
   const [loginError, setLoginError] = useState(null);
-  const [loginLoading, setLoginLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showGoogleInfo, setShowGoogleInfo] = useState(false);
   const [customClientId, setCustomClientId] = useState(() => localStorage.getItem('pravah_google_client_id') || '');
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || customClientId || '';
+  const [accessDeniedModal, setAccessDeniedModal] = useState({ isOpen: false, email: '', message: '' });
 
   // Admin Data State
   const [wards, setWards] = useState([]);
@@ -241,6 +238,36 @@ export default function AdminPortal() {
       setToken(data.token);
       setCurrentUser(data.user);
     } catch (err) {
+      let attemptedEmail = err.data?.email || '';
+      if (!attemptedEmail && credentialResponse?.credential) {
+        try {
+          const base64Url = credentialResponse.credential.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = JSON.parse(window.atob(base64));
+          if (jsonPayload && jsonPayload.email) {
+            attemptedEmail = jsonPayload.email;
+          }
+        } catch {
+          // ignore parsing error
+        }
+      }
+
+      const isForbidden =
+        err.status === 403 ||
+        err.statusCode === 403 ||
+        err.data?.isAccessDenied ||
+        (err.message && (err.message.includes('Access Denied') || err.message.includes('not authorized')));
+
+      if (isForbidden) {
+        setAccessDeniedModal({
+          isOpen: true,
+          email: attemptedEmail,
+          message:
+            err.message ||
+            'Access Denied: This Google account is not authorized for Municipal Command Admin privileges.',
+        });
+      }
+
       setLoginError(err.message || 'Google authentication failed. Please try again.');
     } finally {
       setGoogleLoading(false);
@@ -250,33 +277,6 @@ export default function AdminPortal() {
   const handleGooglePromptConfig = () => {
     setShowGoogleInfo(true);
     setLoginError('Google OAuth 2.0 Web Client ID required to open the official Google Sign-In popup. Please provide your Client ID below.');
-  };
-
-  const handleLogin = async (e) => {
-    if (e) e.preventDefault();
-    setLoginError(null);
-    setLoginLoading(true);
-    try {
-      const data = await login({ email: username, password });
-      sessionStorage.setItem('token', data.token);
-      if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
-      setToken(data.token);
-      setCurrentUser(data.user);
-    } catch {
-      // Local fallback for quick demo access
-      const fallbackToken = 'DEMO_MCD_ADMIN_TOKEN';
-      const fallbackUser = {
-        email: username.includes('@') ? username : `${username}@pravah.delhi.gov.in`,
-        role: 'ADMIN',
-        name: 'Municipal Administrator',
-      };
-      sessionStorage.setItem('token', fallbackToken);
-      sessionStorage.setItem('user', JSON.stringify(fallbackUser));
-      setToken(fallbackToken);
-      setCurrentUser(fallbackUser);
-    } finally {
-      setLoginLoading(false);
-    }
   };
 
   const handleLogout = () => {
@@ -428,22 +428,6 @@ export default function AdminPortal() {
                     width="100%"
                   />
                 </GoogleOAuthProvider>
-                <div className="flex items-center justify-between w-full text-[10px] font-mono text-[var(--text-muted)] pt-1 px-1">
-                  <span className="flex items-center gap-1 text-emerald-400">
-                    <Shield className="w-3 h-3" />
-                    <span>Real Google GIS Connected</span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCustomClientId('');
-                      localStorage.removeItem('pravah_google_client_id');
-                    }}
-                    className="text-[var(--text-muted)] hover:text-rose-400 cursor-pointer"
-                  >
-                    Change Key
-                  </button>
-                </div>
               </div>
             ) : (
               <div className="space-y-2">
@@ -502,53 +486,6 @@ export default function AdminPortal() {
             )}
           </div>
 
-          {/* ── Visual Divider ── */}
-          <div className="relative flex items-center justify-center my-1">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[var(--border)]" />
-            </div>
-            <span className="relative px-2.5 bg-[var(--surface-elevated)] text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)]">
-              Or Municipal Passcode
-            </span>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-[var(--text-secondary)]">
-                Username or Official Email
-              </label>
-              <input
-                type="text"
-                value={username}
-                placeholder="admin@mcd.delhi.gov.in"
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)] font-mono transition-colors"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-[var(--text-secondary)]">
-                Security Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                placeholder="••••••••••••"
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)] font-mono transition-colors"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loginLoading}
-              className="w-full py-2.5 rounded-xl bg-[var(--brand)] hover:opacity-90 text-white font-semibold text-xs transition-opacity cursor-pointer flex items-center justify-center space-x-2 shadow-sm"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>{loginLoading ? 'Authenticating…' : 'Authenticate & Sign In'}</span>
-            </button>
-          </form>
-
           {/* Secure Telemetry Footer Strip */}
           <div className="pt-4 border-t border-[var(--border)] flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)]">
             <span className="flex items-center gap-1.5 text-emerald-500 font-semibold">
@@ -558,6 +495,57 @@ export default function AdminPortal() {
             <span className="opacity-80">MCD / DDMA NCT</span>
           </div>
         </div>
+
+        {/* ── Access Denied Modal Popup ── */}
+        {accessDeniedModal.isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fadeIn">
+            <div className="relative w-full max-w-md bg-[var(--surface-elevated)] border border-rose-500/40 rounded-2xl p-6 sm:p-7 shadow-2xl text-center space-y-4">
+              <button
+                type="button"
+                onClick={() => setAccessDeniedModal({ isOpen: false, email: '', message: '' })}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface)] transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="w-14 h-14 mx-auto rounded-full bg-rose-500/15 border border-rose-500/40 flex items-center justify-center text-rose-500 shadow-lg shadow-rose-500/20">
+                <Ban className="w-7 h-7" />
+              </div>
+
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Access Denied</h3>
+                <p className="text-xs text-rose-400 font-medium">Unauthorized Municipal Account</p>
+              </div>
+
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                {accessDeniedModal.message}
+              </p>
+
+              {accessDeniedModal.email && (
+                <div className="py-2 px-3 rounded-lg bg-[var(--surface)] border border-[var(--border)] font-mono text-[11px] text-[var(--text-muted)] truncate">
+                  Attempted Account: <span className="text-rose-400 font-semibold">{accessDeniedModal.email}</span>
+                </div>
+              )}
+
+              <div className="p-3 rounded-xl bg-slate-500/10 border border-slate-500/20 text-[11px] text-[var(--text-muted)] text-left leading-relaxed">
+                <div className="flex items-center gap-1.5 font-semibold text-[var(--text-secondary)] mb-1">
+                  <Shield className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Security Protocol Enforced</span>
+                </div>
+                Administrative control of hydraulic simulations, drainage overrides, and operational audit dispatch is strictly reserved for authorized municipal command personnel. This unauthorized login attempt has been logged in the immutable security audit ledger.
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setAccessDeniedModal({ isOpen: false, email: '', message: '' })}
+                className="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition-colors shadow-lg shadow-rose-600/30 cursor-pointer"
+              >
+                Dismiss & Return to Login
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
     );

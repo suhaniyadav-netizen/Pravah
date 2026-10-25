@@ -305,6 +305,8 @@ async function loginWithGoogle({ credential, clientId, ipAddress = '127.0.0.1', 
       `Access Denied: The Google account (${googleUser.email}) is not authorized for Municipal Command Admin privileges.`
     );
     err.statusCode = 403;
+    err.email = googleUser.email;
+    err.isAccessDenied = true;
     throw err;
   }
 

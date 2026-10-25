@@ -100,6 +100,14 @@ router.post('/google', async (req, res, next) => {
       token,
     });
   } catch (error) {
+    if (error.statusCode === 403) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: error.message,
+        email: error.email || null,
+        isAccessDenied: true,
+      });
+    }
     next(error);
   }
 });
