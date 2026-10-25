@@ -32,9 +32,12 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           {/* Left: Brand Wordmark with Custom Limelight Font */}
-          <Link to="/" className="flex items-center gap-2.5 text-decoration-none group select-none">
+          <Link to="/" className="flex items-center gap-2 text-decoration-none group select-none">
             <span className="font-limelight text-xl sm:text-2xl tracking-wider text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors uppercase">
               PRAVAH
+            </span>
+            <span className="font-serif text-xs sm:text-sm font-semibold text-[var(--brand)] opacity-85 group-hover:opacity-100 transition-opacity">
+              (प्रवाह)
             </span>
           </Link>
 
@@ -100,9 +103,14 @@ export default function Navbar() {
           >
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
-                <span className="font-limelight text-xl tracking-wider text-[var(--text-primary)] uppercase">
-                  PRAVAH
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-limelight text-xl tracking-wider text-[var(--text-primary)] uppercase">
+                    PRAVAH
+                  </span>
+                  <span className="font-serif text-xs font-semibold text-[var(--brand)]">
+                    (प्रवाह)
+                  </span>
+                </div>
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)]"

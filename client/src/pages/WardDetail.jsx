@@ -1210,7 +1210,7 @@ export default function WardDetail() {
           </div>
 
           <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between text-[10px] text-[var(--text-muted)]">
-            <span>Decision Support Engine v2.0</span>
+            <span>Decision Support Engine · PRAVAH (प्रवाह)</span>
             <Link to="/incidents" className="text-[var(--brand)] hover:underline font-semibold">
               Open Full Incident Command Center →
             </Link>

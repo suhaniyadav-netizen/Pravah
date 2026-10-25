@@ -381,7 +381,7 @@ export default function AdminPortal() {
 
           <div className="absolute bottom-6 right-6 hidden lg:flex items-center gap-2 font-mono text-[11px] text-[var(--text-muted)] bg-[var(--surface-elevated)]/70 px-3.5 py-1.5 rounded-xl border border-[var(--border)] backdrop-blur-md shadow-xs">
             <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-            <span>AUTHENTICATION PROTOCOL // V2.4</span>
+            <span>COMMAND PROTOCOL // PRAVAH (प्रवाह)</span>
           </div>
         </div>
 
@@ -400,7 +400,12 @@ export default function AdminPortal() {
               <Shield className="w-6 h-6" />
             </div>
             
-            <h2 className="text-2xl font-serif text-[var(--text-primary)] tracking-tight">Admin Portal</h2>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <h2 className="text-2xl font-serif text-[var(--text-primary)] tracking-tight">Admin Portal</h2>
+              <span className="text-xs font-serif font-semibold text-[var(--brand)] px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 select-none">
+                (प्रवाह)
+              </span>
+            </div>
             <p className="text-xs text-[var(--text-muted)] leading-relaxed">
               Municipal command login for hydraulic simulations, drainage overrides, and operational audit dispatch.
             </p>
@@ -492,7 +497,7 @@ export default function AdminPortal() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>TLS 256-BIT ENCRYPTED</span>
             </span>
-            <span className="opacity-80">MCD / DDMA NCT</span>
+            <span className="opacity-80">PRAVAH (प्रवाह) · MCD & DDMA</span>
           </div>
         </div>
 
@@ -557,9 +562,14 @@ export default function AdminPortal() {
       {/* ── Clean Top Header ─────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
-            Admin Portal
-          </h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
+              Admin Portal
+            </h1>
+            <span className="text-xs font-serif font-semibold text-[var(--brand)] px-2.5 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 select-none">
+              (प्रवाह)
+            </span>
+          </div>
           <p className="text-xs text-[var(--text-muted)] mt-0.5">
             City flood simulations, drainage overrides, and operational logs.
           </p>
