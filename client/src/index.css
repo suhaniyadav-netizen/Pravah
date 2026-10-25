@@ -750,3 +750,63 @@ input[type='range']::-webkit-slider-thumb:hover {
     opacity: 0.95;
   }
 }
+
+/* Yamuna Bridge & Traffic Dynamics */
+@keyframes bridgeCarEast1 {
+  0% {
+    transform: translateX(-60px);
+  }
+  100% {
+    transform: translateX(1260px);
+  }
+}
+
+@keyframes bridgeCarEast2 {
+  0% {
+    transform: translateX(-240px);
+  }
+  100% {
+    transform: translateX(1260px);
+  }
+}
+
+@keyframes bridgeCarWest1 {
+  0% {
+    transform: translateX(1260px);
+  }
+  100% {
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes bridgeCarWest2 {
+  0% {
+    transform: translateX(1440px);
+  }
+  100% {
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes emergencyStrobeBeacon {
+  0%, 100% {
+    opacity: 0.2;
+    filter: drop-shadow(0 0 1px #f59e0b);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px #f59e0b) drop-shadow(0 0 14px #ef4444);
+  }
+}
+
+@keyframes pierWaterFoamPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scaleX(0.95);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scaleX(1.1);
+  }
+}
+
