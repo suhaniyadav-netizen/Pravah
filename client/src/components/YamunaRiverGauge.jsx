@@ -43,21 +43,6 @@ export default function YamunaRiverGauge({
     }
   }, [simulatedLevel, onWaterLevelChange]);
 
-  // Smooth sinusoidal wave phase progression scaled dynamically by river velocity
-  useEffect(() => {
-    let animId;
-    let lastTime = performance.now();
-    const loop = (currentTime) => {
-      const delta = currentTime - lastTime;
-      lastTime = currentTime;
-      const speedFactor = 0.08 + Math.max(0, (metrics.velocity || 1.35) - 1.2) * 0.05;
-      setWaveOffset((prev) => (prev + delta * speedFactor) % 2000);
-      animId = requestAnimationFrame(loop);
-    };
-    animId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(animId);
-  }, [metrics.velocity]);
-
   // Hydrological physics model
   const metrics = useMemo(() => {
     const level = Number(simulatedLevel);
@@ -133,6 +118,21 @@ export default function YamunaRiverGauge({
       isBackflowActive,
     };
   }, [simulatedLevel]);
+
+  // Smooth sinusoidal wave phase progression scaled dynamically by river velocity
+  useEffect(() => {
+    let animId;
+    let lastTime = performance.now();
+    const loop = (currentTime) => {
+      const delta = currentTime - lastTime;
+      lastTime = currentTime;
+      const speedFactor = 0.08 + Math.max(0, (metrics.velocity || 1.35) - 1.2) * 0.05;
+      setWaveOffset((prev) => (prev + delta * speedFactor) % 2000);
+      animId = requestAnimationFrame(loop);
+    };
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, [metrics.velocity]);
 
   // Color schemes for water layers
   const colors = useMemo(() => {
