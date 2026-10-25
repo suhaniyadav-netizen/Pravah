@@ -1,8 +1,8 @@
 {
-  "name": "pravah-v2-monorepo",
+  "name": "pravah-monorepo",
   "version": "2.0.0",
   "private": true,
-  "description": "Pravah V2 — Municipal Flood Intelligence Platform",
+  "description": "PRAVAH (प्रवाह) — Municipal Flood Intelligence Platform",
   "scripts": {
     "start": "npm run dev",
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan.bold,magenta.bold\" --kill-others-on-fail \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
@@ -12,6 +12,21 @@
     "build": "npm run build --prefix client",
     "test": "npm test --prefix server",
     "verify:phase15": "npm run verify:phase15 --prefix server"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.0",
+    "google-auth-library": "^11.3.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.3",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

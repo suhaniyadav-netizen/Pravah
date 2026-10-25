@@ -4,13 +4,13 @@
   "rainfallMm": 0,
   "precipitationProbability": 0,
   "temperatureC": 29.3,
-  "apparentTemperatureC": 30.8,
-  "relativeHumidity": 47,
-  "windSpeedKmh": 5.7,
+  "apparentTemperatureC": 30.7,
+  "relativeHumidity": 46,
+  "windSpeedKmh": 6.1,
   "weatherCode": 0,
   "condition": "Clear sky",
-  "observedAt": "2026-10-25T08:45:00.000Z",
-  "fetchedAt": "2026-10-25T08:55:32.909Z",
+  "observedAt": "2026-10-25T09:15:00.000Z",
+  "fetchedAt": "2026-10-25T09:15:48.448Z",
   "isStale": false,
   "forecast": [
     {
