@@ -79,9 +79,17 @@ router.get('/', async (req, res, next) => {
 
 /**
  * PATCH /api/complaints/:id/status
- * Protected (ADMIN, RESPONSE_TEAM): Updates verification or resolution status.
+ * Protected (ADMIN only): Updates verification or resolution status.
+ *
+ * NOTE: This endpoint is intentionally restricted to ADMIN. The data model has
+ * no way to scope a RESPONSE_TEAM user to the ward/incident they are assigned
+ * to, so granting this role direct access here would let any response-team
+ * account alter the status of complaints outside their operational scope
+ * (CWE-862 - Missing Authorization). Response-team members should update
+ * operational progress through the ward/incident-scoped
+ * `/response-teams/assignments/:id/status` endpoint instead.
  */
-router.patch('/:id/status', authenticate, authorize('ADMIN', 'RESPONSE_TEAM'), async (req, res, next) => {
+router.patch('/:id/status', authenticate, authorize('ADMIN'), async (req, res, next) => {
   try {
     const parsed = statusUpdateSchema.safeParse(req.body);
     if (!parsed.success) {
