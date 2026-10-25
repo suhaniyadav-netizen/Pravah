@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import {
-  Lock, Shield, Sliders, LogOut, AlertTriangle,
+  Shield, Sliders, LogOut, AlertTriangle,
   CheckCircle2, ArrowRight, RefreshCw,
   Users, Droplets, ChevronRight, Search, Gauge,
   ExternalLink, RotateCcw, TrendingDown, TrendingUp,
   Check, Layers, Info, Filter, ArrowUpRight,
-  Radio, Terminal
+  Radio, Terminal, Ban, X
 } from 'lucide-react';
 import {
-  login,
   loginWithGoogle,
   getAdminOverview,
   updateDrainageCapacity,
@@ -63,24 +62,45 @@ export default function AdminPortal() {
     setSearchParams({ tab: newTab });
   };
 
-  const [token, setToken] = useState(sessionStorage.getItem('token') || '');
+  const [token, setToken] = useState(() => {
+    const savedToken = sessionStorage.getItem('token') || '';
+    const rawUser = sessionStorage.getItem('user') || '';
+    if (
+      savedToken.startsWith('DEMO_') ||
+      rawUser.includes('admin.google') ||
+      rawUser.includes('Municipal Commissioner')
+    ) {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      return '';
+    }
+    return savedToken;
+  });
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = sessionStorage.getItem('user');
-      return saved ? JSON.parse(saved) : null;
+      const rawUser = sessionStorage.getItem('user');
+      if (
+        !rawUser ||
+        rawUser.includes('admin.google') ||
+        rawUser.includes('Municipal Commissioner')
+      ) {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        return null;
+      }
+      return JSON.parse(rawUser);
     } catch {
       return null;
     }
   });
 
-  // Login form state
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  // Login state
   const [loginError, setLoginError] = useState(null);
-  const [loginLoading, setLoginLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showGoogleInfo, setShowGoogleInfo] = useState(false);
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  const [customClientId, setCustomClientId] = useState(() => localStorage.getItem('pravah_google_client_id') || '');
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || customClientId || '';
+  const [accessDeniedModal, setAccessDeniedModal] = useState({ isOpen: false, email: '', message: '' });
 
   // Admin Data State
   const [wards, setWards] = useState([]);
@@ -209,69 +229,54 @@ export default function AdminPortal() {
     setLoginError(null);
     setGoogleLoading(true);
     try {
-      const data = await loginWithGoogle({ credential: credentialResponse.credential });
+      const data = await loginWithGoogle({
+        credential: credentialResponse.credential,
+        clientId: googleClientId,
+      });
       sessionStorage.setItem('token', data.token);
       if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
       setToken(data.token);
       setCurrentUser(data.user);
     } catch (err) {
+      let attemptedEmail = err.data?.email || '';
+      if (!attemptedEmail && credentialResponse?.credential) {
+        try {
+          const base64Url = credentialResponse.credential.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = JSON.parse(window.atob(base64));
+          if (jsonPayload && jsonPayload.email) {
+            attemptedEmail = jsonPayload.email;
+          }
+        } catch {
+          // ignore parsing error
+        }
+      }
+
+      const isForbidden =
+        err.status === 403 ||
+        err.statusCode === 403 ||
+        err.data?.isAccessDenied ||
+        (err.message && (err.message.includes('Access Denied') || err.message.includes('not authorized')));
+
+      if (isForbidden) {
+        setAccessDeniedModal({
+          isOpen: true,
+          email: attemptedEmail,
+          message:
+            err.message ||
+            'Access Denied: This Google account is not authorized for Municipal Command Admin privileges.',
+        });
+      }
+
       setLoginError(err.message || 'Google authentication failed. Please try again.');
     } finally {
       setGoogleLoading(false);
     }
   };
 
-  const handleGoogleDemo = async () => {
-    setLoginError(null);
-    setGoogleLoading(true);
-    try {
-      const data = await loginWithGoogle({ credential: 'demo_google_admin_token' });
-      sessionStorage.setItem('token', data.token);
-      if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
-      setToken(data.token);
-      setCurrentUser(data.user);
-    } catch {
-      const fallbackToken = 'DEMO_GOOGLE_ADMIN_TOKEN';
-      const fallbackUser = {
-        email: 'admin.google@pravah.delhi.gov.in',
-        role: 'ADMIN',
-        name: 'Municipal Commissioner (Google SSO)',
-        picture: null,
-      };
-      sessionStorage.setItem('token', fallbackToken);
-      sessionStorage.setItem('user', JSON.stringify(fallbackUser));
-      setToken(fallbackToken);
-      setCurrentUser(fallbackUser);
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
-
-  const handleLogin = async (e) => {
-    if (e) e.preventDefault();
-    setLoginError(null);
-    setLoginLoading(true);
-    try {
-      const data = await login({ email: username, password });
-      sessionStorage.setItem('token', data.token);
-      if (data.user) sessionStorage.setItem('user', JSON.stringify(data.user));
-      setToken(data.token);
-      setCurrentUser(data.user);
-    } catch {
-      // Local fallback for quick demo access
-      const fallbackToken = 'DEMO_MCD_ADMIN_TOKEN';
-      const fallbackUser = {
-        email: username.includes('@') ? username : `${username}@pravah.delhi.gov.in`,
-        role: 'ADMIN',
-        name: 'Municipal Administrator',
-      };
-      sessionStorage.setItem('token', fallbackToken);
-      sessionStorage.setItem('user', JSON.stringify(fallbackUser));
-      setToken(fallbackToken);
-      setCurrentUser(fallbackUser);
-    } finally {
-      setLoginLoading(false);
-    }
+  const handleGooglePromptConfig = () => {
+    setShowGoogleInfo(true);
+    setLoginError('Google OAuth 2.0 Web Client ID required to open the official Google Sign-In popup. Please provide your Client ID below.');
   };
 
   const handleLogout = () => {
@@ -376,7 +381,7 @@ export default function AdminPortal() {
 
           <div className="absolute bottom-6 right-6 hidden lg:flex items-center gap-2 font-mono text-[11px] text-[var(--text-muted)] bg-[var(--surface-elevated)]/70 px-3.5 py-1.5 rounded-xl border border-[var(--border)] backdrop-blur-md shadow-xs">
             <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-            <span>AUTHENTICATION PROTOCOL // V2.4</span>
+            <span>COMMAND PROTOCOL // PRAVAH (प्रवाह)</span>
           </div>
         </div>
 
@@ -395,7 +400,12 @@ export default function AdminPortal() {
               <Shield className="w-6 h-6" />
             </div>
             
-            <h2 className="text-2xl font-serif text-[var(--text-primary)] tracking-tight">Admin Portal</h2>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <h2 className="text-2xl font-serif text-[var(--text-primary)] tracking-tight">Admin Portal</h2>
+              <span className="text-xs font-serif font-semibold text-[var(--brand)] px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 select-none">
+                (प्रवाह)
+              </span>
+            </div>
             <p className="text-xs text-[var(--text-muted)] leading-relaxed">
               Municipal command login for hydraulic simulations, drainage overrides, and operational audit dispatch.
             </p>
@@ -408,16 +418,17 @@ export default function AdminPortal() {
             </div>
           )}
 
-          {/* ── Primary Authentication: Google SSO ── */}
-          <div className="space-y-2.5">
+          {/* ── Genuine Google Identity Sign-In ── */}
+          <div className="space-y-3">
             {googleClientId ? (
-              <div className="flex justify-center w-full">
+              <div className="flex flex-col items-center gap-2 w-full">
                 <GoogleOAuthProvider clientId={googleClientId}>
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
-                    onError={() => setLoginError('Google Login was cancelled or encountered an error.')}
-                    theme="filled_blue"
-                    shape="pill"
+                    onError={() => setLoginError('Google Sign-In was cancelled or encountered an error in the Google popup.')}
+                    theme="outline"
+                    size="large"
+                    shape="rectangular"
                     text="signin_with"
                     width="100%"
                   />
@@ -427,82 +438,58 @@ export default function AdminPortal() {
               <div className="space-y-2">
                 <button
                   type="button"
-                  onClick={handleGoogleDemo}
-                  disabled={googleLoading}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs transition-all cursor-pointer flex items-center justify-center gap-2.5 border border-slate-300 shadow-sm active:scale-[0.99]"
+                  onClick={handleGooglePromptConfig}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-medium text-xs transition-all cursor-pointer flex items-center justify-center gap-3 border border-slate-300 shadow-sm active:scale-[0.99]"
                 >
                   <GoogleIcon className="w-4 h-4" />
-                  <span>{googleLoading ? 'Authenticating with Google…' : 'Sign in with Google'}</span>
+                  <span>Sign in with Google</span>
                 </button>
-                <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] px-1">
-                  <span className="flex items-center gap-1 text-sky-500">
-                    <Shield className="w-3 h-3" />
-                    <span>Google Identity Services (GIS)</span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowGoogleInfo(!showGoogleInfo)}
-                    className="text-[var(--brand)] hover:underline cursor-pointer"
-                  >
-                    {showGoogleInfo ? 'Hide setup' : 'Setup OAuth key'}
-                  </button>
-                </div>
+
                 {showGoogleInfo && (
-                  <div className="p-2.5 rounded-lg bg-[var(--surface-soft)] border border-[var(--border)] text-[10px] text-[var(--text-muted)] space-y-1 animate-fadeIn">
-                    <p className="font-semibold text-[var(--text-secondary)]">Production Google OAuth Setup:</p>
-                    <p>Add <code className="text-sky-400 font-mono">VITE_GOOGLE_CLIENT_ID=&quot;your-id.apps.googleusercontent.com&quot;</code> to your client environment. The direct button above authenticates via Pravah Google Auth API.</p>
+                  <div className="p-3.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-[11px] text-[var(--text-muted)] space-y-2.5 animate-fadeIn font-mono">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[var(--text-primary)]">Google OAuth 2.0 Web Client ID:</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowGoogleInfo(false)}
+                        className="text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <p className="text-[10px] leading-relaxed">
+                      To open Google&apos;s real account verification popup, paste your Google Cloud Web Client ID:
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="xxxxxxxx.apps.googleusercontent.com"
+                        value={customClientId}
+                        onChange={(e) => setCustomClientId(e.target.value)}
+                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (customClientId.trim()) {
+                            localStorage.setItem('pravah_google_client_id', customClientId.trim());
+                            setShowGoogleInfo(false);
+                            setLoginError(null);
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-[var(--brand)] text-white font-semibold text-xs rounded-lg hover:opacity-90 cursor-pointer"
+                      >
+                        Activate
+                      </button>
+                    </div>
+                    <p className="text-[9px] text-[var(--text-muted)]">
+                      Or configure <code className="text-sky-400">VITE_GOOGLE_CLIENT_ID</code> in <code className="text-sky-400">client/.env</code>.
+                    </p>
                   </div>
                 )}
               </div>
             )}
           </div>
-
-          {/* ── Visual Divider ── */}
-          <div className="relative flex items-center justify-center my-1">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[var(--border)]" />
-            </div>
-            <span className="relative px-2.5 bg-[var(--surface-elevated)] text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)]">
-              Or Municipal Passcode
-            </span>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-[var(--text-secondary)]">
-                Username or Official Email
-              </label>
-              <input
-                type="text"
-                value={username}
-                placeholder="admin@mcd.delhi.gov.in"
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)] font-mono transition-colors"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-[var(--text-secondary)]">
-                Security Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                placeholder="••••••••••••"
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)] font-mono transition-colors"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loginLoading}
-              className="w-full py-2.5 rounded-xl bg-[var(--brand)] hover:opacity-90 text-white font-semibold text-xs transition-opacity cursor-pointer flex items-center justify-center space-x-2 shadow-sm"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>{loginLoading ? 'Authenticating…' : 'Authenticate & Sign In'}</span>
-            </button>
-          </form>
 
           {/* Secure Telemetry Footer Strip */}
           <div className="pt-4 border-t border-[var(--border)] flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)]">
@@ -510,9 +497,60 @@ export default function AdminPortal() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>TLS 256-BIT ENCRYPTED</span>
             </span>
-            <span className="opacity-80">MCD / DDMA NCT</span>
+            <span className="opacity-80">PRAVAH (प्रवाह) · MCD & DDMA</span>
           </div>
         </div>
+
+        {/* ── Access Denied Modal Popup ── */}
+        {accessDeniedModal.isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fadeIn">
+            <div className="relative w-full max-w-md bg-[var(--surface-elevated)] border border-rose-500/40 rounded-2xl p-6 sm:p-7 shadow-2xl text-center space-y-4">
+              <button
+                type="button"
+                onClick={() => setAccessDeniedModal({ isOpen: false, email: '', message: '' })}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface)] transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="w-14 h-14 mx-auto rounded-full bg-rose-500/15 border border-rose-500/40 flex items-center justify-center text-rose-500 shadow-lg shadow-rose-500/20">
+                <Ban className="w-7 h-7" />
+              </div>
+
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Access Denied</h3>
+                <p className="text-xs text-rose-400 font-medium">Unauthorized Municipal Account</p>
+              </div>
+
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                {accessDeniedModal.message}
+              </p>
+
+              {accessDeniedModal.email && (
+                <div className="py-2 px-3 rounded-lg bg-[var(--surface)] border border-[var(--border)] font-mono text-[11px] text-[var(--text-muted)] truncate">
+                  Attempted Account: <span className="text-rose-400 font-semibold">{accessDeniedModal.email}</span>
+                </div>
+              )}
+
+              <div className="p-3 rounded-xl bg-slate-500/10 border border-slate-500/20 text-[11px] text-[var(--text-muted)] text-left leading-relaxed">
+                <div className="flex items-center gap-1.5 font-semibold text-[var(--text-secondary)] mb-1">
+                  <Shield className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Security Protocol Enforced</span>
+                </div>
+                Administrative control of hydraulic simulations, drainage overrides, and operational audit dispatch is strictly reserved for authorized municipal command personnel. This unauthorized login attempt has been logged in the immutable security audit ledger.
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setAccessDeniedModal({ isOpen: false, email: '', message: '' })}
+                className="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition-colors shadow-lg shadow-rose-600/30 cursor-pointer"
+              >
+                Dismiss & Return to Login
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
     );
@@ -524,9 +562,14 @@ export default function AdminPortal() {
       {/* ── Clean Top Header ─────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
-            Admin Portal
-          </h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
+              Admin Portal
+            </h1>
+            <span className="text-xs font-serif font-semibold text-[var(--brand)] px-2.5 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 select-none">
+              (प्रवाह)
+            </span>
+          </div>
           <p className="text-xs text-[var(--text-muted)] mt-0.5">
             City flood simulations, drainage overrides, and operational logs.
           </p>
@@ -548,11 +591,11 @@ export default function AdminPortal() {
             <div className="text-xs font-semibold text-[var(--text-primary)] flex items-center justify-end gap-1.5">
               <span>{currentUser?.name || 'Administrator'}</span>
               <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase font-semibold">
-                {currentUser?.picture || currentUser?.email?.includes('google') ? 'Google SSO' : 'Admin'}
+                Admin
               </span>
             </div>
             <div className="text-[11px] text-[var(--text-muted)] font-mono">
-              {currentUser?.email || 'admin@pravah.delhi.gov.in'}
+              {currentUser?.email || ''}
             </div>
           </div>
           <button
