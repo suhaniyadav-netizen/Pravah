@@ -724,11 +724,29 @@ input[type='range']::-webkit-slider-thumb:hover {
   }
 }
 
+@keyframes riverStreamContinuous {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 @keyframes waveCrest {
   0%, 100% {
     transform: translateY(0px) scaleY(1);
   }
   50% {
     transform: translateY(-4px) scaleY(1.08);
+  }
+}
+
+@keyframes riverWaterPulse {
+  0%, 100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 0.95;
   }
 }
