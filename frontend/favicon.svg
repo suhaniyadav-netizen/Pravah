@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <!-- Deep Aerospace Navy Background Gradient -->
+    <linearGradient id="pravahBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#030c18" />
+      <stop offset="50%" stopColor="#08223e" />
+      <stop offset="100%" stopColor="#020e1e" />
+    </linearGradient>
+
+    <!-- Primary River Surge Wave Gradient -->
+    <linearGradient id="wavePrimary" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#0284c7" />
+      <stop offset="45%" stopColor="#0ea5e9" />
+      <stop offset="85%" stopColor="#38bdf8" />
+      <stop offset="100%" stopColor="#67e8f9" />
+    </linearGradient>
+
+    <!-- Secondary Harmonic Hydraulic Flow Gradient -->
+    <linearGradient id="waveSecondary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#06b6d4" />
+      <stop offset="50%" stopColor="#0d9488" />
+      <stop offset="100%" stopColor="#10b981" />
+    </linearGradient>
+
+    <!-- Luminous Droplet Core Gradient -->
+    <linearGradient id="dropCore" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%" stopColor="#ffffff" />
+      <stop offset="35%" stopColor="#a5f3fc" />
+      <stop offset="70%" stopColor="#38bdf8" />
+      <stop offset="100%" stopColor="#0284c7" />
+    </linearGradient>
+
+    <!-- Soft Ambient Glow for Water Highlights -->
+    <filter id="hydroGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base Frame with Glowing Cyan Border -->
+  <rect x="2.5" y="2.5" width="59" height="59" rx="15" fill="url(#pravahBg)" stroke="#0ea5e9" stroke-width="1.8" stroke-opacity="0.55" />
+
+  <!-- Radar Telemetry Rings (Hydrological Intelligence Symbolism) -->
+  <circle cx="32" cy="32" r="23" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 6" stroke-opacity="0.25" />
+  <circle cx="32" cy="32" r="16" stroke="#06b6d4" stroke-width="0.75" stroke-dasharray="3 5" stroke-opacity="0.2" />
+
+  <!-- Secondary Hydraulic Undercurrent (Teal/Emerald flow) -->
+  <path
+    d="M13 43 C18 34, 25 31, 31 34 C37 37, 44 35, 50 25 C48 38, 41 47, 30 49 C21 50, 16 47, 13 43 Z"
+    fill="url(#waveSecondary)"
+    opacity="0.85"
+  />
+
+  <!-- Primary Hydrological River Wave (The Flow / प्रवाह) -->
+  <path
+    d="M11 41 C17 29, 25 24, 33 27 C40 30, 46 25, 52 15 C54 28, 47 45, 34 47 C23 49, 16 46, 11 41 Z"
+    fill="url(#wavePrimary)"
+    filter="url(#hydroGlow)"
+  />
+
+  <!-- Luminous Water Droplet at Apex -->
+  <path
+    d="M32 9 C32 9, 41 21, 41 26.5 C41 31.5, 37 35.5, 32 35.5 C27 35.5, 23 31.5, 23 26.5 C23 21, 32 9, 32 9 Z"
+    fill="url(#dropCore)"
+  />
+
+  <!-- Specular Water Droplet Glint -->
+  <ellipse cx="29" cy="23" rx="2" ry="4.5" transform="rotate(-25 29 23)" fill="#ffffff" opacity="0.85" />
+  <circle cx="35" cy="28" r="1.2" fill="#ffffff" opacity="0.65" />
+
+  <!-- Flowing White Rapid Streamline Crest -->
+  <path
+    d="M17 39 C22 33, 28 32, 33 35 C37 37, 42 36, 46 31"
+    stroke="#ffffff"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-opacity="0.85"
+  />
+</svg>
