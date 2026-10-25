@@ -12,15 +12,17 @@ const PORT = parseInt(process.env.PORT || '5000', 10);
 const server = http.createServer(app);
 const io = initSocketServer(server);
 
-server.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`🚀 Pravah V2 Server running on port ${PORT}`);
-  console.log(`   Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`   Auth API:     http://localhost:${PORT}/api/auth`);
-  console.log(`   Realtime IO:  Active with JWT & room authorization`);
-  console.log(`   Environment:  ${process.env.NODE_ENV || 'development'}`);
-  console.log(`====================================================`);
-});
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🚀 Pravah V2 Server running on port ${PORT}`);
+    console.log(`   Health Check: http://localhost:${PORT}/api/health`);
+    console.log(`   Auth API:     http://localhost:${PORT}/api/auth`);
+    console.log(`   Realtime IO:  Active with JWT & room authorization`);
+    console.log(`   Environment:  ${process.env.NODE_ENV || 'development'}`);
+    console.log(`====================================================`);
+  });
+}
 
 // Graceful shutdown handling
 function gracefulShutdown(signal) {

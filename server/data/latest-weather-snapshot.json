@@ -4,21 +4,15 @@
   "rainfallMm": 0,
   "precipitationProbability": 0,
   "temperatureC": 29.3,
-  "apparentTemperatureC": 30.7,
-  "relativeHumidity": 46,
-  "windSpeedKmh": 6.1,
+  "apparentTemperatureC": 30.5,
+  "relativeHumidity": 45,
+  "windSpeedKmh": 6,
   "weatherCode": 0,
   "condition": "Clear sky",
-  "observedAt": "2026-10-25T09:15:00.000Z",
-  "fetchedAt": "2026-10-25T09:27:38.862Z",
+  "observedAt": "2026-10-25T09:30:00.000Z",
+  "fetchedAt": "2026-10-25T09:41:39.767Z",
   "isStale": false,
   "forecast": [
-    {
-      "time": "2026-10-25T15:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 29.2
-    },
     {
       "time": "2026-10-25T16:00",
       "rainfallMm": 0,
@@ -156,6 +150,12 @@
       "rainfallMm": 0,
       "precipitationProbability": 0,
       "temperatureC": 29.6
+    },
+    {
+      "time": "2026-10-26T15:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 29.2
     }
   ],
   "past14Days": [
@@ -232,7 +232,7 @@
     {
       "date": "2026-10-25",
       "rainfallMm": 0.8,
-      "avgTemperatureC": 23.1
+      "avgTemperatureC": 23.5
     }
   ]
 }
