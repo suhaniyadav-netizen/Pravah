@@ -3,22 +3,16 @@
   "stationName": "Delhi Central (IMD Safdarjung Reference)",
   "rainfallMm": 0,
   "precipitationProbability": 0,
-  "temperatureC": 28.7,
-  "apparentTemperatureC": 31.4,
-  "relativeHumidity": 50,
-  "windSpeedKmh": 4.8,
+  "temperatureC": 29.1,
+  "apparentTemperatureC": 31.3,
+  "relativeHumidity": 48,
+  "windSpeedKmh": 5.2,
   "weatherCode": 0,
   "condition": "Clear sky",
-  "observedAt": "2026-10-25T07:15:00.000Z",
-  "fetchedAt": "2026-10-25T07:16:29.030Z",
+  "observedAt": "2026-10-25T08:00:00.000Z",
+  "fetchedAt": "2026-10-25T08:00:02.879Z",
   "isStale": false,
   "forecast": [
-    {
-      "time": "2026-10-25T13:00",
-      "rainfallMm": 0,
-      "precipitationProbability": 0,
-      "temperatureC": 29.1
-    },
     {
       "time": "2026-10-25T14:00",
       "rainfallMm": 0,
@@ -156,6 +150,12 @@
       "rainfallMm": 0,
       "precipitationProbability": 0,
       "temperatureC": 28.9
+    },
+    {
+      "time": "2026-10-26T13:00",
+      "rainfallMm": 0,
+      "precipitationProbability": 0,
+      "temperatureC": 29.5
     }
   ],
   "past14Days": [
@@ -232,7 +232,7 @@
     {
       "date": "2026-10-25",
       "rainfallMm": 0.8,
-      "avgTemperatureC": 22.2
+      "avgTemperatureC": 22.7
     }
   ]
 }
