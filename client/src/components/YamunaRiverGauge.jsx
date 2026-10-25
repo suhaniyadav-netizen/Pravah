@@ -43,20 +43,6 @@ export default function YamunaRiverGauge({
     }
   }, [simulatedLevel, onWaterLevelChange]);
 
-  // Smooth sinusoidal wave phase progression
-  useEffect(() => {
-    let animId;
-    let lastTime = performance.now();
-    const loop = (currentTime) => {
-      const delta = currentTime - lastTime;
-      lastTime = currentTime;
-      setWaveOffset((prev) => (prev + delta * 0.08) % 1000);
-      animId = requestAnimationFrame(loop);
-    };
-    animId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(animId);
-  }, []);
-
   // Hydrological physics model
   const metrics = useMemo(() => {
     const level = Number(simulatedLevel);
@@ -133,6 +119,21 @@ export default function YamunaRiverGauge({
     };
   }, [simulatedLevel]);
 
+  // Smooth sinusoidal wave phase progression scaled dynamically by river velocity
+  useEffect(() => {
+    let animId;
+    let lastTime = performance.now();
+    const loop = (currentTime) => {
+      const delta = currentTime - lastTime;
+      lastTime = currentTime;
+      const speedFactor = 0.08 + Math.max(0, (metrics.velocity || 1.35) - 1.2) * 0.05;
+      setWaveOffset((prev) => (prev + delta * speedFactor) % 2000);
+      animId = requestAnimationFrame(loop);
+    };
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, [metrics.velocity]);
+
   // Color schemes for water layers
   const colors = useMemo(() => {
     switch (metrics.theme) {
@@ -140,60 +141,63 @@ export default function YamunaRiverGauge({
       case 'danger':
         return {
           accent: '#ef4444',
-          waterTop: 'rgba(239, 68, 68, 0.45)',
-          waterMid: 'rgba(185, 28, 28, 0.70)',
-          waterDeep: 'rgba(127, 29, 29, 0.95)',
-          waveStroke: '#fca5a5',
-          glow: 'rgba(239, 68, 68, 0.35)',
-          badgeBg: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
-          speedTag: 'text-rose-400',
+          waterTop: 'rgba(239, 68, 68, 0.52)',
+          waterMid: 'rgba(220, 38, 38, 0.75)',
+          waterDeep: 'rgba(153, 27, 27, 0.95)',
+          waterGradient: 'linear-gradient(to bottom, #ef4444 0%, #dc2626 25%, #991b1b 65%, #450a0a 100%)',
+          waveStroke: '#fecaca',
+          glow: 'rgba(239, 68, 68, 0.40)',
+          badgeBg: 'bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-400',
+          speedTag: 'text-rose-600 dark:text-rose-400',
         };
       case 'warning':
         return {
           accent: '#f59e0b',
-          waterTop: 'rgba(245, 158, 11, 0.40)',
-          waterMid: 'rgba(180, 83, 9, 0.70)',
-          waterDeep: 'rgba(120, 53, 15, 0.95)',
-          waveStroke: '#fde68a',
-          glow: 'rgba(245, 158, 11, 0.25)',
-          badgeBg: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
-          speedTag: 'text-amber-400',
+          waterTop: 'rgba(245, 158, 11, 0.50)',
+          waterMid: 'rgba(217, 119, 6, 0.75)',
+          waterDeep: 'rgba(146, 64, 14, 0.95)',
+          waterGradient: 'linear-gradient(to bottom, #f59e0b 0%, #d97706 25%, #92400e 65%, #451a03 100%)',
+          waveStroke: '#fef3c7',
+          glow: 'rgba(245, 158, 11, 0.35)',
+          badgeBg: 'bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400',
+          speedTag: 'text-amber-600 dark:text-amber-400',
         };
       case 'elevated':
         return {
           accent: '#0ea5e9',
-          waterTop: 'rgba(14, 165, 233, 0.40)',
-          waterMid: 'rgba(2, 132, 199, 0.70)',
-          waterDeep: 'rgba(3, 105, 161, 0.95)',
-          waveStroke: '#7dd3fc',
-          glow: 'rgba(14, 165, 233, 0.25)',
-          badgeBg: 'bg-sky-500/15 border-sky-500/30 text-sky-400',
-          speedTag: 'text-sky-400',
+          waterTop: 'rgba(14, 165, 233, 0.50)',
+          waterMid: 'rgba(2, 132, 199, 0.75)',
+          waterDeep: 'rgba(7, 89, 133, 0.95)',
+          waterGradient: 'linear-gradient(to bottom, #0ea5e9 0%, #0284c7 25%, #0369a1 65%, #082f49 100%)',
+          waveStroke: '#bae6fd',
+          glow: 'rgba(14, 165, 233, 0.35)',
+          badgeBg: 'bg-sky-500/15 border-sky-500/30 text-sky-600 dark:text-sky-400',
+          speedTag: 'text-sky-600 dark:text-sky-400',
         };
       case 'safe':
       default:
         return {
-          accent: '#10b981',
-          waterTop: 'rgba(6, 182, 212, 0.35)',
-          waterMid: 'rgba(14, 116, 144, 0.65)',
-          waterDeep: 'rgba(15, 23, 42, 0.95)',
-          waveStroke: '#67e8f9',
-          glow: 'rgba(6, 182, 212, 0.20)',
-          badgeBg: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-          speedTag: 'text-emerald-400',
+          accent: '#06b6d4',
+          waterTop: 'rgba(6, 182, 212, 0.52)',
+          waterMid: 'rgba(14, 116, 144, 0.75)',
+          waterDeep: 'rgba(15, 76, 129, 0.95)',
+          waterGradient: 'linear-gradient(to bottom, #06b6d4 0%, #0284c7 25%, #0369a1 60%, #0c4a6e 100%)',
+          waveStroke: '#a5f3fc',
+          glow: 'rgba(6, 182, 212, 0.35)',
+          badgeBg: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+          speedTag: 'text-emerald-600 dark:text-emerald-400',
         };
     }
   }, [metrics.theme]);
 
-  // Wave path generator
-  const getWavePath = (amplitude, frequency, phase, baseHeight) => {
-    const width = 1200;
+  // Wave path generator with proper coordinate mapping
+  const getWavePath = (amplitude, frequency, phase, baseHeight, width = 1200) => {
     const points = [];
-    for (let x = 0; x <= width; x += 20) {
+    for (let x = 0; x <= width; x += 15) {
       const y = baseHeight + Math.sin((x * frequency + phase) * 0.015) * amplitude;
       points.push(`${x},${y.toFixed(1)}`);
     }
-    return `M0,${baseHeight} L${points.join(' L')} L1200,300 L0,300 Z`;
+    return `M0,${baseHeight} L${points.join(' L')} L${width},160 L0,160 Z`;
   };
 
   return (
@@ -464,30 +468,30 @@ export default function YamunaRiverGauge({
       </div>
 
       {/* ── Visual Hydrological Channel Cross-Section Viewport ──────────────── */}
-      <div className="relative w-full h-64 sm:h-72 bg-gradient-to-b from-[#06101E] via-[#09182C] to-[#040A14] overflow-hidden select-none border-t border-[var(--border)]">
+      <div className="relative w-full h-64 sm:h-72 bg-gradient-to-b from-[#e0f2fe] via-[#bae6fd] to-[#93c5fd] dark:from-[#06101E] dark:via-[#09182C] dark:to-[#040A14] overflow-hidden select-none border-t border-[var(--border)] transition-colors duration-500">
         
         {/* Atmospheric Sky Backdrop with Distant Delhi Skyline Silhouette */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute inset-0 pointer-events-none opacity-25 dark:opacity-20 transition-opacity">
           <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 300">
             {/* Distant Trees & Ghats */}
-            <path d="M0,140 Q150,135 300,138 T600,135 T1000,140 L1000,300 L0,300 Z" fill="#0f2b48" />
+            <path d="M0,140 Q150,135 300,138 T600,135 T1000,140 L1000,300 L0,300 Z" className="fill-[#0284c7] dark:fill-[#0f2b48]" />
           </svg>
         </div>
 
         {/* ── Old Railway Bridge (Loha Pul) Steel Truss Span & Masonry Piers ── */}
-        <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10 opacity-70">
+        <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10 opacity-80 dark:opacity-70 transition-opacity">
           <svg className="w-full h-full" viewBox="0 0 1200 160" preserveAspectRatio="none">
             {/* Upper Deck Railroad Track Girder */}
-            <rect x="0" y="24" width="1200" height="8" fill="#334155" />
-            <rect x="0" y="20" width="1200" height="4" fill="#1e293b" />
+            <rect x="0" y="24" width="1200" height="8" className="fill-slate-600 dark:fill-slate-700" />
+            <rect x="0" y="20" width="1200" height="4" className="fill-slate-800 dark:fill-slate-900" />
 
             {/* Steel Truss Triangles (Loha Pul Architecture) */}
             {Array.from({ length: 16 }).map((_, i) => (
               <g key={i}>
-                <line x1={i * 75} y1="32" x2={i * 75 + 37.5} y2="8" stroke="#475569" strokeWidth="2.5" />
-                <line x1={i * 75 + 37.5} y1="8" x2={(i + 1) * 75} y2="32" stroke="#475569" strokeWidth="2.5" />
-                <line x1={i * 75} y1="32" x2={(i + 1) * 75} y2="32" stroke="#334155" strokeWidth="3" />
-                <line x1={i * 75 + 37.5} y1="8" x2={i * 75 + 37.5} y2="32" stroke="#334155" strokeWidth="1.5" />
+                <line x1={i * 75} y1="32" x2={i * 75 + 37.5} y2="8" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.5" />
+                <line x1={i * 75 + 37.5} y1="8" x2={(i + 1) * 75} y2="32" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.5" />
+                <line x1={i * 75} y1="32" x2={(i + 1) * 75} y2="32" className="stroke-slate-800 dark:stroke-slate-600" strokeWidth="3" />
+                <line x1={i * 75 + 37.5} y1="8" x2={i * 75 + 37.5} y2="32" className="stroke-slate-800 dark:stroke-slate-600" strokeWidth="1.5" />
               </g>
             ))}
 
@@ -495,9 +499,9 @@ export default function YamunaRiverGauge({
             {[260, 600, 940].map((pierX, idx) => (
               <g key={idx}>
                 {/* Pier Column */}
-                <rect x={pierX - 22} y="32" width="44" height="240" fill="#1e293b" stroke="#334155" strokeWidth="1.5" rx="3" />
+                <rect x={pierX - 22} y="32" width="44" height="240" className="fill-slate-700 dark:fill-slate-800 stroke-slate-800 dark:stroke-slate-700" strokeWidth="1.5" rx="3" />
                 {/* Pier Cutwater Arch */}
-                <path d={`M${pierX - 22},120 L${pierX},145 L${pierX + 22},120 Z`} fill="#0f172a" />
+                <path d={`M${pierX - 22},120 L${pierX},145 L${pierX + 22},120 Z`} className="fill-slate-800 dark:fill-slate-950" />
                 {/* Pier Distress Sensor Beacon */}
                 <circle cx={pierX} cy="36" r="3.5" fill={metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC' ? '#ef4444' : '#10b981'} className={metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC' ? 'animate-ping' : ''} />
               </g>
@@ -506,31 +510,40 @@ export default function YamunaRiverGauge({
         </div>
 
         {/* ── River Embankment Levee Slopes (West & East) ── */}
-        <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-[#0d1e30] via-[#081524] to-transparent pointer-events-none z-20 border-r border-dashed border-sky-500/20 flex flex-col justify-between p-3 font-mono text-[9px]">
+        <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-slate-200/95 via-slate-100/80 to-transparent dark:from-[#0d1e30] dark:via-[#081524] dark:to-transparent pointer-events-none z-20 border-r border-dashed border-sky-600/30 dark:border-sky-500/20 flex flex-col justify-between p-3 font-mono text-[9px]">
           <div>
-            <span className="text-[var(--brand)] font-bold block">WEST EMBANKMENT</span>
-            <span className="text-[var(--text-muted)] block text-[8px]">Kashmere Gate / Ring Rd</span>
+            <span className="text-sky-950 dark:text-[var(--brand)] font-bold block">WEST EMBANKMENT</span>
+            <span className="text-slate-600 dark:text-[var(--text-muted)] block text-[8px]">Kashmere Gate / Ring Rd</span>
           </div>
 
           {/* Storm Drain Outfall Pipe Graphic (Kashmere Gate Outfall) */}
-          <div className="relative p-2 rounded-lg bg-[var(--surface-elevated)]/90 border border-[var(--border)] shadow-xs">
-            <span className="text-[8px] font-bold text-[var(--text-primary)] block">Drain #14 Outfall</span>
-            <span className={`text-[7px] font-semibold uppercase px-1 py-0.2 rounded block mt-0.5 ${
-              metrics.isBackflowActive ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'
+          <div className="relative p-2 rounded-xl bg-white/95 dark:bg-[#071320]/95 border border-slate-300 dark:border-sky-500/40 shadow-xs dark:shadow-[0_0_12px_rgba(14,165,233,0.18)] backdrop-blur-md">
+            <div className="flex items-center gap-1.5 mb-1">
+              <div className="w-2.5 h-2.5 rounded-full border border-sky-500/60 bg-sky-500/20 flex items-center justify-center shrink-0">
+                <div className="w-1 h-1 rounded-full bg-cyan-400" />
+              </div>
+              <span className="text-[8.5px] font-bold text-slate-900 dark:text-cyan-200 block truncate">
+                Drain #14 Outfall
+              </span>
+            </div>
+            <span className={`text-[7.5px] font-bold uppercase px-1.5 py-0.5 rounded-md block border tracking-wider text-center ${
+              metrics.isBackflowActive
+                ? 'bg-rose-500/20 text-rose-700 dark:text-rose-200 border-rose-500/40'
+                : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border-emerald-500/40'
             }`}>
               {metrics.isBackflowActive ? 'Backflow Flap Shut' : 'Free Outfall'}
             </span>
           </div>
 
-          <span className="text-[var(--text-muted)] text-[8px]">Invert: 204.10m</span>
+          <span className="text-slate-600 dark:text-sky-300/80 font-mono text-[8px] block">Invert: 204.10m MSL</span>
         </div>
 
-        <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-[#0d1e30] via-[#081524] to-transparent pointer-events-none z-20 border-l border-dashed border-sky-500/20 flex flex-col justify-between p-3 text-right font-mono text-[9px]">
+        <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-slate-200/95 via-slate-100/80 to-transparent dark:from-[#0d1e30] dark:via-[#081524] dark:to-transparent pointer-events-none z-20 border-l border-dashed border-sky-600/30 dark:border-sky-500/20 flex flex-col justify-between p-3 text-right font-mono text-[9px]">
           <div>
-            <span className="text-[var(--brand)] font-bold block">EAST EMBANKMENT</span>
-            <span className="text-[var(--text-muted)] block text-[8px]">Trans-Yamuna Floodplain</span>
+            <span className="text-sky-950 dark:text-[var(--brand)] font-bold block">EAST EMBANKMENT</span>
+            <span className="text-slate-600 dark:text-[var(--text-muted)] block text-[8px]">Trans-Yamuna Floodplain</span>
           </div>
-          <span className="text-[var(--text-muted)] text-[8px]">Geeta Colony Bund</span>
+          <span className="text-slate-600 dark:text-[var(--text-muted)] text-[8px]">Geeta Colony Bund</span>
         </div>
 
         {/* ── Calibrated Hydrographic Staff Gauge (Graduated Water Pole) ── */}
@@ -562,17 +575,17 @@ export default function YamunaRiverGauge({
         
         {/* Historic Record 2023 (208.66m) */}
         <div className="absolute top-[10%] left-24 sm:left-36 right-24 sm:right-36 flex items-center gap-2 pointer-events-none z-10">
-          <div className="h-px flex-1 border-t border-dashed border-red-500/40" />
-          <span className="font-mono text-[9px] text-red-400/80 bg-[#06101E]/80 px-2 py-0.5 rounded border border-red-500/30 shadow-xs">
+          <div className="h-px flex-1 border-t border-dashed border-red-500/50" />
+          <span className="font-mono text-[9px] font-semibold text-red-700 dark:text-red-400 bg-white/95 dark:bg-[#06101E]/90 px-2 py-0.5 rounded border border-red-500/40 shadow-xs">
             2023 Historic Peak: 208.66m
           </span>
-          <div className="h-px flex-1 border-t border-dashed border-red-500/40" />
+          <div className="h-px flex-1 border-t border-dashed border-red-500/50" />
         </div>
 
         {/* Official Danger Mark (205.53m) */}
         <div className="absolute top-[34%] left-24 sm:left-36 right-24 sm:right-36 flex items-center gap-2 pointer-events-none z-20">
           <div className="h-px flex-1 border-t-2 border-dashed border-rose-500" />
-          <span className="font-mono text-[9px] font-bold text-rose-300 bg-rose-950/90 px-2.5 py-0.5 rounded border border-rose-500/60 shadow-md flex items-center gap-1.5">
+          <span className="font-mono text-[9px] font-bold text-rose-950 dark:text-rose-200 bg-rose-100/95 dark:bg-rose-950/90 px-2.5 py-0.5 rounded border-2 border-rose-600 dark:border-rose-500 shadow-md flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             <span>OFFICIAL DANGER MARK · 205.53m</span>
           </span>
@@ -581,11 +594,11 @@ export default function YamunaRiverGauge({
 
         {/* Official Warning Mark (205.33m) */}
         <div className="absolute top-[46%] left-24 sm:left-36 right-24 sm:right-36 flex items-center gap-2 pointer-events-none z-20">
-          <div className="h-px flex-1 border-t border-dashed border-amber-500" />
-          <span className="font-mono text-[9px] font-bold text-amber-300 bg-amber-950/90 px-2.5 py-0.5 rounded border border-amber-500/60 shadow-xs">
+          <div className="h-px flex-1 border-t-2 border-dashed border-amber-500" />
+          <span className="font-mono text-[9px] font-bold text-amber-950 dark:text-amber-200 bg-amber-100/95 dark:bg-amber-950/90 px-2.5 py-0.5 rounded border-2 border-amber-600 dark:border-amber-500 shadow-xs">
             WARNING MARK · 205.33m
           </span>
-          <div className="h-px flex-1 border-t border-dashed border-amber-500" />
+          <div className="h-px flex-1 border-t-2 border-dashed border-amber-500" />
         </div>
 
         {/* ── Actual Real Flowing River Water (Hydrodynamic Wave Layers) ── */}
@@ -593,11 +606,11 @@ export default function YamunaRiverGauge({
           className="absolute bottom-0 left-0 right-0 transition-all duration-700 ease-out z-25"
           style={{
             height: `${metrics.normalizedHeight}%`,
-            boxShadow: `0 -12px 40px ${colors.glow}`,
+            boxShadow: `0 -14px 45px ${colors.glow}`,
           }}
         >
           {/* Surface Float / Water Level Telemetry Indicator */}
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-none flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#08182B] border border-sky-400/40 shadow-xl font-mono text-[11px] text-white">
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-none flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/95 dark:bg-[#08182B]/95 border border-sky-400/50 shadow-xl font-mono text-[11px] text-white">
             <Anchor className="w-3.5 h-3.5 text-sky-400" />
             <span className="font-black text-sky-300">{metrics.level.toFixed(2)} m</span>
             <span className="text-slate-400">|</span>
@@ -625,24 +638,24 @@ export default function YamunaRiverGauge({
             
             {/* Wave Layer 1: Deep Backwater Current */}
             <svg
-              className="absolute -top-7 left-0 w-full h-20 pointer-events-none"
+              className="absolute -top-7 left-0 w-full h-24 pointer-events-none"
               preserveAspectRatio="none"
-              viewBox="0 0 1200 300"
+              viewBox="0 0 1200 160"
             >
               <path
-                d={getWavePath(12, 1.2, waveOffset * 0.6, 30)}
+                d={getWavePath(10, 1.1, waveOffset * 0.5, 25)}
                 fill={colors.waterDeep}
               />
             </svg>
 
             {/* Wave Layer 2: Mid Silt Turbulence */}
             <svg
-              className="absolute -top-8 left-0 w-full h-24 pointer-events-none"
+              className="absolute -top-8 left-0 w-full h-26 pointer-events-none"
               preserveAspectRatio="none"
-              viewBox="0 0 1200 300"
+              viewBox="0 0 1200 160"
             >
               <path
-                d={getWavePath(16, 1.8, waveOffset * 1.1 + 80, 36)}
+                d={getWavePath(14, 1.6, waveOffset * 0.9 + 70, 30)}
                 fill={colors.waterMid}
               />
             </svg>
@@ -651,36 +664,64 @@ export default function YamunaRiverGauge({
             <svg
               className="absolute -top-9 left-0 w-full h-28 pointer-events-none"
               preserveAspectRatio="none"
-              viewBox="0 0 1200 300"
+              viewBox="0 0 1200 160"
             >
               <path
-                d={getWavePath(20, 2.4, waveOffset * 1.6 + 180, 42)}
+                d={getWavePath(18, 2.2, waveOffset * 1.4 + 150, 36)}
                 fill={colors.waterTop}
                 stroke={colors.waveStroke}
-                strokeWidth="2"
+                strokeWidth="3.5"
               />
             </svg>
 
             {/* Deep Water Column Gradient */}
             <div
-              className="absolute top-10 bottom-0 left-0 right-0 pointer-events-none"
+              className="absolute top-8 bottom-0 left-0 right-0 pointer-events-none"
               style={{
-                background: `linear-gradient(to bottom, ${colors.waterMid}, ${colors.waterDeep}, #030810)`,
+                background: colors.waterGradient,
               }}
             />
 
-            {/* Current Streamline Particles showing River Flow Velocity */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+            {/* ── High-Visibility Rushing Surface Rapids & Current Streamlines ── */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-90">
               <div
-                className="w-full h-full flex flex-col justify-around"
+                className="w-[200%] h-full flex"
                 style={{
-                  animation: `riverFlow ${Math.max(1.5, (10 - metrics.velocity * 1.8)).toFixed(1)}s linear infinite`,
+                  animation: `riverStreamContinuous ${Math.max(1.6, 7.5 / (metrics.velocity || 1.35)).toFixed(2)}s linear infinite`,
                 }}
               >
-                <div className="w-28 h-0.5 bg-white rounded-full ml-10 shadow-sm" />
-                <div className="w-44 h-0.5 bg-white/80 rounded-full ml-48" />
-                <div className="w-36 h-0.5 bg-white/70 rounded-full ml-96" />
-                <div className="w-20 h-0.5 bg-white/90 rounded-full ml-32" />
+                {/* Loop Segment 1 */}
+                <div className="w-1/2 h-full relative">
+                  {/* Surface Rapid Foaming Streaks */}
+                  <div className="absolute top-3 left-6 w-36 sm:w-56 h-1 rounded-full bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
+                  <div className="absolute top-6 left-72 w-48 sm:w-80 h-1.5 rounded-full bg-gradient-to-r from-transparent via-white/95 to-transparent shadow-[0_0_8px_rgba(255,255,255,0.85)]" />
+                  <div className="absolute top-4 right-20 w-44 sm:w-64 h-1 rounded-full bg-gradient-to-r from-transparent via-cyan-100 to-transparent shadow-[0_0_6px_rgba(165,243,252,0.9)]" />
+
+                  {/* Mid-Depth Current Ribbons */}
+                  <div className="absolute top-12 left-24 w-60 sm:w-96 h-1 rounded-full bg-gradient-to-r from-transparent via-white/80 dark:via-cyan-200/80 to-transparent shadow-xs" />
+                  <div className="absolute top-16 left-80 w-52 sm:w-80 h-1 rounded-full bg-gradient-to-r from-transparent via-cyan-200/90 dark:via-cyan-300/80 to-transparent" />
+                  <div className="absolute top-20 right-36 w-48 sm:w-72 h-1 rounded-full bg-gradient-to-r from-transparent via-white/75 dark:via-cyan-200/70 to-transparent" />
+
+                  {/* Deeper Channel Current Streaks */}
+                  <div className="absolute top-28 left-16 w-72 sm:w-[420px] h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/60 dark:via-cyan-400/60 to-transparent" />
+                  <div className="absolute top-36 left-96 w-64 sm:w-[380px] h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/65 dark:via-cyan-300/60 to-transparent" />
+                  <div className="absolute top-32 right-10 w-40 sm:w-64 h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/50 dark:via-cyan-400/50 to-transparent" />
+                </div>
+
+                {/* Loop Segment 2 (Seamless Infinite Wrap) */}
+                <div className="w-1/2 h-full relative">
+                  <div className="absolute top-3 left-6 w-36 sm:w-56 h-1 rounded-full bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
+                  <div className="absolute top-6 left-72 w-48 sm:w-80 h-1.5 rounded-full bg-gradient-to-r from-transparent via-white/95 to-transparent shadow-[0_0_8px_rgba(255,255,255,0.85)]" />
+                  <div className="absolute top-4 right-20 w-44 sm:w-64 h-1 rounded-full bg-gradient-to-r from-transparent via-cyan-100 to-transparent shadow-[0_0_6px_rgba(165,243,252,0.9)]" />
+
+                  <div className="absolute top-12 left-24 w-60 sm:w-96 h-1 rounded-full bg-gradient-to-r from-transparent via-white/80 dark:via-cyan-200/80 to-transparent shadow-xs" />
+                  <div className="absolute top-16 left-80 w-52 sm:w-80 h-1 rounded-full bg-gradient-to-r from-transparent via-cyan-200/90 dark:via-cyan-300/80 to-transparent" />
+                  <div className="absolute top-20 right-36 w-48 sm:w-72 h-1 rounded-full bg-gradient-to-r from-transparent via-white/75 dark:via-cyan-200/70 to-transparent" />
+
+                  <div className="absolute top-28 left-16 w-72 sm:w-[420px] h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/60 dark:via-cyan-400/60 to-transparent" />
+                  <div className="absolute top-36 left-96 w-64 sm:w-[380px] h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/65 dark:via-cyan-300/60 to-transparent" />
+                  <div className="absolute top-32 right-10 w-40 sm:w-64 h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/50 dark:via-cyan-400/50 to-transparent" />
+                </div>
               </div>
             </div>
 
@@ -688,7 +729,7 @@ export default function YamunaRiverGauge({
         </div>
 
         {/* River Bed Alluvial Silt Base Foundation */}
-        <div className="absolute bottom-0 left-0 right-0 h-4 bg-[#0a0f18] border-t border-stone-800 flex items-center justify-between px-4 text-[8px] font-mono text-stone-400 select-none z-30">
+        <div className="absolute bottom-0 left-0 right-0 h-4 bg-[#5c442e] dark:bg-[#0a0f18] border-t border-[#78593a] dark:border-stone-800 flex items-center justify-between px-4 text-[8px] font-mono text-amber-100 dark:text-stone-400 select-none z-30 transition-colors">
           <span>YAMUNA ALLUVIAL SILT BED (202.50m MSL)</span>
           <span>DISCHARGE CAPACITY: 4,00,000 CFS</span>
         </div>

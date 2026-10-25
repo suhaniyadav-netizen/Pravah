@@ -10,7 +10,6 @@ import {
   ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import WardMap from '../components/WardMap';
-import YamunaRiverGauge from '../components/YamunaRiverGauge';
 import {
   getWardsGeoJSON, getCityRiskSummary,
   getCityForecast, getCurrentWeather, getWardRiskDetails,
@@ -657,12 +656,6 @@ export default function Dashboard() {
           )}
         </div>
       </div>
-
-      {/* ── Yamuna River Basin Real-Time Flow & Hydro-Gauge ── */}
-      <YamunaRiverGauge
-        initialWaterLevel={204.85}
-        showSimulationControls={true}
-      />
 
       {/* ── Municipal Ward Directory (Interactive Sortable Viewport) ── */}
       <div className="surface-card rounded-none p-3.5 sm:p-4 border border-[var(--border)]">
