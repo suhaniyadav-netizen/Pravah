@@ -479,20 +479,20 @@ export default function YamunaRiverGauge({
         </div>
 
         {/* ── Old Railway Bridge (Loha Pul) Double-Decker Span, Deep Submerged Masonry Piers & Live Traffic ── */}
-        <div className="absolute inset-0 pointer-events-none z-10 select-none overflow-hidden transition-opacity duration-300">
+        <div className="absolute inset-0 pointer-events-none z-10 select-none overflow-hidden opacity-45 dark:opacity-35 transition-opacity duration-500">
           <svg className="w-full h-full" viewBox="0 0 1200 300" preserveAspectRatio="none">
             <defs>
               {/* Linear Gradients for Masonry Pier Lighting & Watermark Wash */}
               <linearGradient id="pierMasonryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#475569" />
-                <stop offset="25%" stopColor="#334155" />
-                <stop offset="70%" stopColor="#1e293b" />
-                <stop offset="100%" stopColor="#0f172a" />
+                <stop offset="0%" stopColor="#94a3b8" />
+                <stop offset="25%" stopColor="#64748b" />
+                <stop offset="70%" stopColor="#475569" />
+                <stop offset="100%" stopColor="#334155" />
               </linearGradient>
               <linearGradient id="pierSubmergedWash" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="rgba(30, 41, 59, 0.4)" />
-                <stop offset="40%" stopColor="rgba(15, 23, 42, 0.85)" />
-                <stop offset="100%" stopColor="rgba(8, 15, 28, 0.98)" />
+                <stop offset="0%" stopColor="rgba(71, 85, 105, 0.15)" />
+                <stop offset="50%" stopColor="rgba(51, 65, 85, 0.35)" />
+                <stop offset="100%" stopColor="rgba(30, 41, 59, 0.55)" />
               </linearGradient>
               
               {/* Vehicle Headlight & Taillight Beams */}
@@ -518,8 +518,8 @@ export default function YamunaRiverGauge({
                   width="56"
                   height="30"
                   rx="3"
-                  className="fill-slate-800 dark:fill-[#0c1422] stroke-slate-900 dark:stroke-slate-950"
-                  strokeWidth="2"
+                  className="fill-slate-600/70 dark:fill-slate-800/60 stroke-slate-500/50 dark:stroke-slate-700/50"
+                  strokeWidth="1.5"
                 />
                 {/* Stepped Caisson Base Shelf */}
                 <rect
@@ -528,8 +528,8 @@ export default function YamunaRiverGauge({
                   width="48"
                   height="12"
                   rx="2"
-                  className="fill-slate-700 dark:fill-[#101b2d] stroke-slate-900 dark:stroke-slate-900"
-                  strokeWidth="1.5"
+                  className="fill-slate-500/60 dark:fill-slate-700/60 stroke-slate-500/50 dark:stroke-slate-700/50"
+                  strokeWidth="1"
                 />
 
                 {/* Main Pier Column Shaft (Extending from Bridge Deck at y=48 all the way down) */}
@@ -539,8 +539,8 @@ export default function YamunaRiverGauge({
                   width="38"
                   height="200"
                   fill="url(#pierMasonryGrad)"
-                  className="stroke-slate-800 dark:stroke-slate-900"
-                  strokeWidth="1.5"
+                  className="stroke-slate-500/40 dark:stroke-slate-600/40"
+                  strokeWidth="1"
                   rx="2"
                 />
 
@@ -556,12 +556,12 @@ export default function YamunaRiverGauge({
                 {/* Cutwater Arch Wedge (Hydrodynamic starling pointed upstream to deflect flood currents) */}
                 <path
                   d={`M${pierX - 19},130 L${pierX},158 L${pierX + 19},130 Z`}
-                  className="fill-slate-800 dark:fill-[#080f1a] stroke-slate-900/60"
+                  className="fill-slate-600/60 dark:fill-slate-800/60 stroke-slate-500/40"
                   strokeWidth="1"
                 />
                 <path
                   d={`M${pierX - 19},205 L${pierX},230 L${pierX + 19},205 Z`}
-                  className="fill-slate-850 dark:fill-[#060b14] stroke-slate-950/60"
+                  className="fill-slate-600/60 dark:fill-slate-850/60 stroke-slate-600/40"
                   strokeWidth="1"
                 />
 
@@ -573,8 +573,8 @@ export default function YamunaRiverGauge({
                     y1={jointY}
                     x2={pierX + 18}
                     y2={jointY}
-                    stroke="rgba(15, 23, 42, 0.75)"
-                    strokeWidth="1.2"
+                    stroke="rgba(203, 213, 225, 0.25)"
+                    strokeWidth="1"
                   />
                 ))}
 
@@ -584,8 +584,8 @@ export default function YamunaRiverGauge({
                   y="44"
                   width="46"
                   height="8"
-                  className="fill-slate-600 dark:fill-slate-700 stroke-slate-800 dark:stroke-slate-900"
-                  strokeWidth="1.5"
+                  className="fill-slate-500/80 dark:fill-slate-600/80 stroke-slate-600/50"
+                  strokeWidth="1.2"
                   rx="1"
                 />
 
@@ -612,33 +612,33 @@ export default function YamunaRiverGauge({
 
             {/* 2. Upper Tier: Heavy Steel Truss Framework (Pratt/Warren Through-Truss) */}
             {/* Top Chord Girder Beam */}
-            <rect x="0" y="8" width="1200" height="4" className="fill-slate-800 dark:fill-slate-900" />
-            <rect x="0" y="12" width="1200" height="2" className="fill-slate-600 dark:fill-slate-700" />
+            <rect x="0" y="8" width="1200" height="4" className="fill-slate-700/80 dark:fill-slate-600/70" />
+            <rect x="0" y="12" width="1200" height="2" className="fill-slate-600/80 dark:fill-slate-500/70" />
             {/* Mid Girder Divider Beam */}
-            <rect x="0" y="32" width="1200" height="3" className="fill-slate-700 dark:fill-slate-800" />
+            <rect x="0" y="32" width="1200" height="3" className="fill-slate-600/80 dark:fill-slate-600/70" />
 
             {/* Warren Triangular Steel Cross-Bracing across all 24 spans */}
             {Array.from({ length: 24 }).map((_, i) => (
               <g key={`truss-${i}`}>
-                <line x1={i * 50} y1="32" x2={i * 50 + 25} y2="12" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.2" />
-                <line x1={i * 50 + 25} y1="12" x2={(i + 1) * 50} y2="32" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.2" />
-                <line x1={i * 50 + 25} y1="12" x2={i * 50 + 25} y2="32" className="stroke-slate-800/80 dark:stroke-slate-600/80" strokeWidth="1.5" />
+                <line x1={i * 50} y1="32" x2={i * 50 + 25} y2="12" className="stroke-slate-600/70 dark:stroke-slate-400/60" strokeWidth="1.8" />
+                <line x1={i * 50 + 25} y1="12" x2={(i + 1) * 50} y2="32" className="stroke-slate-600/70 dark:stroke-slate-400/60" strokeWidth="1.8" />
+                <line x1={i * 50 + 25} y1="12" x2={i * 50 + 25} y2="32" className="stroke-slate-700/60 dark:stroke-slate-500/50" strokeWidth="1.2" />
                 {/* Diagonal Counter-Braces */}
-                <line x1={i * 50} y1="12" x2={(i + 1) * 50} y2="32" stroke="rgba(100, 116, 139, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
+                <line x1={i * 50} y1="12" x2={(i + 1) * 50} y2="32" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="0.8" strokeDasharray="3,3" />
               </g>
             ))}
 
             {/* 3. Lower Tier: Two-Lane Vehicular Roadway Deck */}
             {/* Roadway Base Structural Girder */}
-            <rect x="0" y="46" width="1200" height="6" className="fill-slate-800 dark:fill-slate-950" />
+            <rect x="0" y="46" width="1200" height="6" className="fill-slate-700/80 dark:fill-slate-850/80" />
             {/* Roadway Asphalt Surface */}
-            <rect x="0" y="42" width="1200" height="4" className="fill-slate-700 dark:fill-slate-850" />
+            <rect x="0" y="42" width="1200" height="4" className="fill-slate-600/80 dark:fill-slate-750/80" />
             {/* Center Dashed Lane Divider Line */}
             <line x1="0" y1="44" x2="1200" y2="44" stroke="#facc15" strokeWidth="0.8" strokeDasharray="5,6" opacity="0.85" />
             {/* Upper Safety Railing / Balustrade */}
-            <line x1="0" y1="38" x2="1200" y2="38" className="stroke-slate-500 dark:stroke-slate-600" strokeWidth="1.2" />
+            <line x1="0" y1="38" x2="1200" y2="38" className="stroke-slate-400/70 dark:stroke-slate-500/60" strokeWidth="1" />
             {Array.from({ length: 60 }).map((_, rIdx) => (
-              <line key={`rail-${rIdx}`} x1={rIdx * 20} y1="38" x2={rIdx * 20} y2="42" stroke="rgba(148, 163, 184, 0.6)" strokeWidth="0.8" />
+              <line key={`rail-${rIdx}`} x1={rIdx * 20} y1="38" x2={rIdx * 20} y2="42" stroke="rgba(148, 163, 184, 0.4)" strokeWidth="0.7" />
             ))}
 
             {/* Bridge Lamp Posts with Warm Atmospheric Cones at each pier */}
