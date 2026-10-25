@@ -517,16 +517,25 @@ export default function YamunaRiverGauge({
           </div>
 
           {/* Storm Drain Outfall Pipe Graphic (Kashmere Gate Outfall) */}
-          <div className="relative p-2 rounded-lg bg-white/95 dark:bg-[var(--surface-elevated)]/90 border border-slate-300 dark:border-[var(--border)] shadow-xs">
-            <span className="text-[8px] font-bold text-slate-900 dark:text-[var(--text-primary)] block">Drain #14 Outfall</span>
-            <span className={`text-[7px] font-semibold uppercase px-1 py-0.2 rounded block mt-0.5 ${
-              metrics.isBackflowActive ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300' : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+          <div className="relative p-2 rounded-xl bg-white/95 dark:bg-[#071320]/95 border border-slate-300 dark:border-sky-500/40 shadow-xs dark:shadow-[0_0_12px_rgba(14,165,233,0.18)] backdrop-blur-md">
+            <div className="flex items-center gap-1.5 mb-1">
+              <div className="w-2.5 h-2.5 rounded-full border border-sky-500/60 bg-sky-500/20 flex items-center justify-center shrink-0">
+                <div className="w-1 h-1 rounded-full bg-cyan-400" />
+              </div>
+              <span className="text-[8.5px] font-bold text-slate-900 dark:text-cyan-200 block truncate">
+                Drain #14 Outfall
+              </span>
+            </div>
+            <span className={`text-[7.5px] font-bold uppercase px-1.5 py-0.5 rounded-md block border tracking-wider text-center ${
+              metrics.isBackflowActive
+                ? 'bg-rose-500/20 text-rose-700 dark:text-rose-200 border-rose-500/40'
+                : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border-emerald-500/40'
             }`}>
               {metrics.isBackflowActive ? 'Backflow Flap Shut' : 'Free Outfall'}
             </span>
           </div>
 
-          <span className="text-slate-600 dark:text-[var(--text-muted)] text-[8px]">Invert: 204.10m</span>
+          <span className="text-slate-600 dark:text-sky-300/80 font-mono text-[8px] block">Invert: 204.10m MSL</span>
         </div>
 
         <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-slate-200/95 via-slate-100/80 to-transparent dark:from-[#0d1e30] dark:via-[#081524] dark:to-transparent pointer-events-none z-20 border-l border-dashed border-sky-600/30 dark:border-sky-500/20 flex flex-col justify-between p-3 text-right font-mono text-[9px]">
