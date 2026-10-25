@@ -7,7 +7,6 @@ import CitizenPortal from './pages/CitizenPortal';
 import Dashboard from './pages/Dashboard';
 import WardDetail from './pages/WardDetail';
 import IncidentCommand from './pages/IncidentCommand';
-import Simulator from './pages/Simulator';
 import Analytics from './pages/Analytics';
 import AdminPortal from './pages/AdminPortal';
 

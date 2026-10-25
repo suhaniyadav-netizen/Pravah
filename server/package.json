@@ -5,6 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js",
+    "build": "prisma generate || echo 'Prisma generated or skipped'",
+    "vercel-build": "prisma generate || echo 'Prisma generated or skipped'",
     "dev": "node src/main.js",
     "dev:all": "npm run dev --prefix ..",
     "verify:db": "node src/scripts/verify-db.js",
@@ -38,16 +40,15 @@
     "pg": "^8.13.3",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
+    "prisma": "^5.22.0",
     "zod": "^3.24.2"
   },
-  "devDependencies": {
-    "prisma": "^5.22.0"
-  },
+  "devDependencies": {},
   "prisma": {
     "seed": "node prisma/seed.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "20.x"
   },
   "private": true,
   "keywords": [],

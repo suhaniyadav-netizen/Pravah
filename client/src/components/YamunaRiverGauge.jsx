@@ -478,34 +478,304 @@ export default function YamunaRiverGauge({
           </svg>
         </div>
 
-        {/* ── Old Railway Bridge (Loha Pul) Steel Truss Span & Masonry Piers ── */}
-        <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10 opacity-80 dark:opacity-70 transition-opacity">
-          <svg className="w-full h-full" viewBox="0 0 1200 160" preserveAspectRatio="none">
-            {/* Upper Deck Railroad Track Girder */}
-            <rect x="0" y="24" width="1200" height="8" className="fill-slate-600 dark:fill-slate-700" />
-            <rect x="0" y="20" width="1200" height="4" className="fill-slate-800 dark:fill-slate-900" />
+        {/* ── Old Railway Bridge (Loha Pul) Double-Decker Span, Deep Submerged Masonry Piers & Live Traffic ── */}
+        <div className="absolute inset-0 pointer-events-none z-10 select-none overflow-hidden transition-opacity duration-300">
+          <svg className="w-full h-full" viewBox="0 0 1200 300" preserveAspectRatio="none">
+            <defs>
+              {/* Linear Gradients for Masonry Pier Lighting & Watermark Wash */}
+              <linearGradient id="pierMasonryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#475569" />
+                <stop offset="25%" stopColor="#334155" />
+                <stop offset="70%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#0f172a" />
+              </linearGradient>
+              <linearGradient id="pierSubmergedWash" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="rgba(30, 41, 59, 0.4)" />
+                <stop offset="40%" stopColor="rgba(15, 23, 42, 0.85)" />
+                <stop offset="100%" stopColor="rgba(8, 15, 28, 0.98)" />
+              </linearGradient>
+              
+              {/* Vehicle Headlight & Taillight Beams */}
+              <linearGradient id="headlightEast" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="rgba(254, 240, 138, 0.95)" />
+                <stop offset="35%" stopColor="rgba(254, 240, 138, 0.45)" />
+                <stop offset="100%" stopColor="rgba(254, 240, 138, 0)" />
+              </linearGradient>
+              <linearGradient id="headlightWest" x1="100%" y1="0%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="rgba(254, 240, 138, 0.95)" />
+                <stop offset="35%" stopColor="rgba(254, 240, 138, 0.45)" />
+                <stop offset="100%" stopColor="rgba(254, 240, 138, 0)" />
+              </linearGradient>
+            </defs>
 
-            {/* Steel Truss Triangles (Loha Pul Architecture) */}
-            {Array.from({ length: 16 }).map((_, i) => (
-              <g key={i}>
-                <line x1={i * 75} y1="32" x2={i * 75 + 37.5} y2="8" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.5" />
-                <line x1={i * 75 + 37.5} y1="8" x2={(i + 1) * 75} y2="32" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.5" />
-                <line x1={i * 75} y1="32" x2={(i + 1) * 75} y2="32" className="stroke-slate-800 dark:stroke-slate-600" strokeWidth="3" />
-                <line x1={i * 75 + 37.5} y1="8" x2={i * 75 + 37.5} y2="32" className="stroke-slate-800 dark:stroke-slate-600" strokeWidth="1.5" />
+            {/* 1. Deep Submerged Stone Masonry Piers (Plunging from y=48 down to y=286 into the riverbed) */}
+            {[220, 500, 780, 1020].map((pierX, idx) => (
+              <g key={`pier-${idx}`}>
+                {/* Caisson Bed Foundation Footing (Embedded in Alluvial Riverbed) */}
+                <rect
+                  x={pierX - 28}
+                  y="256"
+                  width="56"
+                  height="30"
+                  rx="3"
+                  className="fill-slate-800 dark:fill-[#0c1422] stroke-slate-900 dark:stroke-slate-950"
+                  strokeWidth="2"
+                />
+                {/* Stepped Caisson Base Shelf */}
+                <rect
+                  x={pierX - 24}
+                  y="244"
+                  width="48"
+                  height="12"
+                  rx="2"
+                  className="fill-slate-700 dark:fill-[#101b2d] stroke-slate-900 dark:stroke-slate-900"
+                  strokeWidth="1.5"
+                />
+
+                {/* Main Pier Column Shaft (Extending from Bridge Deck at y=48 all the way down) */}
+                <rect
+                  x={pierX - 19}
+                  y="48"
+                  width="38"
+                  height="200"
+                  fill="url(#pierMasonryGrad)"
+                  className="stroke-slate-800 dark:stroke-slate-900"
+                  strokeWidth="1.5"
+                  rx="2"
+                />
+
+                {/* Submerged Silt & Watermark Algae Gradient Overlay */}
+                <rect
+                  x={pierX - 19}
+                  y="100"
+                  width="38"
+                  height="148"
+                  fill="url(#pierSubmergedWash)"
+                />
+
+                {/* Cutwater Arch Wedge (Hydrodynamic starling pointed upstream to deflect flood currents) */}
+                <path
+                  d={`M${pierX - 19},130 L${pierX},158 L${pierX + 19},130 Z`}
+                  className="fill-slate-800 dark:fill-[#080f1a] stroke-slate-900/60"
+                  strokeWidth="1"
+                />
+                <path
+                  d={`M${pierX - 19},205 L${pierX},230 L${pierX + 19},205 Z`}
+                  className="fill-slate-850 dark:fill-[#060b14] stroke-slate-950/60"
+                  strokeWidth="1"
+                />
+
+                {/* Ashlar Stone Masonry Course Seams (Authentic Victorian Loha Pul Stone Architecture) */}
+                {[64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240].map((jointY) => (
+                  <line
+                    key={jointY}
+                    x1={pierX - 18}
+                    y1={jointY}
+                    x2={pierX + 18}
+                    y2={jointY}
+                    stroke="rgba(15, 23, 42, 0.75)"
+                    strokeWidth="1.2"
+                  />
+                ))}
+
+                {/* Pier Cap / Truss Bearing Corbel Block */}
+                <rect
+                  x={pierX - 23}
+                  y="44"
+                  width="46"
+                  height="8"
+                  className="fill-slate-600 dark:fill-slate-700 stroke-slate-800 dark:stroke-slate-900"
+                  strokeWidth="1.5"
+                  rx="1"
+                />
+
+                {/* Distress & Flood Clearance Beacon */}
+                <circle
+                  cx={pierX}
+                  cy="48"
+                  r="3.5"
+                  fill={metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC' ? '#ef4444' : metrics.stage === 'WARNING' ? '#f59e0b' : '#10b981'}
+                  className={metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC' ? 'animate-ping' : ''}
+                />
               </g>
             ))}
 
-            {/* Heavy Stone Masonry Piers extending into the river */}
-            {[260, 600, 940].map((pierX, idx) => (
-              <g key={idx}>
-                {/* Pier Column */}
-                <rect x={pierX - 22} y="32" width="44" height="240" className="fill-slate-700 dark:fill-slate-800 stroke-slate-800 dark:stroke-slate-700" strokeWidth="1.5" rx="3" />
-                {/* Pier Cutwater Arch */}
-                <path d={`M${pierX - 22},120 L${pierX},145 L${pierX + 22},120 Z`} className="fill-slate-800 dark:fill-slate-950" />
-                {/* Pier Distress Sensor Beacon */}
-                <circle cx={pierX} cy="36" r="3.5" fill={metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC' ? '#ef4444' : '#10b981'} className={metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC' ? 'animate-ping' : ''} />
+            {/* Central Pier Depth Gauge Markings (Graduated physical flood stage on Pier 2) */}
+            <g opacity="0.7" className="font-mono text-[6px]">
+              <line x1="517" y1="102" x2="523" y2="102" stroke="#ef4444" strokeWidth="1.5" />
+              <text x="525" y="104" fill="#ef4444" fontWeight="bold">DGR</text>
+              <line x1="517" y1="138" x2="522" y2="138" stroke="#f59e0b" strokeWidth="1.2" />
+              <text x="524" y="140" fill="#f59e0b" fontWeight="bold">WRN</text>
+              <line x1="517" y1="195" x2="522" y2="195" stroke="#38bdf8" strokeWidth="1.2" />
+              <text x="524" y="197" fill="#38bdf8">BAS</text>
+            </g>
+
+            {/* 2. Upper Tier: Heavy Steel Truss Framework (Pratt/Warren Through-Truss) */}
+            {/* Top Chord Girder Beam */}
+            <rect x="0" y="8" width="1200" height="4" className="fill-slate-800 dark:fill-slate-900" />
+            <rect x="0" y="12" width="1200" height="2" className="fill-slate-600 dark:fill-slate-700" />
+            {/* Mid Girder Divider Beam */}
+            <rect x="0" y="32" width="1200" height="3" className="fill-slate-700 dark:fill-slate-800" />
+
+            {/* Warren Triangular Steel Cross-Bracing across all 24 spans */}
+            {Array.from({ length: 24 }).map((_, i) => (
+              <g key={`truss-${i}`}>
+                <line x1={i * 50} y1="32" x2={i * 50 + 25} y2="12" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.2" />
+                <line x1={i * 50 + 25} y1="12" x2={(i + 1) * 50} y2="32" className="stroke-slate-700 dark:stroke-slate-500" strokeWidth="2.2" />
+                <line x1={i * 50 + 25} y1="12" x2={i * 50 + 25} y2="32" className="stroke-slate-800/80 dark:stroke-slate-600/80" strokeWidth="1.5" />
+                {/* Diagonal Counter-Braces */}
+                <line x1={i * 50} y1="12" x2={(i + 1) * 50} y2="32" stroke="rgba(100, 116, 139, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
               </g>
             ))}
+
+            {/* 3. Lower Tier: Two-Lane Vehicular Roadway Deck */}
+            {/* Roadway Base Structural Girder */}
+            <rect x="0" y="46" width="1200" height="6" className="fill-slate-800 dark:fill-slate-950" />
+            {/* Roadway Asphalt Surface */}
+            <rect x="0" y="42" width="1200" height="4" className="fill-slate-700 dark:fill-slate-850" />
+            {/* Center Dashed Lane Divider Line */}
+            <line x1="0" y1="44" x2="1200" y2="44" stroke="#facc15" strokeWidth="0.8" strokeDasharray="5,6" opacity="0.85" />
+            {/* Upper Safety Railing / Balustrade */}
+            <line x1="0" y1="38" x2="1200" y2="38" className="stroke-slate-500 dark:stroke-slate-600" strokeWidth="1.2" />
+            {Array.from({ length: 60 }).map((_, rIdx) => (
+              <line key={`rail-${rIdx}`} x1={rIdx * 20} y1="38" x2={rIdx * 20} y2="42" stroke="rgba(148, 163, 184, 0.6)" strokeWidth="0.8" />
+            ))}
+
+            {/* Bridge Lamp Posts with Warm Atmospheric Cones at each pier */}
+            {[220, 500, 780, 1020].map((lampX, lIdx) => (
+              <g key={`lamp-${lIdx}`}>
+                <line x1={lampX} y1="38" x2={lampX} y2="30" stroke="#94a3b8" strokeWidth="1.5" />
+                <circle cx={lampX} cy="30" r="1.8" fill="#fef08a" />
+                <polygon points={`${lampX - 12},46 ${lampX + 12},46 ${lampX},30`} fill="rgba(254, 240, 138, 0.08)" />
+              </g>
+            ))}
+
+            {/* 4. Active Moving Vehicular Traffic Across Old Railway Bridge */}
+            
+            {/* ── Vehicle 1: Delhi Auto-Rickshaw (CNG Yellow & Green) · Eastbound ── */}
+            <g className="bridge-vehicle-east-1">
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                from="-50 0"
+                to="1250 0"
+                dur="26s"
+                repeatCount="indefinite"
+                begin="0s"
+              />
+              {/* Headlight Projection Beam */}
+              <polygon points="20,41 55,39 55,44 20,43" fill="url(#headlightEast)" opacity="0.8" />
+              {/* Auto Canopy (Yellow) */}
+              <path d="M4,39 Q8,35 15,35 L19,38 L19,41 L3,41 Z" fill="#eab308" />
+              {/* Auto Lower Cabin (Green) */}
+              <rect x="3" y="39" width="16" height="3.5" rx="1" fill="#15803d" />
+              {/* Front Windshield Glass */}
+              <polygon points="15,36 19,38 18,40 14,40" fill="#bae6fd" opacity="0.9" />
+              {/* Headlight bulb */}
+              <circle cx="19.5" cy="40.5" r="1" fill="#fef08a" />
+              {/* Taillight bulb */}
+              <circle cx="2.8" cy="40.5" r="0.8" fill="#ef4444" />
+              {/* Wheels */}
+              <circle cx="6" cy="43.2" r="1.4" fill="#0f172a" stroke="#475569" strokeWidth="0.5" />
+              <circle cx="16" cy="43.2" r="1.4" fill="#0f172a" stroke="#475569" strokeWidth="0.5" />
+            </g>
+
+            {/* ── Vehicle 2: White Delhi City Sedan / Taxi · Eastbound (Staggered) ── */}
+            <g className="bridge-vehicle-east-2">
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                from="-220 0"
+                to="1250 0"
+                dur="20s"
+                repeatCount="indefinite"
+                begin="-8s"
+              />
+              {/* Headlight Beam */}
+              <polygon points="26,41.5 65,39 65,45 26,43.5" fill="url(#headlightEast)" opacity="0.85" />
+              {/* Car Body Roof & Hood */}
+              <path d="M3,41 L7,38 L18,38 L22,41 L26,41.5 L26,43 L2,43 Z" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="0.5" />
+              {/* Windows Glass */}
+              <polygon points="8,39 12,39 12,41 7,41" fill="#0284c7" opacity="0.75" />
+              <polygon points="13,39 18,39 20,41 13,41" fill="#0284c7" opacity="0.75" />
+              {/* Headlight */}
+              <rect x="25.5" y="41.2" width="1.5" height="1.6" fill="#fef08a" rx="0.5" />
+              {/* Taillight */}
+              <rect x="1.8" y="41.2" width="1" height="1.6" fill="#dc2626" rx="0.5" />
+              {/* Wheels */}
+              <circle cx="7" cy="43.5" r="1.5" fill="#1e293b" />
+              <circle cx="21" cy="43.5" r="1.5" fill="#1e293b" />
+            </g>
+
+            {/* ── Vehicle 3: Commuter Compact SUV (Navy Blue) · Westbound ── */}
+            <g className="bridge-vehicle-west-1">
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                from="1250 0"
+                to="-60 0"
+                dur="22s"
+                repeatCount="indefinite"
+                begin="-4s"
+              />
+              {/* Headlight Beam Westbound */}
+              <polygon points="2,42 -40,39 -40,45 2,43.5" fill="url(#headlightWest)" opacity="0.85" />
+              {/* SUV Roof Rack & Body */}
+              <line x1="8" y1="36" x2="19" y2="36" stroke="#94a3b8" strokeWidth="0.6" />
+              <path d="M2,42.5 L6,37 L19,37 L24,39.5 L25,43 L1,43 Z" fill="#1e3a8a" stroke="#3b82f6" strokeWidth="0.5" />
+              {/* Glass Windows */}
+              <polygon points="7,38 12,38 12,40.5 5,40.5" fill="#93c5fd" opacity="0.8" />
+              <polygon points="13,38 18,38 22,40.5 13,40.5" fill="#93c5fd" opacity="0.8" />
+              {/* Headlights Westbound */}
+              <rect x="0.8" y="41.5" width="1.5" height="1.5" fill="#fef08a" rx="0.4" />
+              {/* Taillights Eastbound */}
+              <rect x="24.5" y="41.2" width="1" height="1.6" fill="#ef4444" rx="0.4" />
+              {/* Wheels */}
+              <circle cx="6" cy="43.5" r="1.6" fill="#0f172a" />
+              <circle cx="20" cy="43.5" r="1.6" fill="#0f172a" />
+            </g>
+
+            {/* ── Vehicle 4: DDMA / Flood Response Patrol Van with Strobe Siren · Westbound ── */}
+            <g className="bridge-vehicle-west-2">
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                from="1250 0"
+                to="-60 0"
+                dur="17s"
+                repeatCount="indefinite"
+                begin="-12s"
+              />
+              {/* Headlight Beam Westbound */}
+              <polygon points="2,42 -45,39 -45,45 2,43.5" fill="url(#headlightWest)" opacity="0.9" />
+              {/* Flashing Roof Emergency Siren Beacon */}
+              <circle cx="14" cy="35.5" r="2" fill="#f59e0b" style={{ animation: 'emergencyStrobeBeacon 0.7s infinite alternate' }} />
+              <circle cx="14" cy="35.5" r="1" fill="#ef4444" />
+              {/* Van Body (White with Emergency High-Vis Orange Stripe) */}
+              <path d="M2,42 L5,37.5 L24,37.5 L25,43 L1,43 Z" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.6" />
+              <rect x="2" y="40.5" width="22" height="1.2" fill="#ea580c" />
+              {/* Cab Windows */}
+              <polygon points="5,38.5 10,38.5 10,40.5 4,40.5" fill="#38bdf8" opacity="0.85" />
+              <rect x="12" y="38.5" width="5" height="2" fill="#38bdf8" opacity="0.75" />
+              {/* Headlight */}
+              <rect x="0.8" y="41.2" width="1.5" height="1.5" fill="#fef08a" rx="0.4" />
+              {/* Taillight */}
+              <rect x="24.5" y="41.2" width="1" height="1.5" fill="#dc2626" rx="0.4" />
+              {/* Wheels */}
+              <circle cx="6" cy="43.5" r="1.6" fill="#0f172a" stroke="#64748b" strokeWidth="0.5" />
+              <circle cx="20" cy="43.5" r="1.6" fill="#0f172a" stroke="#64748b" strokeWidth="0.5" />
+            </g>
+
+            {/* 5. Emergency Traffic Suspension Protocol HUD on Bridge Railing */}
+            {(metrics.stage === 'DANGER' || metrics.stage === 'CATASTROPHIC') && (
+              <g className="animate-pulse">
+                <rect x="420" y="24" width="360" height="14" rx="3" fill="rgba(153, 27, 27, 0.95)" stroke="#ef4444" strokeWidth="1.5" />
+                <text x="600" y="34" fill="#ffffff" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle" letterSpacing="0.5">
+                  ⚠️ TRAFFIC SUSPENDED · DANGER MARK 205.53m BREACHED
+                </text>
+              </g>
+            )}
+
           </svg>
         </div>
 
@@ -609,6 +879,19 @@ export default function YamunaRiverGauge({
             boxShadow: `0 -14px 45px ${colors.glow}`,
           }}
         >
+          {/* Hydraulic Cutwater Foam & Wake Eddies at Submerged Bridge Piers */}
+          {[18.33, 41.67, 65, 85].map((pierPct, pIdx) => (
+            <div
+              key={`wake-${pIdx}`}
+              className="absolute -top-2.5 -translate-x-1/2 pointer-events-none z-30"
+              style={{ left: `${pierPct}%` }}
+            >
+              {/* V-Bow Churning Wake Wave against Stone Pier */}
+              <div className="w-12 h-3 border-b-2 border-white/90 dark:border-cyan-100 rounded-full blur-[0.5px] shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-pulse" />
+              <div className="w-6 h-1.5 mx-auto -mt-1 bg-white/60 dark:bg-cyan-200/70 rounded-full blur-[1px]" />
+            </div>
+          ))}
+
           {/* Surface Float / Water Level Telemetry Indicator */}
           <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-none flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/95 dark:bg-[#08182B]/95 border border-sky-400/50 shadow-xl font-mono text-[11px] text-white">
             <Anchor className="w-3.5 h-3.5 text-sky-400" />

@@ -4,8 +4,8 @@ import {
   Shield, Sliders, LogOut, AlertTriangle,
   CheckCircle2, ArrowRight, RefreshCw,
   Users, Droplets, ChevronRight, Search, Gauge,
-  ExternalLink, RotateCcw, TrendingDown, TrendingUp,
-  Check, Layers, Info, Filter, ArrowUpRight,
+  RotateCcw, TrendingDown, TrendingUp,
+  Layers, Info, ArrowUpRight,
   Radio, Terminal, Ban, X
 } from 'lucide-react';
 import {
@@ -96,7 +96,6 @@ export default function AdminPortal() {
 
   // Login state
   const [loginError, setLoginError] = useState(null);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [showGoogleInfo, setShowGoogleInfo] = useState(false);
   const [customClientId, setCustomClientId] = useState(() => localStorage.getItem('pravah_google_client_id') || '');
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || customClientId || '';
