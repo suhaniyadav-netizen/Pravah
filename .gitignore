@@ -3,6 +3,7 @@
 .env.local
 .env.*.local
 *.env
+docs/
 
 # Dependencies
 node_modules/
