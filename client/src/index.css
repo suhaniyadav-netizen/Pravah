@@ -677,37 +677,14 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3D ROTATING CELESTIAL EARTH — DUAL THEME OPTIMIZATION
-   In Light Mode: Eliminates the dark rectangular box & muddy gray left wash
-   by applying a smooth radial vignette mask centered on the 3D globe.
-   In Dark Mode: Full cosmic space bleed into the black canvas.
+   3D ROTATING CELESTIAL EARTH — FULL-BLEED COSMIC OBSERVATORY
+   High-fidelity celestial Earth with luminous contrast across
+   both light and dark theme configurations.
    ───────────────────────────────────────────────────────────── */
 .hero-earth-video {
-  -webkit-mask-image: radial-gradient(circle at 75% 50%, rgba(0, 0, 0, 1) 28%, rgba(0, 0, 0, 0.45) 48%, rgba(0, 0, 0, 0) 70%);
-  mask-image: radial-gradient(circle at 75% 50%, rgba(0, 0, 0, 1) 28%, rgba(0, 0, 0, 0.45) 48%, rgba(0, 0, 0, 0) 70%);
-  filter: contrast(1.08) brightness(1.04);
-  opacity: 0.95;
-}
-
-@media (max-width: 1024px) {
-  .hero-earth-video {
-    -webkit-mask-image: radial-gradient(circle at 65% 55%, rgba(0, 0, 0, 1) 26%, rgba(0, 0, 0, 0.4) 46%, rgba(0, 0, 0, 0) 68%);
-    mask-image: radial-gradient(circle at 65% 55%, rgba(0, 0, 0, 1) 26%, rgba(0, 0, 0, 0.4) 46%, rgba(0, 0, 0, 0) 68%);
-  }
-}
-
-@media (max-width: 640px) {
-  .hero-earth-video {
-    -webkit-mask-image: radial-gradient(circle at 50% 68%, rgba(0, 0, 0, 1) 22%, rgba(0, 0, 0, 0.35) 42%, rgba(0, 0, 0, 0) 64%);
-    mask-image: radial-gradient(circle at 50% 68%, rgba(0, 0, 0, 1) 22%, rgba(0, 0, 0, 0.35) 42%, rgba(0, 0, 0, 0) 64%);
-  }
-}
-
-:root[data-theme='dark'] .hero-earth-video,
-.dark .hero-earth-video {
   -webkit-mask-image: none;
   mask-image: none;
-  filter: none;
+  filter: contrast(1.06) brightness(1.02);
   opacity: 1;
 }
 

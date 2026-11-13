@@ -20,7 +20,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WardMap from '../components/WardMap';
 import YamunaRiverGauge from '../components/YamunaRiverGauge';
-import LightModeEarthGlobe from '../components/LightModeEarthGlobe';
 import { getCityRiskSummary, getCurrentWeather, getWardsGeoJSON } from '../services/api';
 
 export default function Landing() {
@@ -158,12 +157,12 @@ export default function Landing() {
       <Navbar />
 
       {/* ─────────────────────────────────────────────────────────────
-          1. HERO SECTION: DUAL-THEME RESPONSIVE OBSERVATORY
+          1. HERO SECTION: COSMIC EARTH OBSERVATORY (DUAL THEME)
           ───────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[74vh] sm:min-h-[80vh] w-full flex flex-col justify-between pt-24 pb-8 px-4 sm:px-6 lg:px-8 overflow-hidden select-none bg-slate-50 dark:bg-black transition-colors duration-300">
+      <section className="relative min-h-[74vh] sm:min-h-[80vh] w-full flex flex-col justify-between pt-24 pb-8 px-4 sm:px-6 lg:px-8 overflow-hidden select-none bg-black border-b border-black/20 dark:border-white/10 transition-colors duration-300">
 
-        {/* Dark Mode: 3D Motion Deep-Space Cosmic Earth Video */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden dark:block" aria-hidden="true">
+        {/* 3D Motion Deep-Space Cosmic Earth Video Background */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
           <div className="absolute right-0 lg:right-16 top-1/2 -translate-y-1/2 w-[340px] sm:w-[460px] h-[340px] sm:h-[460px] rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
 
           <video
@@ -175,22 +174,11 @@ export default function Landing() {
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260613_180732_a54afbf6-b30d-470e-861f-669871f09f67.mp4"
           />
 
-          {/* Dark Mode Cosmic Gradient: Preserves sharp text contrast against deep space */}
+          {/* Cosmic Directional Gradient: Preserves razor-sharp text contrast against deep space */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent pointer-events-none" />
           
           {/* Subtle Bottom Transition to Metric Ribbon */}
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/50 to-transparent pointer-events-none" />
-        </div>
-
-        {/* Light Mode: Sleek Holographic 3D Interactive Earth Observatory */}
-        <div className="absolute inset-0 z-0 overflow-hidden block dark:hidden pointer-events-none" aria-hidden="true">
-          {/* Right-aligned 3D Globe with interactive pointer controls */}
-          <div className="absolute inset-y-0 right-0 w-full lg:w-[62%] h-full pointer-events-auto">
-            <LightModeEarthGlobe />
-          </div>
-          {/* Left subtle gradient vignette to preserve razor-sharp typography contrast */}
-          <div className="absolute inset-y-0 left-0 w-full lg:w-[50%] bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none" />
         </div>
 
         {/* Hero Editorial Content */}
@@ -198,33 +186,33 @@ export default function Landing() {
           {/* Left Column: Authoritative Editorial */}
           <div className="lg:col-span-8 space-y-4 text-left max-w-xl">
             {/* Live Status Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/25 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-semibold uppercase tracking-wider backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-semibold uppercase tracking-wider backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>LIVE · 250 WARDS MONITORED</span>
             </div>
 
             {/* Authoritative Headline */}
-            <h1 className="font-instrument text-slate-900 dark:text-white text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight transition-colors duration-300">
+            <h1 className="font-instrument text-white text-4xl sm:text-6xl lg:text-7xl leading-[0.95] tracking-tight">
               Know the risk.
               <br />
-              <span className="italic font-light text-sky-600 dark:text-cyan-200">
+              <span className="italic font-light text-cyan-200">
                 Before the water rises.
               </span>
             </h1>
 
             {/* Mission Statement */}
-            <p className="text-sm sm:text-base text-slate-700 dark:text-white/85 leading-relaxed font-normal max-w-lg transition-colors duration-300">
+            <p className="text-sm sm:text-base text-white/85 leading-relaxed font-normal max-w-lg">
               Delhi's unified municipal flood monitoring, deterministic risk intelligence, and emergency dispatch system across all 250 municipal wards.
             </p>
 
             {/* Architecture Badges */}
-            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-600 dark:text-white/70 font-mono transition-colors duration-300">
+            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-white/70 font-mono">
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>PostGIS Spatial Containment</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Zero-Crash Offline Resilient</span>
               </span>
             </div>
@@ -235,14 +223,14 @@ export default function Landing() {
         </div>
 
         {/* Lower Hero Bar: Radar Heartbeat Left & Coordinates Right Above City Risk Index */}
-        <div className="relative z-10 max-w-6xl mx-auto w-full flex items-center justify-between pt-3 border-t border-slate-200 dark:border-white/15 text-xs text-slate-600 dark:text-white/70 font-mono transition-colors duration-300">
+        <div className="relative z-10 max-w-6xl mx-auto w-full flex items-center justify-between pt-3 border-t border-white/15 text-xs text-white/70 font-mono">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-            <span className="tracking-wider uppercase text-[10px] text-slate-600 dark:text-white/70 font-semibold">
+            <span className="tracking-wider uppercase text-[10px] text-white/70 font-semibold">
               LIVE RADAR SYNC · UPDATED 2 MINS AGO
             </span>
           </div>
-          <span className="text-[11px] text-slate-700 dark:text-white/80 tracking-wider font-semibold">
+          <span className="text-[11px] text-white/80 tracking-wider font-semibold">
             28.6139° N · 77.2090° E · DELHI NCT
           </span>
         </div>
