@@ -9,7 +9,8 @@
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
     "install:all": "npm install --prefix server && npm install --prefix client",
-    "build": "npm run build --prefix client",
+    "postinstall": "npm --prefix client install",
+    "build": "npm --prefix client install && npm --prefix client run build",
     "test": "npm test --prefix server",
     "verify:phase15": "npm run verify:phase15 --prefix server"
   },
