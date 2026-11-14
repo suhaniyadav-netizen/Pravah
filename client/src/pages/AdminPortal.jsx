@@ -328,8 +328,8 @@ export default function AdminPortal() {
               <span>Restricted Municipal Access</span>
             </div>
 
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/10 text-[var(--brand)] border border-sky-500/20 flex items-center justify-center mx-auto shadow-xs mt-1">
-              <Shield className="w-6 h-6" />
+            <div className="w-14 h-14 rounded-full bg-white/10 dark:bg-black/20 border border-sky-500/30 flex items-center justify-center mx-auto shadow-sm p-1 mt-1">
+              <img src="/logo.png" alt="Pravah Emblem" className="w-full h-full rounded-full object-contain" />
             </div>
             
             <div className="flex items-center justify-center gap-2 mt-1">
@@ -410,6 +410,7 @@ export default function AdminPortal() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
         <div>
           <div className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="Pravah" className="w-8 h-8 rounded-full object-contain ring-1 ring-sky-500/20 shadow-xs" />
             <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
               Admin Portal
             </h1>

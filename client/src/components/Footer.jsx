@@ -9,6 +9,11 @@ export default function Footer() {
         
         {/* Left Side: Copyright, Brand (with Hindi), and Authority */}
         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-2 gap-y-1 text-center sm:text-left">
+          <img
+            src="/logo.png"
+            alt="Pravah"
+            className="w-4 h-4 rounded-full object-contain inline-block shrink-0"
+          />
           <span>© 2026 Suhani Yadav</span>
           <span className="opacity-50">·</span>
           <span className="font-semibold text-[var(--text-primary)]">PRAVAH (प्रवाह)</span>

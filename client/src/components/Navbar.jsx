@@ -35,24 +35,33 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Left: Brand Wordmark with Custom Limelight Font */}
-          <Link to="/" className="flex items-center gap-2 text-decoration-none group select-none">
-            <span
-              className={`font-limelight text-xl sm:text-2xl tracking-wider uppercase transition-colors ${
-                isHeroTop
-                  ? 'text-white group-hover:text-sky-300'
-                  : 'text-[var(--text-primary)] group-hover:text-[var(--brand)]'
-              }`}
-            >
-              PRAVAH
-            </span>
-            <span
-              className={`font-serif text-xs sm:text-sm font-semibold transition-opacity ${
-                isHeroTop ? 'text-sky-400 opacity-90' : 'text-[var(--brand)] opacity-85'
-              } group-hover:opacity-100`}
-            >
-              (प्रवाह)
-            </span>
+          {/* Left: Brand Wordmark with Custom Limelight Font & Official Logo */}
+          <Link to="/" className="flex items-center gap-2.5 text-decoration-none group select-none">
+            <div className="relative flex items-center justify-center shrink-0">
+              <img
+                src="/logo.png"
+                alt="Pravah Emblem"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-contain shadow-xs transition-transform duration-300 group-hover:scale-105 ring-1 ring-white/30 bg-white/10 dark:bg-black/20 backdrop-blur-xs"
+              />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span
+                className={`font-limelight text-xl sm:text-2xl tracking-wider uppercase transition-colors ${
+                  isHeroTop
+                    ? 'text-white group-hover:text-sky-300'
+                    : 'text-[var(--text-primary)] group-hover:text-[var(--brand)]'
+                }`}
+              >
+                PRAVAH
+              </span>
+              <span
+                className={`font-serif text-xs sm:text-sm font-semibold transition-opacity ${
+                  isHeroTop ? 'text-sky-400 opacity-90' : 'text-[var(--brand)] opacity-85'
+                } group-hover:opacity-100`}
+              >
+                (प्रवाह)
+              </span>
+            </div>
           </Link>
 
           {/* Center: Balanced, Clean Navigation Titles */}

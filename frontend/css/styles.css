@@ -163,6 +163,14 @@ a {
     justify-content: center;
     font-size: 1.4rem;
     color: #2dd4bf;
+    overflow: hidden;
+}
+
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
 }
 
 .brand-text .main-title {
