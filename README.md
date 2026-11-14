@@ -1,35 +1,127 @@
-# Pravah V2 (प्रवाह) — Urban Flood Intelligence & Decision Support Platform
+<div align="center">
 
-> Production-Grade Urban Flood Monitoring, Explainable Risk Intelligence, Multi-Horizon Hydrological Forecasting, Incident Dispatch, Decision Support, and Real-Time Telemetry Platform for Delhi Municipal Wards.
+  <img src="docs/images/logo.png" alt="Pravah Logo" width="130" height="130" style="border-radius: 50%;" />
 
-[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-blue.svg)](https://www.postgresql.org/)
-[![PostGIS](https://img.shields.io/badge/PostGIS-3.4%2B-blue.svg)](https://postgis.net/)
-[![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748.svg)](https://www.prisma.io/)
-[![Socket.IO](https://img.shields.io/badge/Socket.IO-4.8-black.svg)](https://socket.io/)
-[![OWASP](https://img.shields.io/badge/OWASP-Hardened-orange.svg)](https://owasp.org/)
-[![Test Suite](https://img.shields.io/badge/Tests-19%2F19%20Passed-brightgreen.svg)]()
+  # PRAVAH V2 (प्रवाह)
+  ### Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
+
+  <p align="center">
+    A production-grade geospatial flood monitoring, deterministic hydrological forecasting, incident command dispatch, and decision support platform engineered for the <strong>National Capital Territory of Delhi (250 Municipal Wards)</strong>.
+  </p>
+
+  <p align="center">
+    <a href="#-quick-links"><strong>Explore Features »</strong></a> ·
+    <a href="#-system-showcase"><strong>View Screenshots »</strong></a> ·
+    <a href="#-developer-quickstart"><strong>Run Locally »</strong></a> ·
+    <a href="#-rest-api-reference"><strong>API Reference »</strong></a>
+  </p>
+
+  <!-- Badges -->
+  <p align="center">
+    <img src="https://img.shields.io/badge/Platform-Pravah%20v2.0-0284c7?style=for-the-badge&logo=shield" alt="Pravah v2" />
+    <img src="https://img.shields.io/badge/React%2018-Vite%20%2B%20Tailwind-38bdf8?style=for-the-badge&logo=react" alt="React 18" />
+    <img src="https://img.shields.io/badge/Node.js-18%2B%20Express-22c55e?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
+    <img src="https://img.shields.io/badge/PostgreSQL%2016-PostGIS%20Spatial-336791?style=for-the-badge&logo=postgresql" alt="PostGIS" />
+    <img src="https://img.shields.io/badge/Socket.IO-Realtime%20Telemetry-010101?style=for-the-badge&logo=socketdotio" alt="Socket.IO" />
+    <img src="https://img.shields.io/badge/Tests-19%2F19%20%2B%209%2F9%20Passed-10b981?style=for-the-badge&logo=checkmarx" alt="Tests Passed" />
+  </p>
+
+</div>
+
+---
+
+## 🧭 Table of Contents
+
+- [🌟 What is Pravah V2?](#-what-is-pravah-v2)
+- [📸 System Showcase](#-system-showcase)
+- [⚡ Key Platform Capabilities](#-key-platform-capabilities)
+- [📐 Deterministic Risk Mass-Balance Model](#-deterministic-risk-mass-balance-model)
+- [🏗️ System Architecture](#-system-architecture)
+- [📡 REST API Reference](#-rest-api-reference)
+- [💻 Developer Quickstart](#-developer-quickstart)
+- [🧪 Automated Reliability & Verification Suites](#-automated-reliability--verification-suites)
+- [🔐 Security, RBAC & Offline Resilience](#-security-rbac--offline-resilience)
+- [📚 Technical Documentation Index](#-technical-documentation-index)
 
 ---
 
 ## 🌟 What is Pravah V2?
 
-**Pravah V2** is a complete architectural reimagining of municipal flood risk management. Engineered to replace opaque heuristics with transparent physical mass-balance models, Pravah V2 empowers municipal authorities, disaster response teams, hydrological analysts, and citizens with actionable real-time intelligence during severe monsoon weather events.
+During peak monsoon events, Delhi's urban runoff challenges culvert capacities, road underpasses, and low-lying settlements along the Yamuna floodplain. **Pravah V2 (प्रवाह)** replaces opaque heuristics with a **transparent, physics-grounded hydrological model** and **sub-second PostGIS spatial indexing** across all 250 municipal wards of the Municipal Corporation of Delhi (MCD).
+
+### Why Pravah V2?
+- 🌊 **Predictive, Not Reactive**: Sub-second Doppler radar precipitation integration identifies convective rainfall accumulation before standing water rises.
+- 📐 **100% Explainable**: No black-box AI drift. Every risk index (0–100) breaks down into exact mathematical weights for drainage culvert capacity, precipitation intensity, and citizen distress reports.
+- 🚜 **Tactical Decision Support**: "What Should the City Do Now?" algorithm ranks interventions (high-capacity dewatering pump deployment, traffic diversion, alert dispatches) based on resource proximity.
+- 🛡️ **Zero-Crash Resilient Architecture**: Uninterrupted operations with local in-memory spatial caches and mock fallback feeds if external weather APIs or databases experience network disruption.
 
 ---
 
-## 🚀 Key Platform Capabilities
+## 📸 System Showcase
 
-| Capability | Technical Implementation | Value to Municipal Operations |
+<div align="center">
+
+### 1. Unified Earth Observatory & Live Grid Hero
+*Cinematic dual-theme observatory with live Safdarjung Doppler radar sync and real-time municipal ward telemetry.*
+
+![Pravah Observatory Hero](docs/images/landing-hero.png)
+
+</div>
+
+<br />
+
+| 🗺️ Interactive City Risk Map (`/dashboard`) | 🚨 Citizen Waterlogging Portal (`/report`) |
+| :---: | :---: |
+| [![City Risk Map](docs/images/city-risk-map.png)](docs/images/city-risk-map.png) | [![Citizen Portal](docs/images/citizen-portal.png)](docs/images/citizen-portal.png) |
+| *Color-coded 250-ward PostGIS spatial heat map with real-time risk scores and quick ward inspection drawer.* | *Public mobile-first reporting interface with auto GPS reverse-geocoding, camera upload, and duplicate clustering.* |
+
+| 🛡️ Municipal Admin Command Console (`/admin`) | 📈 Multi-Horizon Hydrological Analytics (`/analytics`) |
+| :---: | :---: |
+| [![Admin Portal](docs/images/admin-portal.png)](docs/images/admin-portal.png) | [![Hydrology Analytics](docs/images/hydrology-analytics.png)](docs/images/hydrology-analytics.png) |
+| *Command center for What-If simulations, culvert overrides, emergency dispatches, and immutable audit logs.* | *Yamuna river gauge levels, historical waterlogging hotspots, and 6h / 12h / 24h predictive flood projection curves.* |
+
+<div align="center">
+
+### 2. End-to-End Operational Pipeline & Institutional Readiness
+*Four-step municipal pipeline connecting Doppler radar, PostGIS polygons, mass-balance risk, and pre-emptive pump dispatch.*
+
+![Operational Continuum](docs/images/operational-continuum.png)
+
+</div>
+
+---
+
+## ⚡ Key Platform Capabilities
+
+| Capability | Technical Mechanism | Operational Value |
 | :--- | :--- | :--- |
-| **Explainable Risk Engine V2** | Deterministic multi-factor synthesis: $(S_{\text{drain}} \times 0.4) + (S_{\text{rain}} \times 0.35) + (S_{\text{complaint}} \times 0.25)$ | 100% explainable, deterministic risk scoring (0–100) with primary driver attribution and data confidence indicators. |
-| **PostGIS Spatial Architecture** | PostGIS `GEOMETRY(Polygon, 4326)` & `POINT(4326)` spatial indexes with point-in-polygon containment and distance ranking | Sub-millisecond geographic ward resolution and spatial infrastructure proximity searches. |
-| **"What Should the City Do Now?"** | Multi-attribute decision scoring combining ward vulnerability, standing water, and equipment proximity | Automated, ranked tactical action plans for emergency managers (mobile pumps, road closures, citizen alerts). |
-| **What-If Scenario Simulator** | Hydrological intervention sandbox computing delta risk scores ($\Delta \text{Risk}$) and operational feasibility | Safe digital twin to stress-test high-capacity pump deployments and desilting before dispatching physical assets. |
-| **Multi-Horizon Forecasting** | Physics-grounded hydrological projections across 6-hour, 12-hour, and 24-hour windows | Early flood warnings with uncertainty confidence intervals, soil saturation factors, and time-to-peak inundation. |
-| **Real-Time Telemetry Bus** | Socket.IO WebSocket broadcast engine with ward-level spatial rooms and event listeners | Sub-second streaming of flood alerts, pump dispatches, citizen complaints, and precipitation updates. |
-| **Security & OWASP Hardening** | Helmet CSP/HSTS, Bcrypt hashing, signed JWTs, IP rate limiting, recursive XSS sanitization, and audit logging | Enterprise-grade protection against brute force, credential stuffing, SQL injection, and privilege escalation. |
-| **Zero-Crash Offline Resilience** | Resilient in-memory fallback stores with automatic database reconnection | Ensures uninterrupted emergency operations even if PostgreSQL or external weather APIs experience outages. |
+| **Explainable Risk Engine V2** | Deterministic mass-balance equation: $(S_{\text{drain}} \times 0.40) + (S_{\text{rain}} \times 0.35) + (S_{\text{complaints}} \times 0.25)$ | Transparent 0–100 vulnerability score per ward with primary driver attribution and data freshness confidence tags. |
+| **PostGIS Spatial Architecture** | PostGIS `GEOMETRY(Polygon, 4326)` & `POINT(4326)` with spatial R-tree indexing | Sub-millisecond point-in-polygon mapping of citizen reports and spatial equipment proximity queries. |
+| **"What Should the City Do Now?"** | Multi-attribute decision scoring combining ward vulnerability, standing water, and equipment proximity | Automated, ranked tactical action roadmap for incident commanders (mobile pumps, road closures, citizen alerts). |
+| **What-If Scenario Simulator** | Hydrological digital twin computing delta risk ($\Delta \text{Risk}$) and operational feasibility | Safe sandbox to stress-test high-capacity pump deployments and desilting before dispatching physical assets. |
+| **Multi-Horizon Forecasting** | Physics-grounded hydrological projections across 6h, 12h, and 24h horizons | Early flood warnings with uncertainty intervals, soil saturation decay, and time-to-peak inundation. |
+| **Real-Time Telemetry Bus** | Socket.IO WebSocket broadcast engine with ward-level spatial rooms | Instant streaming of new complaints, pump dispatches, culvert capacity updates, and radar precipitation. |
+| **OWASP Security Hardening** | Helmet CSP/HSTS, Bcrypt hashing, signed JWTs, IP rate limiting, recursive XSS sanitization | Enterprise-grade protection against brute force, credential stuffing, injection, and privilege escalation. |
+| **Zero-Crash Resilient Architecture** | In-memory spatial caches with automatic database failover and reconnection | Uninterrupted emergency operations even if PostgreSQL or external weather APIs experience outages. |
+
+---
+
+## 📐 Deterministic Risk Mass-Balance Model
+
+Pravah V2 rejects black-box neural networks for life-critical municipal infrastructure decisions. Instead, it utilizes an explainable **deterministic mass-balance model**:
+
+$$\text{Risk Score} = (S_{\text{drainage}} \times 0.40) + (S_{\text{rainfall}} \times 0.35) + (S_{\text{complaints}} \times 0.25)$$
+
+### Mathematical Factor Breakdown
+1. **Drainage Deficit Factor ($S_{\text{drainage}}$ — 40% Weight)**:
+   - Evaluates current desilting level against culvert cross-section capacity.
+   - Silted drains ($< 50\%$ capacity) drastically heighten runoff accumulation risk.
+2. **Precipitation Intensity ($S_{\text{rainfall}}$ — 35% Weight)**:
+   - Real-time radar ingestion from Safdarjung IMD station combined with rolling 14-day soil moisture saturation.
+   - Runoff coefficient scales non-linearly when antecedent rainfall exceeds 25 mm.
+3. **Civic Distress Ground Truth ($S_{\text{complaints}}$ — 25% Weight)**:
+   - Geotagged citizen reports validated through coordinate boundary checks.
+   - Dynamically deduplicated and chronologically decayed over a 6-hour half-life curve.
 
 ---
 
@@ -37,157 +129,233 @@
 
 ```mermaid
 flowchart TB
-    subgraph Clients["Client Layer"]
+    subgraph Clients["1. Client Layer"]
         CP["Citizen Portal (Leaflet GIS)"]
         CD["City Command Dashboard"]
-        AC["Admin Control Center"]
+        AC["Admin Control Center & Simulator"]
     end
 
-    subgraph Edge["Security & Gateway Layer"]
-        RL["Rate Limiters (Auth: 15/15m, Public: 30/15m)"]
+    subgraph Edge["2. Security & Gateway Layer"]
+        RL["IP Rate Limiters (Auth: 15/15m, Public: 30/15m)"]
         SEC["Helmet Security Headers (CSP, HSTS, NoSniff)"]
-        XSS["Recursive XSS Sanitizer"]
+        XSS["Recursive XSS Sanitizer & Zod Validators"]
     end
 
-    subgraph Core["Pravah V2 Express Engine (Port 5000)"]
+    subgraph Core["3. Pravah V2 Express Engine (Port 5000)"]
         AUTH["JWT & RBAC Service"]
         GIS["PostGIS Spatial Engine"]
         RISK["Explainable Risk Engine V2"]
-        WEATHER["Weather Ingestion Cache (Open-Meteo)"]
+        WEATHER["Weather Ingestion Cache (Safdarjung IMD)"]
         FORECAST["Hydrological Forecasting (6h/12h/24h)"]
         INCIDENTS["Incident Lifecycle Engine"]
         DISPATCH["Response Team Dispatch"]
         DECISION["Decision Support Engine"]
         SIM["What-If Scenario Simulator"]
-        ANALYTICS["Historical Analytics Engine"]
+        ANALYTICS["Historical Hotspot Analytics"]
         AUDIT["Immutable Audit Logger"]
     end
 
-    subgraph Realtime["Real-Time Bus"]
-        SIO["Socket.IO Telemetry Hub"]
+    subgraph Realtime["4. Real-Time Telemetry Bus"]
+        SIO["Socket.IO Hub (Ward-Level Spatial Rooms)"]
     end
 
-    subgraph Data["Persistence Layer"]
+    subgraph Persistence["5. Persistence & Resilient Fallback Layer"]
         PRISMA["Prisma ORM Client"]
         PG[("PostgreSQL 16 + PostGIS")]
-        CACHE["Resilient Local Fallback Cache"]
+        FALLBACK["Zero-Crash In-Memory Cache (250 Wards GeoJSON)"]
     end
 
     Clients --> Edge --> Core
     Core <--> SIO -.-> Clients
     Core <--> PRISMA <--> PG
-    Core -.-> CACHE
+    Core -.-> FALLBACK
 ```
 
 ---
 
 ## 📡 REST API Reference
 
-### 1. Wards & GIS Spatial Services
-- `GET /api/wards` — Returns GeoJSON FeatureCollection of all 250 municipal wards with risk metrics.
+<details>
+<summary><strong>1. Wards & GIS Spatial Services</strong> (Click to expand)</summary>
+
+- `GET /api/wards` — Returns GeoJSON FeatureCollection of all 250 municipal wards with computed risk scores.
 - `GET /api/wards/search?q=:query` — Searches wards by name, code, or administrative zone.
 - `POST /api/wards/lookup-point` — Point-in-polygon containment lookup mapping GPS coordinates to containing ward.
 - `GET /api/wards/:id` — Retrieves comprehensive ward detail, active incidents, and infrastructure assets.
 
-### 2. Risk Engine & Forecasting
-- `GET /api/risk/summary` — Aggregate citywide risk metrics, critical counts, and top vulnerable wards.
+</details>
+
+<details>
+<summary><strong>2. Risk Engine & Forecasting</strong> (Click to expand)</summary>
+
+- `GET /api/risk/summary` & `GET /api/risk-summary` — Aggregate citywide risk metrics, critical counts, and top vulnerable wards.
 - `GET /api/risk/ward/:id` — Explainable risk breakdown with mathematical factor contributions.
 - `GET /api/forecasting/ward/:id` — Multi-horizon flood forecast projections (6h, 12h, 24h) with confidence intervals.
-- `GET /api/forecasting/city` — 24-hour citywide risk escalation overview identifying wards likely to flood.
+- `GET /api/forecasting/city` & `GET /api/prediction` — 24-hour citywide risk escalation overview identifying wards likely to flood.
 
-### 3. Decision Support & What-If Simulation
+</details>
+
+<details>
+<summary><strong>3. Decision Support & What-If Simulation</strong> (Click to expand)</summary>
+
 - `GET /api/decision-support/ward/:id` — Generates ranked tactical action plans for a ward.
 - `GET /api/decision-support/city` — Citywide prioritized intervention roadmap for incident command.
 - `POST /api/simulation/ward` — Simulates pump deployment or rainfall surge and calculates delta risk ($\Delta \text{Risk}$).
 - `GET /api/simulation/presets` — Pre-calibrated emergency simulation scenarios (e.g. Yamuna overflow, cloudburst).
 
-### 4. Complaints, Incidents & Response Teams
-- `POST /api/complaints` — Submits citizen waterlogging report with automatic PostGIS ward mapping.
+</details>
+
+<details>
+<summary><strong>4. Complaints, Incidents & Response Teams</strong> (Click to expand)</summary>
+
+- `POST /api/complaints` & `POST /api/complaint` — Submits citizen waterlogging report with automatic PostGIS ward mapping.
 - `GET /api/incidents` — Lists active operational flood incidents.
 - `POST /api/response-teams/dispatch` — Assigns emergency response team and equipment to an active incident.
 
-### 5. Administration & Security Audit
+</details>
+
+<details>
+<summary><strong>5. Administration & Security Audit</strong> (Click to expand)</summary>
+
 - `POST /api/auth/login` — Authenticates credentials and issues signed JWT bearer token.
-- `GET /api/admin/overview` — Administrative ward vulnerability table.
+- `GET /api/admin/overview` — Administrative ward vulnerability overview.
 - `POST /api/admin/update-drainage` — Updates ward drainage capacity and writes to immutable audit log.
 - `GET /api/admin/audit-logs` — Retrieves security event history.
+
+</details>
 
 ---
 
 ## 💻 Developer Quickstart
 
 ### Prerequisites
-- Node.js 18+ and npm
-- (Optional) Docker for PostgreSQL + PostGIS (System includes resilient offline fallback mode)
+- **Node.js**: v18.0.0 or higher
+- **npm**: v9.0.0 or higher
+- **PostgreSQL & PostGIS** *(Optional: system includes offline zero-crash fallback if DB is not installed)*
 
-### 1. Backend Server Setup
+### Universal One-Command Launch (Root)
 ```powershell
-# Navigate to backend server
-cd server
+# Clones repository and installs all dependencies
+git clone https://github.com/suhaniyadav-netizen/Pravah.git
+cd Pravah
 
-# Install dependencies
+# Installs root and client packages
+npm install
+cd client && npm install && cd ..
+cd server && npm install && cd ..
+
+# Concurrently runs Server (port 5000) and Vite React Client (port 5173)
+npm run dev
+```
+
+### Manual Individual Component Setup
+
+<details>
+<summary><strong>Backend Server (`server/`)</strong></summary>
+
+```powershell
+cd server
 npm install
 
-# Run database setup (if PostgreSQL is running)
+# Setup database schema (when PostgreSQL is active)
 npx prisma generate
 npx prisma db push
 npm run prisma:seed
 
-# Start Pravah V2 server on port 5000
+# Start backend development server
 npm run dev
 ```
 
-### 2. Running Verification Suites
-Pravah V2 includes dedicated automated verification suites covering all phases and failure scenarios:
+</details>
+
+<details>
+<summary><strong>Modern React Client (`client/`)</strong></summary>
+
 ```powershell
-cd server
-
-# Run Master Reliability & Failure Scenario Suite (Phase 14)
-npm test
-
-# Run Client Integration Suite (Phase 15)
-npm run verify:phase15
-```
-
-### 3. Frontend Clients
-
-#### A. Modern React + Vite Client (`client/`)
-```powershell
-# Navigate to modern client
 cd client
-
-# Install dependencies
 npm install
 
-# Start Vite dev server on port 5173 (with proxy to port 5000)
+# Start Vite dev server on http://localhost:5173
 npm run dev
 
-# Or build production bundle
+# Or build production static bundle
 npm run build
 ```
 
-#### B. Legacy Static Client (`frontend/`)
-Alternatively, open `frontend/index.html` via VS Code Live Server or double-click. `frontend/js/common.js` automatically routes requests to `http://localhost:5000`.
+</details>
 
-**Default Demo Credentials:**
-- **Administrator**: `admin@pravah.delhi.gov.in` (Password: `PravahDev@2026`) or `admin` / `admin123`
-- **Hydrological Analyst**: `analyst@pravah.delhi.gov.in` (Password: `PravahDev@2026`)
-- **Response Team Lead**: `team.central@pravah.delhi.gov.in` (Password: `PravahDev@2026`)
-- **Citizen Reporter**: `citizen.delhi@example.com` (Password: `PravahDev@2026`)
+<details>
+<summary><strong>Demo Credentials</strong></summary>
+
+| Role | Username / Email | Password | Access Scope |
+| :--- | :--- | :--- | :--- |
+| **Municipal Administrator** | `admin@pravah.delhi.gov.in` | `PravahDev@2026` | Full Control: Drainage Overrides, Dispatches, Audits |
+| **Legacy Admin Quickpass** | `admin` | `admin123` | Quick evaluation fallback |
+| **Hydrological Analyst** | `analyst@pravah.delhi.gov.in` | `PravahDev@2026` | Read-only analytics, telemetry & what-if simulator |
+| **Response Team Lead** | `team.central@pravah.delhi.gov.in` | `PravahDev@2026` | Incident acknowledgment & pump dispatch acceptance |
+| **Citizen Reporter** | `citizen.delhi@example.com` | `PravahDev@2026` | Public report submission & ward verification |
+
+</details>
+
+---
+
+## 🧪 Automated Reliability & Verification Suites
+
+Pravah V2 enforces strict reliability guarantees. All failure scenarios, boundary checks, and client regressions are verified via automated test suites:
+
+```powershell
+# Run Master Failure & Reliability Suite (Phase 14: 19/19 checks)
+npm test
+
+# Run Client Integration & Legacy Endpoint Suite (Phase 15: 9/9 checks)
+npm run verify:phase15
+```
+
+<details>
+<summary><strong>Master Test Suite Breakdown (19/19 Verification Checks)</strong></summary>
+
+1. **System Health & Discovery**: Health check returns HTTP 200 with service dependencies.
+2. **Database Disconnection Fallback**: Resilient fallback returns 250 wards, risk summaries, and simulations offline.
+3. **Weather Stale Telemetry Handling**: Stale weather data (>12h) is tagged and throttled gracefully.
+4. **GIS Coordinate Validation**: Boundary enforcement rejects coordinates outside Delhi municipal territory (400 Bad Request).
+5. **Schema Validation & Sanitization**: Zod validation blocks malformed severity enums and short payloads.
+6. **Authentication & RBAC Defenses**: Prevents privilege escalation and forged JWT payloads.
+7. **End-to-End Operational Lifecycle Drill**: Verifies full complaint submission → incident generation → decision support ranking → what-if simulation risk delta ($\Delta \text{Risk}$).
+
+</details>
+
+---
+
+## 🔐 Security, RBAC & Offline Resilience
+
+- **OWASP Hardened**: Helmet HTTP security headers (Strict-Transport-Security, Content-Security-Policy, X-Content-Type-Options: nosniff).
+- **Authentication**: Signed stateless JSON Web Tokens (JWT) with HMAC-SHA256 and 8-hour expiration.
+- **Audit Logging**: All administrative drainage modifications and pump overrides generate permanent, immutable audit records.
+- **Offline Resilience**: If PostgreSQL or IMD Safdarjung weather APIs become unreachable, Pravah V2 switches instantly to zero-crash memory cache (`server/data/demo-ward-boundaries.json`), preventing system downtime during emergency events.
 
 ---
 
 ## 📚 Technical Documentation Index
 
-- [System Architecture & Specifications](docs/system-architecture.md)
-- [Testing & Reliability Runbook](docs/testing-and-reliability.md)
-- [Security Hardening & OWASP Compliance](docs/security-hardening.md)
-- [Decision Support Engine](docs/decision-support-engine.md)
-- [What-If Scenario Simulator](docs/what-if-simulator.md)
-- [Real-Time Socket.IO Architecture](docs/realtime-socket-architecture.md)
-- [Historical Analytics & Hotspot Telemetry](docs/historical-analytics.md)
-- [Hydrological Forecasting Architecture](docs/forecasting-architecture.md)
-- [Explainable Risk Engine V2](docs/risk-engine-v2.md)
-- [GIS & Ward Spatial API](docs/ward-gis-api.md)
-- [Database Schema & PostGIS Entities](docs/database-schema.md)
-- [Authentication & RBAC](docs/authentication-rbac.md)
+For in-depth architectural specifications and implementation guides, explore the `docs/` repository:
+
+| Document | Topic Covered |
+| :--- | :--- |
+| [System Architecture](docs/system-architecture.md) | High-level system topology, process model & scaling |
+| [Explainable Risk Engine V2](docs/risk-engine-v2.md) | Mathematical mass-balance formulation & factor weights |
+| [GIS & Ward Spatial API](docs/ward-gis-api.md) | PostGIS spatial queries, R-tree indexing & GeoJSON schema |
+| [Decision Support Engine](docs/decision-support-engine.md) | Tactical intervention ranking and resource matching |
+| [What-If Scenario Simulator](docs/what-if-simulator.md) | Hydrological simulation formulas & delta risk calculation |
+| [Hydrological Forecasting](docs/forecasting-architecture.md) | 6h, 12h, and 24h multi-horizon projection models |
+| [Real-Time Socket Architecture](docs/realtime-socket-architecture.md) | WebSocket protocol, spatial room partitioning & event contracts |
+| [Security Hardening & RBAC](docs/security-hardening.md) | OWASP defense checklist, JWT schema & rate-limit configurations |
+| [Testing & Reliability Runbook](docs/testing-and-reliability.md) | Master failure drills, fault tolerance & test runbook |
+
+---
+
+<div align="center">
+
+  **PRAVAH (प्रवाह)** · Developed by **Suhani Yadav**  
+  *In collaboration with the Municipal Corporation of Delhi (MCD) & Delhi Disaster Management Authority (DDMA)*
+
+</div>
