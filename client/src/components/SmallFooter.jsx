@@ -10,6 +10,11 @@ export default function SmallFooter() {
     <footer className="w-full border-t border-[var(--border)] bg-[var(--surface-elevated)] py-3 px-4 sm:px-8 text-xs text-[var(--text-muted)] select-none">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5 font-inter">
         <div className="flex items-center gap-2">
+          <img
+            src="/logo.png"
+            alt="Pravah"
+            className="w-4 h-4 rounded-full object-contain shrink-0"
+          />
           <span className="font-limelight text-sm tracking-wider text-[var(--text-primary)] uppercase">
             PRAVAH
           </span>
