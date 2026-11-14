@@ -579,7 +579,7 @@ export default function Landing() {
           src="/logo.png"
           alt=""
           aria-hidden="true"
-          className="absolute -right-10 sm:-right-14 top-1/2 -translate-y-1/2 w-64 h-64 sm:w-80 sm:h-80 opacity-[0.035] dark:opacity-[0.06] pointer-events-none select-none blur-[0.5px] -z-0"
+          className="absolute -right-10 sm:-right-14 top-1/2 -translate-y-1/2 w-64 h-64 sm:w-80 sm:h-80 opacity-[0.10] dark:opacity-[0.15] pointer-events-none select-none blur-[0.5px] -z-0"
         />
 
         <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
