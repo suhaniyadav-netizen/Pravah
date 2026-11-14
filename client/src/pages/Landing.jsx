@@ -574,14 +574,6 @@ export default function Landing() {
         {/* Subtle Ambient Radial Lighting in Background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-sky-500/5 dark:bg-sky-500/10 blur-[120px] rounded-full pointer-events-none -z-0" />
 
-        {/* Ambient Pravah Watermark on the Right Side */}
-        <img
-          src="/logo.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute -right-10 sm:-right-14 top-1/2 -translate-y-1/2 w-64 h-64 sm:w-80 sm:h-80 opacity-[0.10] dark:opacity-[0.15] pointer-events-none select-none blur-[0.5px] -z-0"
-        />
-
         <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
 
           {/* Section Header */}
@@ -600,6 +592,14 @@ export default function Landing() {
 
           {/* 4-Step Pipeline Cards with Connected Flow Architecture */}
           <div className="relative">
+            {/* Ambient Watermark Logo Centered in Cards Section */}
+            <img
+              src="/logo.png"
+              alt=""
+              aria-hidden="true"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 sm:w-96 sm:h-96 opacity-[0.10] dark:opacity-[0.15] pointer-events-none select-none blur-[0.5px] -z-0"
+            />
+
             {/* Horizontal flow line visible on large screens */}
             <div className="absolute top-1/2 left-8 right-8 h-px border-t border-dashed border-sky-500/20 hidden lg:block -translate-y-8 -z-0 pointer-events-none" />
 
