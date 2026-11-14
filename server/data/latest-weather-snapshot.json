@@ -10,7 +10,7 @@
   "weatherCode": 0,
   "condition": "Clear sky",
   "observedAt": "2026-11-14T14:00:00.000Z",
-  "fetchedAt": "2026-11-14T14:06:51.224Z",
+  "fetchedAt": "2026-11-14T14:12:04.065Z",
   "isStale": false,
   "forecast": [
     {

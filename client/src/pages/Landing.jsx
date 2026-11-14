@@ -17,9 +17,6 @@ import {
   Cpu,
   Radar,
   Droplets,
-  Compass,
-  Shield,
-  ChevronRight,
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -570,14 +567,14 @@ export default function Landing() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. FOUR-STEP MUNICIPAL OPERATING CONTINUUM & INSTITUTIONAL DISPATCH
+          6. FOUR-STEP MUNICIPAL OPERATING CONTINUUM
           ───────────────────────────────────────────────────────────── */}
-      <section className="pt-20 sm:pt-28 pb-24 sm:pb-36 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] relative overflow-hidden bg-gradient-to-b from-transparent via-[var(--surface)]/20 to-[var(--surface-elevated)]/40 transition-colors duration-300">
+      <section className="pt-20 sm:pt-28 pb-20 sm:pb-28 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] relative overflow-hidden bg-gradient-to-b from-transparent via-[var(--surface)]/20 to-transparent transition-colors duration-300">
         
         {/* Subtle Ambient Radial Lighting in Background */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-sky-500/5 dark:bg-sky-500/10 blur-[120px] rounded-full pointer-events-none -z-0" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-sky-500/5 dark:bg-sky-500/10 blur-[120px] rounded-full pointer-events-none -z-0" />
 
-        <div className="max-w-7xl mx-auto space-y-16 sm:space-y-20 relative z-10">
+        <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
 
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -670,91 +667,6 @@ export default function Landing() {
                   </div>
                 );
               })}
-            </div>
-          </div>
-
-          {/* ─────────────────────────────────────────────────────────
-              Institutional Dispatch & City Readiness Module (Niche & Clean)
-              ───────────────────────────────────────────────────────── */}
-          <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-gradient-to-br from-[var(--surface-elevated)] via-[var(--surface)] to-[var(--surface-elevated)] p-8 sm:p-12 lg:p-14 shadow-xl">
-            {/* Ambient Watermark Emblem in Background */}
-            <img
-              src="/logo.png"
-              alt="Pravah"
-              className="absolute -right-8 -bottom-8 w-64 h-64 sm:w-80 sm:h-80 opacity-[0.04] dark:opacity-[0.07] pointer-events-none select-none blur-[0.5px]"
-            />
-
-            {/* Glowing Accent Corner Flare */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-sky-500/10 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Column: Authoritative Editorial */}
-              <div className="lg:col-span-8 space-y-4">
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 font-mono text-[10px] font-semibold uppercase tracking-wider">
-                  <Compass className="w-3.5 h-3.5 text-[var(--brand)]" />
-                  <span>Delhi Municipal Early Warning Network</span>
-                </div>
-
-                <h3 className="font-instrument text-2xl sm:text-4xl lg:text-5xl font-normal text-[var(--text-primary)] tracking-tight leading-[1.08]">
-                  Operationalize flood intelligence across your municipal ward.
-                </h3>
-
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-normal max-w-xl leading-relaxed">
-                  Monitor live ward risk indices, simulate culvert pump deployments, or file a geotagged civic waterlogging report in seconds.
-                </p>
-
-                {/* Trust & Grid Capabilities Badges */}
-                <div className="pt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--text-muted)] font-mono">
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>250 Wards Indexed</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>Yamuna Live Telemetry</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>Zero-Crash Offline Resilient</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Right Column: High-Affordance Action Buttons */}
-              <div className="lg:col-span-4 flex flex-col gap-3">
-                <Link
-                  to="/dashboard"
-                  className="w-full inline-flex items-center justify-between px-5 py-3.5 rounded-xl bg-[var(--brand)] hover:bg-[var(--brand-strong)] text-white font-medium text-sm transition-all shadow-md hover:shadow-sky-500/20 group no-underline"
-                >
-                  <span className="flex items-center gap-2 font-medium">
-                    <Activity className="w-4 h-4" />
-                    <span>Launch City Risk Map</span>
-                  </span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-
-                <Link
-                  to="/report"
-                  className="w-full inline-flex items-center justify-between px-5 py-3 rounded-xl bg-[var(--surface-elevated)] hover:bg-[var(--surface-soft)] text-[var(--text-primary)] border border-[var(--border)] hover:border-[var(--brand)] font-medium text-xs transition-all group no-underline"
-                >
-                  <span className="flex items-center gap-2 font-medium">
-                    <Droplets className="w-4 h-4 text-cyan-500" />
-                    <span>File Citizen Waterlogging Report</span>
-                  </span>
-                  <ChevronRight className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--brand)] transition-transform group-hover:translate-x-0.5" />
-                </Link>
-
-                <Link
-                  to="/admin"
-                  className="w-full inline-flex items-center justify-between px-5 py-2.5 rounded-xl bg-transparent hover:bg-sky-500/5 text-[var(--text-muted)] hover:text-[var(--brand)] text-[11px] font-mono transition-colors group no-underline"
-                >
-                  <span className="flex items-center gap-2">
-                    <Shield className="w-3.5 h-3.5 text-[var(--brand)]" />
-                    <span>Municipal Admin Command Console</span>
-                  </span>
-                  <span className="text-[10px] uppercase tracking-wider opacity-60 group-hover:opacity-100">Login →</span>
-                </Link>
-              </div>
             </div>
           </div>
 
