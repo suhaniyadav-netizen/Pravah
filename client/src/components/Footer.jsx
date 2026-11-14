@@ -5,16 +5,8 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full border-t border-[var(--border)] bg-[var(--surface-elevated)] text-[var(--text-secondary)] transition-colors duration-300 relative overflow-hidden select-none">
-      {/* Ambient Watermark Logo Emblem */}
-      <img
-        src="/logo.png"
-        alt=""
-        aria-hidden="true"
-        className="absolute -right-6 sm:-right-10 -bottom-8 sm:-bottom-14 w-52 h-52 sm:w-64 sm:h-64 opacity-[0.04] dark:opacity-[0.07] pointer-events-none select-none blur-[0.5px]"
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10 text-xs">
+    <footer className="w-full border-t border-[var(--border)] bg-[var(--surface-elevated)] text-[var(--text-secondary)] transition-colors duration-300 select-none">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
         
         {/* Left Side: Pravah with Name and Logo */}
         <Link to="/" className="flex items-center gap-2.5 text-decoration-none group select-none">
