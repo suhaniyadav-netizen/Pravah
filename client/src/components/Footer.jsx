@@ -33,9 +33,17 @@ export default function Footer() {
           </div>
         </Link>
 
-        {/* Right Side: Dynamic Yearly Copyright & Author Attribution */}
+        {/* Right Side: Dynamic Yearly Copyright & Author Attribution with Repo Link */}
         <div className="text-[var(--text-muted)] text-[11px] sm:text-xs font-normal tracking-wide text-center sm:text-right">
-          © {currentYear} Designed and Engineered by Suhani Yadav
+          © {currentYear} Designed and Engineered by{' '}
+          <a
+            href="https://github.com/suhaniyadav-netizen/Pravah"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-[var(--text-primary)] hover:text-[var(--brand)] transition-colors no-underline"
+          >
+            Suhani Yadav
+          </a>
         </div>
 
       </div>

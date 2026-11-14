@@ -2,11 +2,15 @@
 
   <img src="docs/images/logo.png" alt="Pravah Logo" width="130" height="130" style="border-radius: 50%;" />
 
-  # PRAVAH V2 (प्रवाह)
+  # PRAVAH (प्रवाह)
   ### Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
 
   <p align="center">
     A production-grade geospatial flood monitoring, deterministic hydrological forecasting, incident command dispatch, and decision support platform engineered for the <strong>National Capital Territory of Delhi (250 Municipal Wards)</strong>.
+  </p>
+
+  <p align="center">
+    Designed & Engineered by <a href="https://github.com/suhaniyadav-netizen/Pravah"><strong>Suhani Yadav</strong></a>
   </p>
 
   <p align="center">
@@ -18,7 +22,7 @@
 
   <!-- Badges -->
   <p align="center">
-    <img src="https://img.shields.io/badge/Platform-Pravah%20v2.0-0284c7?style=for-the-badge&logo=shield" alt="Pravah v2" />
+    <img src="https://img.shields.io/badge/Platform-Pravah-0284c7?style=for-the-badge&logo=shield" alt="Pravah" />
     <img src="https://img.shields.io/badge/React%2018-Vite%20%2B%20Tailwind-38bdf8?style=for-the-badge&logo=react" alt="React 18" />
     <img src="https://img.shields.io/badge/Node.js-18%2B%20Express-22c55e?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
     <img src="https://img.shields.io/badge/PostgreSQL%2016-PostGIS%20Spatial-336791?style=for-the-badge&logo=postgresql" alt="PostGIS" />
@@ -32,7 +36,7 @@
 
 ## 🧭 Table of Contents
 
-- [🌟 What is Pravah V2?](#-what-is-pravah-v2)
+- [🌟 What is Pravah?](#-what-is-pravah)
 - [📸 System Showcase](#-system-showcase)
 - [⚡ Key Platform Capabilities](#-key-platform-capabilities)
 - [📐 Deterministic Risk Mass-Balance Model](#-deterministic-risk-mass-balance-model)
@@ -45,11 +49,11 @@
 
 ---
 
-## 🌟 What is Pravah V2?
+## 🌟 What is Pravah?
 
-During peak monsoon events, Delhi's urban runoff challenges culvert capacities, road underpasses, and low-lying settlements along the Yamuna floodplain. **Pravah V2 (प्रवाह)** replaces opaque heuristics with a **transparent, physics-grounded hydrological model** and **sub-second PostGIS spatial indexing** across all 250 municipal wards of the Municipal Corporation of Delhi (MCD).
+During peak monsoon events, Delhi's urban runoff challenges culvert capacities, road underpasses, and low-lying settlements along the Yamuna floodplain. **Pravah (प्रवाह)** replaces opaque heuristics with a **transparent, physics-grounded hydrological model** and **sub-second PostGIS spatial indexing** across all 250 municipal wards of the Municipal Corporation of Delhi (MCD).
 
-### Why Pravah V2?
+### Why Pravah?
 - 🌊 **Predictive, Not Reactive**: Sub-second Doppler radar precipitation integration identifies convective rainfall accumulation before standing water rises.
 - 📐 **100% Explainable**: No black-box AI drift. Every risk index (0–100) breaks down into exact mathematical weights for drainage culvert capacity, precipitation intensity, and citizen distress reports.
 - 🚜 **Tactical Decision Support**: "What Should the City Do Now?" algorithm ranks interventions (high-capacity dewatering pump deployment, traffic diversion, alert dispatches) based on resource proximity.
@@ -82,8 +86,8 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 
 <div align="center">
 
-### 2. End-to-End Operational Pipeline & Institutional Readiness
-*Four-step municipal pipeline connecting Doppler radar, PostGIS polygons, mass-balance risk, and pre-emptive pump dispatch.*
+### 2. End-to-End Operational Pipeline & Minimal Institutional Footprint
+*Four-step municipal pipeline connecting Doppler radar, PostGIS polygons, mass-balance risk, and pre-emptive pump dispatch with a clean minimal brand footer.*
 
 ![Operational Continuum](docs/images/operational-continuum.png)
 
@@ -95,7 +99,7 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 
 | Capability | Technical Mechanism | Operational Value |
 | :--- | :--- | :--- |
-| **Explainable Risk Engine V2** | Deterministic mass-balance equation: $(S_{\text{drain}} \times 0.40) + (S_{\text{rain}} \times 0.35) + (S_{\text{complaints}} \times 0.25)$ | Transparent 0–100 vulnerability score per ward with primary driver attribution and data freshness confidence tags. |
+| **Explainable Risk Engine** | Deterministic mass-balance equation: $(S_{\text{drain}} \times 0.40) + (S_{\text{rain}} \times 0.35) + (S_{\text{complaints}} \times 0.25)$ | Transparent 0–100 vulnerability score per ward with primary driver attribution and data freshness confidence tags. |
 | **PostGIS Spatial Architecture** | PostGIS `GEOMETRY(Polygon, 4326)` & `POINT(4326)` with spatial R-tree indexing | Sub-millisecond point-in-polygon mapping of citizen reports and spatial equipment proximity queries. |
 | **"What Should the City Do Now?"** | Multi-attribute decision scoring combining ward vulnerability, standing water, and equipment proximity | Automated, ranked tactical action roadmap for incident commanders (mobile pumps, road closures, citizen alerts). |
 | **What-If Scenario Simulator** | Hydrological digital twin computing delta risk ($\Delta \text{Risk}$) and operational feasibility | Safe sandbox to stress-test high-capacity pump deployments and desilting before dispatching physical assets. |
@@ -108,7 +112,7 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 
 ## 📐 Deterministic Risk Mass-Balance Model
 
-Pravah V2 rejects black-box neural networks for life-critical municipal infrastructure decisions. Instead, it utilizes an explainable **deterministic mass-balance model**:
+Pravah rejects black-box neural networks for life-critical municipal infrastructure decisions. Instead, it utilizes an explainable **deterministic mass-balance model**:
 
 $$\text{Risk Score} = (S_{\text{drainage}} \times 0.40) + (S_{\text{rainfall}} \times 0.35) + (S_{\text{complaints}} \times 0.25)$$
 
@@ -141,10 +145,10 @@ flowchart TB
         XSS["Recursive XSS Sanitizer & Zod Validators"]
     end
 
-    subgraph Core["3. Pravah V2 Express Engine (Port 5000)"]
+    subgraph Core["3. Pravah Express Engine (Port 5000)"]
         AUTH["JWT & RBAC Service"]
         GIS["PostGIS Spatial Engine"]
-        RISK["Explainable Risk Engine V2"]
+        RISK["Explainable Risk Engine"]
         WEATHER["Weather Ingestion Cache (Safdarjung IMD)"]
         FORECAST["Hydrological Forecasting (6h/12h/24h)"]
         INCIDENTS["Incident Lifecycle Engine"]
@@ -301,13 +305,13 @@ npm run build
 
 ## 🧪 Automated Reliability & Verification Suites
 
-Pravah V2 enforces strict reliability guarantees. All failure scenarios, boundary checks, and client regressions are verified via automated test suites:
+Pravah enforces strict reliability guarantees. All failure scenarios, boundary checks, and client regressions are verified via automated test suites:
 
 ```powershell
-# Run Master Failure & Reliability Suite (Phase 14: 19/19 checks)
+# Run Master Failure & Reliability Suite (19/19 checks)
 npm test
 
-# Run Client Integration & Legacy Endpoint Suite (Phase 15: 9/9 checks)
+# Run Client Integration & Legacy Endpoint Suite (9/9 checks)
 npm run verify:phase15
 ```
 
@@ -331,7 +335,7 @@ npm run verify:phase15
 - **OWASP Hardened**: Helmet HTTP security headers (Strict-Transport-Security, Content-Security-Policy, X-Content-Type-Options: nosniff).
 - **Authentication**: Signed stateless JSON Web Tokens (JWT) with HMAC-SHA256 and 8-hour expiration.
 - **Audit Logging**: All administrative drainage modifications and pump overrides generate permanent, immutable audit records.
-- **Offline Resilience**: If PostgreSQL or IMD Safdarjung weather APIs become unreachable, Pravah V2 switches instantly to zero-crash memory cache (`server/data/demo-ward-boundaries.json`), preventing system downtime during emergency events.
+- **Offline Resilience**: If PostgreSQL or IMD Safdarjung weather APIs become unreachable, Pravah switches instantly to zero-crash memory cache (`server/data/demo-ward-boundaries.json`), preventing system downtime during emergency events.
 
 ---
 
@@ -342,7 +346,7 @@ For in-depth architectural specifications and implementation guides, explore the
 | Document | Topic Covered |
 | :--- | :--- |
 | [System Architecture](docs/system-architecture.md) | High-level system topology, process model & scaling |
-| [Explainable Risk Engine V2](docs/risk-engine-v2.md) | Mathematical mass-balance formulation & factor weights |
+| [Explainable Risk Engine](docs/risk-engine-v2.md) | Mathematical mass-balance formulation & factor weights |
 | [GIS & Ward Spatial API](docs/ward-gis-api.md) | PostGIS spatial queries, R-tree indexing & GeoJSON schema |
 | [Decision Support Engine](docs/decision-support-engine.md) | Tactical intervention ranking and resource matching |
 | [What-If Scenario Simulator](docs/what-if-simulator.md) | Hydrological simulation formulas & delta risk calculation |
@@ -355,7 +359,7 @@ For in-depth architectural specifications and implementation guides, explore the
 
 <div align="center">
 
-  **PRAVAH (प्रवाह)** · Developed by **Suhani Yadav**  
+  **PRAVAH (प्रवाह)** · Designed & Engineered by [**Suhani Yadav**](https://github.com/suhaniyadav-netizen/Pravah)  
   *In collaboration with the Municipal Corporation of Delhi (MCD) & Delhi Disaster Management Authority (DDMA)*
 
 </div>
