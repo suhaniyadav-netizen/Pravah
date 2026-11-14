@@ -7,7 +7,6 @@ const express = require('express');
 const { z } = require('zod');
 const { authenticate, authorize } = require('../middlewares/auth.middleware');
 const { listAuditLogs, recordAuditLog } = require('../services/audit.service');
-const { getCityRiskSummary, getWardRiskDetails } = require('../services/risk-engine.service');
 const { getAllWardsGeoJSON, getWardById } = require('../services/ward.service');
 const prisma = require('../config/prisma');
 

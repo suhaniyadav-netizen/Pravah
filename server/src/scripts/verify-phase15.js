@@ -14,7 +14,6 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const app = require('../app');
-const { generateToken } = require('../services/auth.service');
 
 let passedChecks = 0;
 let totalChecks = 0;

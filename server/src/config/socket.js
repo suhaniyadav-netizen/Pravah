@@ -108,7 +108,7 @@ function initSocketServer(httpServer) {
           role: decoded.role,
           name: decoded.name,
         };
-      } catch (err) {
+      } catch {
         // Token invalid - allow connection as anonymous citizen viewer
         socket.user = null;
       }
@@ -170,7 +170,7 @@ function initSocketServer(httpServer) {
       }
     });
 
-    socket.on('disconnect', (reason) => {
+    socket.on('disconnect', () => {
       // Clean disconnect
     });
   });

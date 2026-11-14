@@ -10,8 +10,7 @@
  * confusion between historical, current, simulated, and predicted telemetry.
  */
 
-const prisma = require('../config/prisma');
-const { getWardById, getAllWardsGeoJSON } = require('./ward.service');
+const { getWardById } = require('./ward.service');
 const { getCurrentWeather } = require('./weather.service');
 
 // Curated Historical Hotspot Reference Set (Verified Delhi Municipal Flooding Records)

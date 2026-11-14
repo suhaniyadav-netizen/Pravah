@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  BarChart3, Download, Flame, Search, Filter, Droplets,
+  BarChart3, Download, Flame, Search, Droplets,
   Waves, AlertTriangle, TrendingUp, Layers,
   Building2, Compass
 } from 'lucide-react';

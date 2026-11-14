@@ -10,9 +10,8 @@
  */
 
 const { getWardById, getAllWardsGeoJSON } = require('./ward.service');
-const { evaluateRisk, classifyRiskLevel, determinePrimaryDriver } = require('./risk-engine.service');
+const { evaluateRisk } = require('./risk-engine.service');
 const { getCurrentWeather } = require('./weather.service');
-const { listResponseTeams } = require('./response-team.service');
 
 // Standard Presets for Scenario Modeling
 const SIMULATION_PRESETS = [

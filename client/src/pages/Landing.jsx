@@ -12,8 +12,6 @@ import {
   Radio,
   Eye,
   Search,
-  Filter,
-  Waves,
   Cpu,
   Radar,
   Droplets,
@@ -31,7 +29,6 @@ export default function Landing() {
   const [selectedWard, setSelectedWard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedZone, setSelectedZone] = useState('ALL');
 
   // Load initial citywide risk, weather, and ward boundaries
   useEffect(() => {
@@ -56,67 +53,11 @@ export default function Landing() {
     });
   }, []);
 
-  const availableZones = useMemo(() => {
-    if (!wardsGeoJSON?.features) return ['ALL'];
-    const set = new Set();
-    wardsGeoJSON.features.forEach((f) => {
-      const z = f.properties?.zone;
-      if (z) set.add(z.toUpperCase());
-    });
-    return ['ALL', ...Array.from(set).sort()];
-  }, [wardsGeoJSON]);
-
-  const displayedWards = useMemo(() => {
-    if (!wardsGeoJSON?.features) return wardsGeoJSON;
-    if (!selectedZone || selectedZone === 'ALL') return wardsGeoJSON;
-    return {
-      ...wardsGeoJSON,
-      features: wardsGeoJSON.features.filter(
-        (f) => (f.properties?.zone || '').toUpperCase() === selectedZone
-      ),
-    };
-  }, [wardsGeoJSON, selectedZone]);
-
-  const handleSelectZone = (zone) => {
-    setSelectedZone(zone);
-    if (!wardsGeoJSON?.features) return;
-    if (zone === 'ALL') {
-      const crit = wardsGeoJSON.features.find((f) => {
-        const lvl = (f.properties?.riskLevel || f.properties?.risk_level || '').toUpperCase();
-        return lvl.includes('CRIT');
-      }) || wardsGeoJSON.features[0];
-      if (crit) setSelectedWard(crit.properties);
-    } else {
-      const zoneWards = wardsGeoJSON.features.filter(
-        (f) => (f.properties?.zone || '').toUpperCase() === zone
-      );
-      if (zoneWards.length > 0) {
-        // Select the ward with highest risk in this zone
-        const sorted = [...zoneWards].sort((a, b) => {
-          const scoreA = a.properties?.riskScore ?? a.properties?.risk_score ?? 0;
-          const scoreB = b.properties?.riskScore ?? b.properties?.risk_score ?? 0;
-          return scoreB - scoreA;
-        });
-        setSelectedWard(sorted[0].properties);
-      }
-    }
-  };
+  const displayedWards = wardsGeoJSON;
 
   const counts = useMemo(() => {
-    const sourceWards = displayedWards?.features;
-    if (!sourceWards || selectedZone === 'ALL') {
-      return riskSummary?.countsByLevel || { critical: 12, high: 38, moderate: 110, low: 90 };
-    }
-    const c = { critical: 0, high: 0, moderate: 0, low: 0 };
-    sourceWards.forEach((f) => {
-      const lvl = (f.properties?.riskLevel || f.properties?.risk_level || 'moderate').toLowerCase();
-      if (lvl.includes('crit')) c.critical++;
-      else if (lvl.includes('high')) c.high++;
-      else if (lvl.includes('mod')) c.moderate++;
-      else c.low++;
-    });
-    return c;
-  }, [displayedWards, selectedZone, riskSummary]);
+    return riskSummary?.countsByLevel || { critical: 12, high: 38, moderate: 110, low: 90 };
+  }, [riskSummary]);
 
   const totalWardsCount = wardsGeoJSON?.features?.length || 250;
   const currentRainfall = weather?.rainfallMm?.toFixed(1) ?? '42.0';

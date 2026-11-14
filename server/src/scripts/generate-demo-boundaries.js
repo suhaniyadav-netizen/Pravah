@@ -18,7 +18,6 @@ const OUTPUT_FILE = path.resolve(OUTPUT_DIR, 'demo-ward-boundaries.json');
 
 function parseCSV(content) {
   const lines = content.trim().split('\n');
-  const headers = lines[0].split(',').map((h) => h.trim());
   const records = [];
 
   for (let i = 1; i < lines.length; i++) {

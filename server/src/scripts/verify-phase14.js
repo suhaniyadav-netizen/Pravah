@@ -16,9 +16,7 @@
 const http = require('http');
 const app = require('../app');
 const { generateToken } = require('../services/auth.service');
-const { normalizeWeatherData } = require('../services/weather.service');
 const { evaluateRisk } = require('../services/risk-engine.service');
-const { resolveWardFromPoint } = require('../services/ward.service');
 
 let passedChecks = 0;
 let totalChecks = 0;
@@ -315,7 +313,7 @@ async function runPhase14Verification() {
 
     reportCheck(
       'Decision support evaluates active incident and recommends emergency dispatch',
-      actions.length > 0 && actions.some((a) => a.category === 'DISPATCH' || a.category === 'INFRASTRUCTURE'),
+      actions.some((a) => a.category === 'DISPATCH' || a.category === 'INFRASTRUCTURE'),
       `Recommended actions count: ${actions.length}`
     );
 

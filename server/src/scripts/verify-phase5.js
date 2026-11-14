@@ -16,7 +16,6 @@ const {
   normalizeWeatherData,
   interpretWeatherCode,
   getCurrentWeather,
-  getWeatherForecast,
 } = require('../services/weather.service');
 const { generateToken } = require('../services/auth.service');
 

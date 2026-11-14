@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
-  ShieldAlert, MapPin, Send, AlertTriangle, Radio, RefreshCw,
-  Search, Clock, Droplets, Truck, CheckCircle2,
+  ShieldAlert, MapPin, Send, AlertTriangle, RefreshCw,
+  Search, Droplets, Truck, CheckCircle2,
   ChevronRight, ArrowUpRight, PhoneCall, ShieldCheck,
-  ChevronDown, ChevronUp, Sparkles, SlidersHorizontal, X, Activity
+  ChevronDown, ChevronUp, Sparkles, X, Activity
 } from 'lucide-react';
 import {
   listIncidents,
@@ -327,7 +327,7 @@ export default function IncidentCommand() {
         type: 'SUCCESS',
         message: `Deployment authorized: ${teamDisplayName} dispatched with ${selectedEquipment} to ${selectedIncident.wardName || selectedIncident.wardId}.`,
       });
-    } catch (_err) {
+    } catch {
       setDispatchStatus({
         type: 'SUCCESS',
         message: `Deployment authorized: ${teamDisplayName} mobilized with ${selectedEquipment} to Ward ${selectedIncident.wardId || selectedIncident.wardCode || 'Site'}.`,

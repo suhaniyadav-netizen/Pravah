@@ -257,8 +257,6 @@ export default function Dashboard() {
     }
   };
 
-  const avgScore = riskSummary?.cityAverageRiskScore ?? riskSummary?.avgRiskScore;
-
   const kpiCards = [
     { label: 'Critical Zones',  value: counts.critical || 25,
       unit: '', icon: AlertCircle, color: 'rose',    sub: 'Immediate pump staging' },

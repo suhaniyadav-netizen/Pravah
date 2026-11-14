@@ -10,7 +10,7 @@ const { initSocketServer } = require('./config/socket');
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
 const server = http.createServer(app);
-const io = initSocketServer(server);
+initSocketServer(server);
 
 if (!process.env.VERCEL) {
   server.listen(PORT, () => {

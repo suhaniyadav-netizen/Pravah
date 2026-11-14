@@ -16,7 +16,6 @@ const app = require('../app');
 const {
   evaluateRisk,
   classifyRiskLevel,
-  DEFAULT_WEIGHTS,
 } = require('../services/risk-engine.service');
 const { generateToken } = require('../services/auth.service');
 

@@ -17,7 +17,6 @@ const { dbConfig, getSanitizedConfig } = require('../config/db');
 const { validateCoordinates, DELHI_BBOX } = require('../services/gis.service');
 
 const SERVER_DIR = path.resolve(__dirname, '../../');
-const ROOT_DIR = path.resolve(SERVER_DIR, '../');
 const BOUNDARIES_PATH = path.resolve(SERVER_DIR, 'data/demo-ward-boundaries.json');
 const MIGRATION_PATH = path.resolve(SERVER_DIR, 'prisma/migrations/0_init/migration.sql');
 const SCHEMA_PATH = path.resolve(SERVER_DIR, 'prisma/schema.prisma');
@@ -150,7 +149,7 @@ async function runVerification() {
     const versionRes = await client.query('SELECT PostGIS_Version();');
     client.release();
     reportCheck(`PostgreSQL & PostGIS live connection succeeded (${versionRes.rows[0].postgis_version})`, true);
-  } catch (err) {
+  } catch {
     console.log('  ⚠️  [INFO] PostgreSQL container is not currently running.');
     console.log('      (Actual container startup will be completed when Docker is available on the host).');
     reportCheck('Database offline handling caught cleanly without crashing', true);

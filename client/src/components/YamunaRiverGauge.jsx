@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Waves, AlertTriangle, ShieldCheck, Gauge, ArrowUpRight,
-  TrendingUp, TrendingDown, RefreshCw, Sliders, Droplets,
-  Activity, Compass, Radio, ChevronRight, Eye, ShieldAlert,
-  ArrowDownCircle, Anchor
+  Waves, Gauge, TrendingUp, RefreshCw, Sliders, Droplets,
+  Activity, Compass, Radio, ArrowDownCircle, Anchor
 } from 'lucide-react';
 
 /**
@@ -12,7 +10,7 @@ import {
  * storm outfall flap-gate backflow mechanics, and hydrodynamic wave velocity rendering.
  */
 
-export const GAUGE_BENCHMARKS = {
+const GAUGE_BENCHMARKS = {
   MIN_BED: 202.50,
   SAFE_BASELINE: 204.00,
   WARNING_MARK: 205.33,

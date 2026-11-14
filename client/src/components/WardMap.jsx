@@ -1,10 +1,7 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import {
-  MapPin, AlertTriangle, Layers, Droplets, ZoomIn, ZoomOut, RotateCcw,
-  Eye, EyeOff, ShieldAlert, Waves
-} from 'lucide-react';
+import { MapPin, AlertTriangle, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import fallbackWards from '../data/fallback-wards.json';
 import {
   extractWardRiskLevel,
@@ -45,7 +42,6 @@ export default function WardMap({
   const [showHotspots, setShowHotspots] = useState(true);
   const [showCircles, setShowCircles] = useState(true);
   const [hoveredWard, setHoveredWard] = useState(null);
-  const [hoveredHotspot, setHoveredHotspot] = useState(null);
 
   // Wards GeoJSON Features with resilient fallback
   const data = useMemo(() => {

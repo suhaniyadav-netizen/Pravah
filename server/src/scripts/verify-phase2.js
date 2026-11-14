@@ -14,8 +14,8 @@ const http = require('http');
 const bcrypt = require('bcryptjs');
 const app = require('../app');
 const { registerSchema, loginSchema } = require('../schemas/auth.schema');
-const { generateToken, verifyToken, loginUser, registerUser } = require('../services/auth.service');
-const { authenticate, authorize } = require('../middlewares/auth.middleware');
+const { generateToken, verifyToken } = require('../services/auth.service');
+const { authorize } = require('../middlewares/auth.middleware');
 
 let passedChecks = 0;
 let totalChecks = 0;
