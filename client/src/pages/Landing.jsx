@@ -15,6 +15,11 @@ import {
   Filter,
   Waves,
   Cpu,
+  Radar,
+  Droplets,
+  Compass,
+  Shield,
+  ChevronRight,
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -565,55 +570,194 @@ export default function Landing() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. FOUR-STEP MUNICIPAL OPERATING CONTINUUM
+          6. FOUR-STEP MUNICIPAL OPERATING CONTINUUM & INSTITUTIONAL DISPATCH
           ───────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-mono uppercase tracking-wider text-[var(--brand)] font-semibold">
-              Operational Continuum
-            </span>
-            <h2 className="font-instrument text-3xl sm:text-4xl font-normal text-[var(--text-primary)] tracking-tight">
+      <section className="pt-20 sm:pt-28 pb-24 sm:pb-36 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] relative overflow-hidden bg-gradient-to-b from-transparent via-[var(--surface)]/20 to-[var(--surface-elevated)]/40 transition-colors duration-300">
+        
+        {/* Subtle Ambient Radial Lighting in Background */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-sky-500/5 dark:bg-sky-500/10 blur-[120px] rounded-full pointer-events-none -z-0" />
+
+        <div className="max-w-7xl mx-auto space-y-16 sm:space-y-20 relative z-10">
+
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 font-mono text-[11px] font-semibold uppercase tracking-wider backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+              <span>Operational Continuum · 250 Wards</span>
+            </div>
+            <h2 className="font-instrument text-3xl sm:text-5xl lg:text-6xl font-normal text-[var(--text-primary)] tracking-tight leading-[1.05]">
               How Pravah Protects Delhi
             </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
-              From atmospheric Doppler radar detection to pre-emptive pump mobilization in under 60 seconds.
+            <p className="text-xs sm:text-base text-[var(--text-secondary)] font-normal max-w-2xl mx-auto leading-relaxed">
+              From atmospheric Doppler radar detection to pre-emptive pump mobilization in under 60 seconds — a deterministic hydraulic loop operating continuously.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              {
-                step: '01',
-                title: 'Doppler Radar Ingestion',
-                desc: 'Continuous 15-minute meteorological radar scans forecast convective rainfall intensity across Delhi NCT.',
-              },
-              {
-                step: '02',
-                title: 'PostGIS Polygon Mapping',
-                desc: 'Sub-second spatial indexing maps reverse-geocoded citizen reports directly into 250 municipal ward polygons.',
-              },
-              {
-                step: '03',
-                title: 'Mass-Balance Risk Engine',
-                desc: 'Calculates runoff volume against culvert cross-sections to generate deterministic risk scores from 0 to 100.',
-              },
-              {
-                step: '04',
-                title: 'Pre-Emptive Dewatering',
-                desc: 'Automated dispatch orders mobilize mobile pumps and emergency crews before road waterlogging peaks.',
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] space-y-2 relative shadow-xs"
-              >
-                <span className="text-xs font-mono font-bold text-[var(--brand)]">{item.step}</span>
-                <h3 className="text-sm font-bold text-[var(--text-primary)] font-serif">{item.title}</h3>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
+          {/* 4-Step Pipeline Cards with Connected Flow Architecture */}
+          <div className="relative">
+            {/* Horizontal flow line visible on large screens */}
+            <div className="absolute top-1/2 left-8 right-8 h-px border-t border-dashed border-sky-500/20 hidden lg:block -translate-y-8 -z-0 pointer-events-none" />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 relative z-10">
+              {[
+                {
+                  step: '01',
+                  badge: 'IMD SAFDARJUNG',
+                  icon: Radar,
+                  title: 'Doppler Radar Ingestion',
+                  desc: 'Continuous 15-minute meteorological radar scans measure convective rainfall intensity and cloud velocity across Delhi NCT.',
+                  stat: '15-Min Scans',
+                },
+                {
+                  step: '02',
+                  badge: 'POSTGIS CORE',
+                  icon: Layers,
+                  title: 'Spatial Polygon Mapping',
+                  desc: 'Sub-second point-in-polygon containment maps reverse-geocoded telemetry directly into Delhi’s 250 municipal ward boundaries.',
+                  stat: '250 Ward Polygons',
+                },
+                {
+                  step: '03',
+                  badge: 'MASS-BALANCE',
+                  icon: Cpu,
+                  title: 'Deterministic Risk Engine',
+                  desc: 'Calculates runoff volume against culvert cross-sections to generate explainable risk scores from 0 to 100 without black-box drift.',
+                  stat: 'Explainable 0–100',
+                },
+                {
+                  step: '04',
+                  badge: 'COMMAND ORDER',
+                  icon: Droplets,
+                  title: 'Pre-Emptive Dewatering',
+                  desc: 'Automated dispatch protocols mobilize high-capacity mobile pumps and emergency crews before road waterlogging peaks.',
+                  stat: '< 60s Dispatch',
+                },
+              ].map((item, i) => {
+                const IconComponent = item.icon;
+                return (
+                  <div
+                    key={i}
+                    className="surface-card p-6 rounded-2xl border border-[var(--border)] hover:border-sky-500/40 bg-[var(--surface-elevated)]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-between space-y-5 group relative"
+                  >
+                    {/* Top Step Row: Badge and Step Indicator */}
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 text-[var(--brand)] flex items-center justify-center transition-colors group-hover:bg-sky-500/20">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <span className="font-mono text-xs font-bold text-[var(--brand)] px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20">
+                        {item.step}
+                      </span>
+                    </div>
+
+                    {/* Content */}
+                    <div className="space-y-2">
+                      <div className="text-[10px] font-mono tracking-wider uppercase text-[var(--text-muted)] font-semibold">
+                        {item.badge}
+                      </div>
+                      <h3 className="text-base font-serif font-bold text-[var(--text-primary)] tracking-tight group-hover:text-[var(--brand)] transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                        {item.desc}
+                      </p>
+                    </div>
+
+                    {/* Bottom Micro Stat Tag */}
+                    <div className="pt-3 border-t border-[var(--border)]/70 flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)]">
+                      <span className="text-[var(--text-secondary)] font-medium">Cadence</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{item.stat}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
+
+          {/* ─────────────────────────────────────────────────────────
+              Institutional Dispatch & City Readiness Module (Niche & Clean)
+              ───────────────────────────────────────────────────────── */}
+          <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-gradient-to-br from-[var(--surface-elevated)] via-[var(--surface)] to-[var(--surface-elevated)] p-8 sm:p-12 lg:p-14 shadow-xl">
+            {/* Ambient Watermark Emblem in Background */}
+            <img
+              src="/logo.png"
+              alt="Pravah"
+              className="absolute -right-8 -bottom-8 w-64 h-64 sm:w-80 sm:h-80 opacity-[0.04] dark:opacity-[0.07] pointer-events-none select-none blur-[0.5px]"
+            />
+
+            {/* Glowing Accent Corner Flare */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-sky-500/10 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Authoritative Editorial */}
+              <div className="lg:col-span-8 space-y-4">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 font-mono text-[10px] font-semibold uppercase tracking-wider">
+                  <Compass className="w-3.5 h-3.5 text-[var(--brand)]" />
+                  <span>Delhi Municipal Early Warning Network</span>
+                </div>
+
+                <h3 className="font-instrument text-2xl sm:text-4xl lg:text-5xl font-normal text-[var(--text-primary)] tracking-tight leading-[1.08]">
+                  Operationalize flood intelligence across your municipal ward.
+                </h3>
+
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-normal max-w-xl leading-relaxed">
+                  Monitor live ward risk indices, simulate culvert pump deployments, or file a geotagged civic waterlogging report in seconds.
+                </p>
+
+                {/* Trust & Grid Capabilities Badges */}
+                <div className="pt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--text-muted)] font-mono">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>250 Wards Indexed</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Yamuna Live Telemetry</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Zero-Crash Offline Resilient</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Right Column: High-Affordance Action Buttons */}
+              <div className="lg:col-span-4 flex flex-col gap-3">
+                <Link
+                  to="/dashboard"
+                  className="w-full inline-flex items-center justify-between px-5 py-3.5 rounded-xl bg-[var(--brand)] hover:bg-[var(--brand-strong)] text-white font-medium text-sm transition-all shadow-md hover:shadow-sky-500/20 group no-underline"
+                >
+                  <span className="flex items-center gap-2 font-medium">
+                    <Activity className="w-4 h-4" />
+                    <span>Launch City Risk Map</span>
+                  </span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+
+                <Link
+                  to="/report"
+                  className="w-full inline-flex items-center justify-between px-5 py-3 rounded-xl bg-[var(--surface-elevated)] hover:bg-[var(--surface-soft)] text-[var(--text-primary)] border border-[var(--border)] hover:border-[var(--brand)] font-medium text-xs transition-all group no-underline"
+                >
+                  <span className="flex items-center gap-2 font-medium">
+                    <Droplets className="w-4 h-4 text-cyan-500" />
+                    <span>File Citizen Waterlogging Report</span>
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--brand)] transition-transform group-hover:translate-x-0.5" />
+                </Link>
+
+                <Link
+                  to="/admin"
+                  className="w-full inline-flex items-center justify-between px-5 py-2.5 rounded-xl bg-transparent hover:bg-sky-500/5 text-[var(--text-muted)] hover:text-[var(--brand)] text-[11px] font-mono transition-colors group no-underline"
+                >
+                  <span className="flex items-center gap-2">
+                    <Shield className="w-3.5 h-3.5 text-[var(--brand)]" />
+                    <span>Municipal Admin Command Console</span>
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wider opacity-60 group-hover:opacity-100">Login →</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
