@@ -299,12 +299,3 @@ For in-depth architectural specifications and implementation guides, explore the
 | [Real-Time Socket Architecture](docs/realtime-socket-architecture.md) | WebSocket protocol, spatial room partitioning & event contracts |
 | [Security Hardening & RBAC](docs/security-hardening.md) | OWASP defense checklist, JWT schema & rate-limit configurations |
 | [Testing & Reliability Runbook](docs/testing-and-reliability.md) | Master failure drills, fault tolerance & test runbook |
-
----
-
-<div align="center">
-
-  **PRAVAH (प्रवाह)** · Designed & Engineered by [**Suhani Yadav**](https://github.com/suhaniyadav-netizen/Pravah)  
-  *In collaboration with the Municipal Corporation of Delhi (MCD) & Delhi Disaster Management Authority (DDMA)*
-
-</div>
