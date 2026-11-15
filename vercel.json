@@ -1,20 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run build:client",
   "outputDirectory": "client/dist",
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "server/**"
-    }
-  },
   "rewrites": [
     {
       "source": "/api",
-      "destination": "/api/index.js"
+      "destination": "https://pravah-br0g.onrender.com/api"
     },
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
+      "source": "/api/:path*",
+      "destination": "https://pravah-br0g.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",

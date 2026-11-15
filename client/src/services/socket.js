@@ -8,7 +8,13 @@ let socketInstance = null;
 
 export function getSocket() {
   if (!socketInstance) {
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000');
+    const defaultSocketUrl =
+      typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+        ? 'https://pravah-br0g.onrender.com'
+        : typeof window !== 'undefined'
+          ? window.location.origin
+          : 'http://localhost:5000';
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || defaultSocketUrl;
     socketInstance = io(socketUrl, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 10,
