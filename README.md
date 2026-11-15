@@ -14,21 +14,6 @@
 
 ---
 
-## 🧭 Table of Contents
-
-- [🌟 What is Pravah?](#-what-is-pravah)
-- [📸 System Showcase](#-system-showcase)
-- [⚡ Key Platform Capabilities](#-key-platform-capabilities)
-- [📐 Deterministic Risk Mass-Balance Model](#-deterministic-risk-mass-balance-model)
-- [🏗️ System Architecture](#-system-architecture)
-- [📡 REST API Reference](#-rest-api-reference)
-- [💻 Developer Quickstart](#-developer-quickstart)
-- [🧪 Automated Reliability & Verification Suites](#-automated-reliability--verification-suites)
-- [🔐 Security, RBAC & Offline Resilience](#-security-rbac--offline-resilience)
-- [📚 Technical Documentation Index](#-technical-documentation-index)
-
----
-
 ## 🌟 What is Pravah?
 
 During peak monsoon events, Delhi's urban runoff challenges culvert capacities, road underpasses, and low-lying settlements along the Yamuna floodplain. **Pravah (प्रवाह)** replaces opaque heuristics with a **transparent, physics-grounded hydrological model** and **sub-second PostGIS spatial indexing** across all 250 municipal wards of the Municipal Corporation of Delhi (MCD).
