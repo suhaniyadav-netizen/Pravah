@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="docs/images/logo.png" alt="Pravah Logo" width="130" height="130" style="border-radius: 50%;" />
+  <img src="docs/images/logo.png" alt="Pravah Logo" width="44" height="44" align="left" style="border-radius: 50%;" />
 
   # PRAVAH (प्रवाह)
   ### Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
@@ -10,6 +10,7 @@
   </p>
 
 </div>
+<br clear="left" />
 
 ---
 
