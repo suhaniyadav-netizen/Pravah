@@ -12,7 +12,7 @@
     "build:server": "npm --prefix server run build",
     "build:client": "npm --prefix client run build",
     "build": "npm run build:server && npm run build:client",
-    "vercel-build": "npm run build",
+    "vercel-build": "npm run build:client",
     "postinstall": "npm --prefix client install && npm --prefix server install",
     "test": "npm test --prefix server",
     "verify:phase15": "npm run verify:phase15 --prefix server"
