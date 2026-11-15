@@ -11,33 +11,33 @@
 
 ---
 
-## 🌟 What is Pravah?
+##  What is Pravah?
 
 During peak monsoon events, Delhi's urban runoff challenges culvert capacities, road underpasses, and low-lying settlements along the Yamuna floodplain. **Pravah (प्रवाह)** replaces opaque heuristics with a **transparent, physics-grounded hydrological model** and **sub-second PostGIS spatial indexing** across all 250 municipal wards of the Municipal Corporation of Delhi (MCD).
 
 ### Why Pravah?
-- 🌊 **Predictive, Not Reactive**: Sub-second Doppler radar precipitation integration identifies convective rainfall accumulation before standing water rises.
-- 📐 **100% Explainable**: No black-box AI drift. Every risk index (0–100) breaks down into exact mathematical weights for drainage culvert capacity, precipitation intensity, and citizen distress reports.
-- 🚜 **Tactical Decision Support**: "What Should the City Do Now?" algorithm ranks interventions (high-capacity dewatering pump deployment, traffic diversion, alert dispatches) based on resource proximity.
-- 🛡️ **Zero-Crash Resilient Architecture**: Uninterrupted operations with local in-memory spatial caches and mock fallback feeds if external weather APIs or databases experience network disruption.
+-  **Predictive, Not Reactive**: Sub-second Doppler radar precipitation integration identifies convective rainfall accumulation before standing water rises.
+-  **100% Explainable**: No black-box AI drift. Every risk index (0–100) breaks down into exact mathematical weights for drainage culvert capacity, precipitation intensity, and citizen distress reports.
+-  **Tactical Decision Support**: "What Should the City Do Now?" algorithm ranks interventions (high-capacity dewatering pump deployment, traffic diversion, alert dispatches) based on resource proximity.
+-  **Zero-Crash Resilient Architecture**: Uninterrupted operations with local in-memory spatial caches and mock fallback feeds if external weather APIs or databases experience network disruption.
 
 ---
 
-## 📸 System Showcase
+## System Showcase
 
-| 🗺️ Interactive City Risk Map (`/dashboard`) | 🚨 Citizen Waterlogging Portal (`/report`) |
+|  Interactive City Risk Map (`/dashboard`) |  Citizen Waterlogging Portal (`/report`) |
 | :---: | :---: |
 | [![City Risk Map](docs/images/city-risk-map.png)](docs/images/city-risk-map.png) | [![Citizen Portal](docs/images/citizen-portal.png)](docs/images/citizen-portal.png) |
 | *Color-coded 250-ward PostGIS spatial heat map with real-time risk scores and quick ward inspection drawer.* | *Public mobile-first reporting interface with auto GPS reverse-geocoding, camera upload, and duplicate clustering.* |
 
-| 🛡️ Municipal Admin Command Console (`/admin`) | 📈 Multi-Horizon Hydrological Analytics (`/analytics`) |
+|  Municipal Admin Command Console (`/admin`) |  Multi-Horizon Hydrological Analytics (`/analytics`) |
 | :---: | :---: |
 | [![Admin Portal](docs/images/admin-portal.png)](docs/images/admin-portal.png) | [![Hydrology Analytics](docs/images/hydrology-analytics.png)](docs/images/hydrology-analytics.png) |
 | *Command center for What-If simulations, culvert overrides, emergency dispatches, and immutable audit logs.* | *Yamuna river gauge levels, historical waterlogging hotspots, and 6h / 12h / 24h predictive flood projection curves.* |
 
 ---
 
-## ⚡ Key Platform Capabilities
+##  Key Platform Capabilities
 
 | Capability | Technical Mechanism | Operational Value |
 | :--- | :--- | :--- |
@@ -52,7 +52,7 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 
 ---
 
-## 📐 Deterministic Risk Mass-Balance Model
+##  Deterministic Risk Mass-Balance Model
 
 Pravah rejects black-box neural networks for life-critical municipal infrastructure decisions. Instead, it utilizes an explainable **deterministic mass-balance model**:
 
@@ -71,7 +71,7 @@ $$\text{Risk Score} = (S_{\text{drainage}} \times 0.40) + (S_{\text{rainfall}} \
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```mermaid
 flowchart TB
@@ -119,7 +119,7 @@ flowchart TB
 
 ---
 
-## 📡 REST API Reference
+##  REST API Reference
 
 <details>
 <summary><strong>1. Wards & GIS Spatial Services</strong> (Click to expand)</summary>
@@ -172,7 +172,7 @@ flowchart TB
 
 ---
 
-## 💻 Developer Quickstart
+##  Developer Quickstart
 
 ### Prerequisites
 - **Node.js**: v18.0.0 or higher
@@ -245,7 +245,7 @@ npm run build
 
 ---
 
-## 🧪 Automated Reliability & Verification Suites
+##  Automated Reliability & Verification Suites
 
 Pravah enforces strict reliability guarantees. All failure scenarios, boundary checks, and client regressions are verified via automated test suites:
 
@@ -272,7 +272,7 @@ npm run verify:phase15
 
 ---
 
-## 🔐 Security, RBAC & Offline Resilience
+##  Security, RBAC & Offline Resilience
 
 - **OWASP Hardened**: Helmet HTTP security headers (Strict-Transport-Security, Content-Security-Policy, X-Content-Type-Options: nosniff).
 - **Authentication**: Signed stateless JSON Web Tokens (JWT) with HMAC-SHA256 and 8-hour expiration.
@@ -281,7 +281,7 @@ npm run verify:phase15
 
 ---
 
-## 📚 Technical Documentation Index
+##  Technical Documentation Index
 
 For in-depth architectural specifications and implementation guides, explore the `docs/` repository:
 
