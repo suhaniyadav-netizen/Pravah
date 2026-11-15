@@ -177,6 +177,18 @@ app.post('/api/complaint', async (req, res, next) => {
   }
 });
 
+// Serve static client build if dist folder exists (Render/production fullstack deployment)
+const fs = require('fs');
+const path = require('path');
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
+
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({
