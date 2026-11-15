@@ -334,9 +334,6 @@ export default function AdminPortal() {
             
             <div className="flex items-center justify-center gap-2 mt-1">
               <h2 className="text-2xl font-serif text-[var(--text-primary)] tracking-tight">Admin Portal</h2>
-              <span className="text-xs font-serif font-semibold text-[var(--brand)] px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 select-none">
-                (प्रवाह)
-              </span>
             </div>
             <p className="text-xs text-[var(--text-muted)] leading-relaxed">
               Municipal command login for hydraulic simulations, drainage overrides, and operational audit dispatch.
@@ -409,15 +406,9 @@ export default function AdminPortal() {
       {/* ── Clean Top Header ─────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
         <div>
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Pravah" className="w-8 h-8 rounded-full object-contain ring-1 ring-sky-500/20 shadow-xs" />
-            <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
-              Admin Portal
-            </h1>
-            <span className="text-xs font-serif font-semibold text-[var(--brand)] px-2.5 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/20 select-none">
-              (प्रवाह)
-            </span>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)] tracking-tight">
+            Admin Portal
+          </h1>
           <p className="text-xs text-[var(--text-muted)] mt-0.5">
             City flood simulations, drainage overrides, and operational logs.
           </p>
