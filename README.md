@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/images/logo.png" alt="Pravah Logo" width="44" height="44" align="left" style="border-radius: 50%;" /> <h1 align="left">PRAVAH (प्रवाह)</h1> 
+  <img src="docs/images/logo.png" alt="Pravah Logo" width="44" height="44" align="center" style="border-radius: 50%;" /> <h1 align="center">PRAVAH (प्रवाह)</h1> 
   
   <h3 align="center">Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
 </div>
