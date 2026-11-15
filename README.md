@@ -9,27 +9,6 @@
     A production-grade geospatial flood monitoring, deterministic hydrological forecasting, incident command dispatch, and decision support platform engineered for the <strong>National Capital Territory of Delhi (250 Municipal Wards)</strong>.
   </p>
 
-  <p align="center">
-    Designed & Engineered by <a href="https://github.com/suhaniyadav-netizen/Pravah"><strong>Suhani Yadav</strong></a>
-  </p>
-
-  <p align="center">
-    <a href="#-quick-links"><strong>Explore Features »</strong></a> ·
-    <a href="#-system-showcase"><strong>View Screenshots »</strong></a> ·
-    <a href="#-developer-quickstart"><strong>Run Locally »</strong></a> ·
-    <a href="#-rest-api-reference"><strong>API Reference »</strong></a>
-  </p>
-
-  <!-- Badges -->
-  <p align="center">
-    <img src="https://img.shields.io/badge/Platform-Pravah-0284c7?style=for-the-badge&logo=shield" alt="Pravah" />
-    <img src="https://img.shields.io/badge/React%2018-Vite%20%2B%20Tailwind-38bdf8?style=for-the-badge&logo=react" alt="React 18" />
-    <img src="https://img.shields.io/badge/Node.js-18%2B%20Express-22c55e?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
-    <img src="https://img.shields.io/badge/PostgreSQL%2016-PostGIS%20Spatial-336791?style=for-the-badge&logo=postgresql" alt="PostGIS" />
-    <img src="https://img.shields.io/badge/Socket.IO-Realtime%20Telemetry-010101?style=for-the-badge&logo=socketdotio" alt="Socket.IO" />
-    <img src="https://img.shields.io/badge/Tests-19%2F19%20%2B%209%2F9%20Passed-10b981?style=for-the-badge&logo=checkmarx" alt="Tests Passed" />
-  </p>
-
 </div>
 
 ---
