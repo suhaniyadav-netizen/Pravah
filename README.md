@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="docs/images/logo.png" alt="Pravah Logo" width="130" height="130" style="border-radius: 50%;" />
+  <img src="docs/images/logo.png" alt="Pravah Logo" width="44" height="44" align="left" style="border-radius: 50%;" />
 
   # PRAVAH (प्रवाह)
   ### Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
@@ -9,43 +9,8 @@
     A production-grade geospatial flood monitoring, deterministic hydrological forecasting, incident command dispatch, and decision support platform engineered for the <strong>National Capital Territory of Delhi (250 Municipal Wards)</strong>.
   </p>
 
-  <p align="center">
-    Designed & Engineered by <a href="https://github.com/suhaniyadav-netizen/Pravah"><strong>Suhani Yadav</strong></a>
-  </p>
-
-  <p align="center">
-    <a href="#-quick-links"><strong>Explore Features »</strong></a> ·
-    <a href="#-system-showcase"><strong>View Screenshots »</strong></a> ·
-    <a href="#-developer-quickstart"><strong>Run Locally »</strong></a> ·
-    <a href="#-rest-api-reference"><strong>API Reference »</strong></a>
-  </p>
-
-  <!-- Badges -->
-  <p align="center">
-    <img src="https://img.shields.io/badge/Platform-Pravah-0284c7?style=for-the-badge&logo=shield" alt="Pravah" />
-    <img src="https://img.shields.io/badge/React%2018-Vite%20%2B%20Tailwind-38bdf8?style=for-the-badge&logo=react" alt="React 18" />
-    <img src="https://img.shields.io/badge/Node.js-18%2B%20Express-22c55e?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
-    <img src="https://img.shields.io/badge/PostgreSQL%2016-PostGIS%20Spatial-336791?style=for-the-badge&logo=postgresql" alt="PostGIS" />
-    <img src="https://img.shields.io/badge/Socket.IO-Realtime%20Telemetry-010101?style=for-the-badge&logo=socketdotio" alt="Socket.IO" />
-    <img src="https://img.shields.io/badge/Tests-19%2F19%20%2B%209%2F9%20Passed-10b981?style=for-the-badge&logo=checkmarx" alt="Tests Passed" />
-  </p>
-
 </div>
-
----
-
-## 🧭 Table of Contents
-
-- [🌟 What is Pravah?](#-what-is-pravah)
-- [📸 System Showcase](#-system-showcase)
-- [⚡ Key Platform Capabilities](#-key-platform-capabilities)
-- [📐 Deterministic Risk Mass-Balance Model](#-deterministic-risk-mass-balance-model)
-- [🏗️ System Architecture](#-system-architecture)
-- [📡 REST API Reference](#-rest-api-reference)
-- [💻 Developer Quickstart](#-developer-quickstart)
-- [🧪 Automated Reliability & Verification Suites](#-automated-reliability--verification-suites)
-- [🔐 Security, RBAC & Offline Resilience](#-security-rbac--offline-resilience)
-- [📚 Technical Documentation Index](#-technical-documentation-index)
+<br clear="left" />
 
 ---
 
@@ -63,17 +28,6 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 
 ## 📸 System Showcase
 
-<div align="center">
-
-### 1. Unified Earth Observatory & Live Grid Hero
-*Cinematic dual-theme observatory with live Safdarjung Doppler radar sync and real-time municipal ward telemetry.*
-
-![Pravah Observatory Hero](docs/images/landing-hero.png)
-
-</div>
-
-<br />
-
 | 🗺️ Interactive City Risk Map (`/dashboard`) | 🚨 Citizen Waterlogging Portal (`/report`) |
 | :---: | :---: |
 | [![City Risk Map](docs/images/city-risk-map.png)](docs/images/city-risk-map.png) | [![Citizen Portal](docs/images/citizen-portal.png)](docs/images/citizen-portal.png) |
@@ -83,15 +37,6 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 | :---: | :---: |
 | [![Admin Portal](docs/images/admin-portal.png)](docs/images/admin-portal.png) | [![Hydrology Analytics](docs/images/hydrology-analytics.png)](docs/images/hydrology-analytics.png) |
 | *Command center for What-If simulations, culvert overrides, emergency dispatches, and immutable audit logs.* | *Yamuna river gauge levels, historical waterlogging hotspots, and 6h / 12h / 24h predictive flood projection curves.* |
-
-<div align="center">
-
-### 2. End-to-End Operational Pipeline & Minimal Institutional Footprint
-*Four-step municipal pipeline connecting Doppler radar, PostGIS polygons, mass-balance risk, and pre-emptive pump dispatch with a clean minimal brand footer.*
-
-![Operational Continuum](docs/images/operational-continuum.png)
-
-</div>
 
 ---
 
@@ -354,12 +299,3 @@ For in-depth architectural specifications and implementation guides, explore the
 | [Real-Time Socket Architecture](docs/realtime-socket-architecture.md) | WebSocket protocol, spatial room partitioning & event contracts |
 | [Security Hardening & RBAC](docs/security-hardening.md) | OWASP defense checklist, JWT schema & rate-limit configurations |
 | [Testing & Reliability Runbook](docs/testing-and-reliability.md) | Master failure drills, fault tolerance & test runbook |
-
----
-
-<div align="center">
-
-  **PRAVAH (प्रवाह)** · Designed & Engineered by [**Suhani Yadav**](https://github.com/suhaniyadav-netizen/Pravah)  
-  *In collaboration with the Municipal Corporation of Delhi (MCD) & Delhi Disaster Management Authority (DDMA)*
-
-</div>
