@@ -28,17 +28,6 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 
 ## 📸 System Showcase
 
-<div align="center">
-
-### 1. Unified Earth Observatory & Live Grid Hero
-*Cinematic dual-theme observatory with live Safdarjung Doppler radar sync and real-time municipal ward telemetry.*
-
-![Pravah Observatory Hero](docs/images/landing-hero.png)
-
-</div>
-
-<br />
-
 | 🗺️ Interactive City Risk Map (`/dashboard`) | 🚨 Citizen Waterlogging Portal (`/report`) |
 | :---: | :---: |
 | [![City Risk Map](docs/images/city-risk-map.png)](docs/images/city-risk-map.png) | [![Citizen Portal](docs/images/citizen-portal.png)](docs/images/citizen-portal.png) |
@@ -48,15 +37,6 @@ During peak monsoon events, Delhi's urban runoff challenges culvert capacities, 
 | :---: | :---: |
 | [![Admin Portal](docs/images/admin-portal.png)](docs/images/admin-portal.png) | [![Hydrology Analytics](docs/images/hydrology-analytics.png)](docs/images/hydrology-analytics.png) |
 | *Command center for What-If simulations, culvert overrides, emergency dispatches, and immutable audit logs.* | *Yamuna river gauge levels, historical waterlogging hotspots, and 6h / 12h / 24h predictive flood projection curves.* |
-
-<div align="center">
-
-### 2. End-to-End Operational Pipeline & Minimal Institutional Footprint
-*Four-step municipal pipeline connecting Doppler radar, PostGIS polygons, mass-balance risk, and pre-emptive pump dispatch with a clean minimal brand footer.*
-
-![Operational Continuum](docs/images/operational-continuum.png)
-
-</div>
 
 ---
 
