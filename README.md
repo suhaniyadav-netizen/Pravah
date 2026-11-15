@@ -1,16 +1,13 @@
 <div align="center">
-
   <img src="docs/images/logo.png" alt="Pravah Logo" width="44" height="44" align="left" style="border-radius: 50%;" />
+   <h1 align="left">PRAVAH (प्रवाह)</h1>
+  
+  <h3 align="left">Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
 
-  # PRAVAH (प्रवाह)
-  ### Delhi Municipal Flood Intelligence, Explainable Risk Modeling & Emergency Dispatch Grid
-
-  <p align="center">
+  <p align="left">
     A production-grade geospatial flood monitoring, deterministic hydrological forecasting, incident command dispatch, and decision support platform engineered for the <strong>National Capital Territory of Delhi (250 Municipal Wards)</strong>.
   </p>
-
 </div>
-<br clear="left" />
 
 ---
 
