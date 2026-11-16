@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api",
+      "destination": "https://pravah-br0g.onrender.com/api"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://pravah-br0g.onrender.com/api/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
