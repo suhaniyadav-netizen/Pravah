@@ -330,7 +330,7 @@ export default function Analytics() {
             <Flame className="w-3.5 h-3.5 text-rose-500" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-2xl font-serif font-bold text-[var(--text-primary)]">{totalHotspots}</span>
+            <span className="text-2xl font-bold text-[var(--text-primary)]">{totalHotspots}</span>
             <span className="text-[11px] text-rose-500 font-medium">Critical Nodes</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Mapped across 250 municipal wards</p>
@@ -342,7 +342,7 @@ export default function Analytics() {
             <Waves className="w-3.5 h-3.5 text-sky-500" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-2xl font-serif font-bold text-[var(--text-primary)]">{maxWaterDepth}</span>
+            <span className="text-2xl font-bold text-[var(--text-primary)]">{maxWaterDepth}</span>
             <span className="text-[11px] text-[var(--text-muted)] font-mono">cm depth</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Minto Bridge grade-depression</p>
@@ -354,7 +354,7 @@ export default function Analytics() {
             <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-2xl font-serif font-bold text-[var(--text-primary)]">{avgRecurrence}</span>
+            <span className="text-2xl font-bold text-[var(--text-primary)]">{avgRecurrence}</span>
             <span className="text-[11px] text-amber-500 font-mono">/ 100</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Culvert siltation & runoff index</p>
@@ -366,7 +366,7 @@ export default function Analytics() {
             <Layers className="w-3.5 h-3.5 text-[var(--brand)]" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-xl font-serif font-bold text-[var(--text-primary)] truncate">Barapullah</span>
+            <span className="text-xl font-bold text-[var(--text-primary)] truncate">Barapullah</span>
             <span className="text-[11px] text-emerald-500 font-medium">5 Nodes</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Najafgarh basin carries 42% peak runoff</p>
