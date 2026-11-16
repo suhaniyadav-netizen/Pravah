@@ -331,13 +331,14 @@ export default function Dashboard() {
 
       {/* ── KPI Cards (Compact High-Density Rectangular) ──────── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-        {kpiCards.map((card) => {
+        {kpiCards.map((card, idx) => {
           const Icon = card.icon;
           const c    = palette[card.color];
+          const isLast = idx === kpiCards.length - 1;
           return (
             <div
               key={card.label}
-              className={`surface-card p-3 rounded-none ${c.hover} transition-all border border-[var(--border)]`}
+              className={`surface-card p-3 rounded-none ${c.hover} transition-all border border-[var(--border)] ${isLast ? 'col-span-2 sm:col-span-1' : ''}`}
             >
               <div className="flex items-center justify-between text-[var(--text-muted)] text-[9px] font-bold uppercase tracking-wider mb-1">
                 <span>{card.label}</span>
@@ -670,8 +671,8 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            {/* Filter Tabs with Live Dynamic Counts */}
-            <div className="inline-flex rounded-none border border-[var(--border)] bg-[var(--surface-soft)] p-0.5">
+            {/* Filter Tabs with Live Dynamic Counts (Scrollable on small screens) */}
+            <div className="inline-flex rounded-none border border-[var(--border)] bg-[var(--surface-soft)] p-0.5 overflow-x-auto max-w-full no-scrollbar">
               {[
                 { id: 'ALL', label: 'All (250)' },
                 { id: 'CRITICAL', label: `Critical (${counts.critical || 25})` },

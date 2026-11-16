@@ -385,26 +385,29 @@ export default function WardMap({
           <button
             type="button"
             onClick={() => setShowCircles(!showCircles)}
-            className={`px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider font-bold rounded-none cursor-pointer flex items-center space-x-1 ${
+            className={`px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold rounded-none cursor-pointer flex items-center space-x-1 ${
               showCircles
                 ? 'map-glass-btn-active'
                 : 'map-glass-btn'
             }`}
           >
-            <span>Zone Circles ({wardCentroids.length})</span>
+            <span className="hidden sm:inline">Zone Circles</span>
+            <span className="sm:hidden">Zones</span>
+            <span>({wardCentroids.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setShowHotspots(!showHotspots)}
-            className={`px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider font-bold rounded-none cursor-pointer flex items-center space-x-1 ${
+            className={`px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold rounded-none cursor-pointer flex items-center space-x-1 ${
               showHotspots
                 ? 'bg-rose-500/25 text-rose-300 border border-rose-500/50 shadow-sm'
                 : 'map-glass-btn'
             }`}
           >
             <AlertTriangle className="w-3 h-3 text-rose-400" />
-            <span>Hotspots ({CHRONIC_HOTSPOTS.length})</span>
+            <span>Hotspots</span>
+            <span className="hidden sm:inline">({CHRONIC_HOTSPOTS.length})</span>
           </button>
         </div>
       </div>
@@ -436,7 +439,7 @@ export default function WardMap({
 
       {/* ── Bottom-Left: Real-Time Ward Telemetry HUD (Strict Glassmorphism Rectangle) ── */}
       {hoveredWard && (
-        <div className="absolute bottom-3 left-3 z-[400] max-w-sm map-glass-box border-l-4 border-l-[var(--brand)] p-3 space-y-2 animate-in fade-in pointer-events-none">
+        <div className="absolute bottom-3 left-3 right-3 sm:right-auto z-[400] max-w-sm map-glass-box border-l-4 border-l-[var(--brand)] p-3 space-y-2 animate-in fade-in pointer-events-none">
           <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-1.5">
             <span className="font-bold text-[var(--text-primary)] text-xs flex items-center space-x-1.5">
               <MapPin className="w-3.5 h-3.5 text-[var(--brand)]" />
@@ -476,26 +479,26 @@ export default function WardMap({
       )}
 
       {/* ── Bottom-Right: Color Risk Choropleth Legend (Strict Glassmorphism Rectangle) ── */}
-      <div className="absolute bottom-3 right-3 z-[400] map-glass-box p-2.5 space-y-1.5 text-[10px] pointer-events-auto">
+      <div className={`absolute bottom-3 right-3 z-[400] map-glass-box p-2 sm:p-2.5 space-y-1 sm:space-y-1.5 text-[9px] sm:text-[10px] pointer-events-auto ${hoveredWard ? 'hidden sm:block' : 'block'}`}>
         <div className="text-[9px] font-bold uppercase tracking-wider opacity-75 font-mono">
           Flood Risk Zone Legend
         </div>
-        <div className="flex items-center space-x-3 font-mono">
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-none bg-rose-500 inline-block animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+        <div className="flex items-center space-x-2 sm:space-x-3 font-mono text-[9px] sm:text-[10px]">
+          <span className="flex items-center space-x-1 sm:space-x-1.5">
+            <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-none bg-rose-500 inline-block animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
             <span className="text-rose-400 font-bold">Critical</span>
           </span>
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-none bg-orange-500 inline-block shadow-[0_0_6px_rgba(249,115,22,0.4)]" />
+          <span className="flex items-center space-x-1 sm:space-x-1.5">
+            <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-none bg-orange-500 inline-block shadow-[0_0_6px_rgba(249,115,22,0.4)]" />
             <span className="text-orange-400 font-bold">High</span>
           </span>
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-none bg-yellow-500 inline-block shadow-[0_0_6px_rgba(234,179,8,0.4)]" />
+          <span className="flex items-center space-x-1 sm:space-x-1.5">
+            <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-none bg-yellow-500 inline-block shadow-[0_0_6px_rgba(234,179,8,0.4)]" />
             <span className="text-yellow-400 font-bold">Mod</span>
           </span>
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-none bg-emerald-500 inline-block shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
-            <span className="text-emerald-400 font-bold">Safe / Low</span>
+          <span className="flex items-center space-x-1 sm:space-x-1.5">
+            <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-none bg-emerald-500 inline-block shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
+            <span className="text-emerald-400 font-bold">Safe</span>
           </span>
         </div>
       </div>

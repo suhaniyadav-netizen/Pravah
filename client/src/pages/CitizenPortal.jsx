@@ -325,7 +325,7 @@ export default function CitizenPortal() {
               <label className="text-xs font-semibold text-[var(--text-primary)] block">
                 Severity Level
               </label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
                   { lvl: 'LOW', label: 'Low', desc: 'Slow runoff' },
                   { lvl: 'MEDIUM', label: 'Medium', desc: 'Caution' },
@@ -371,7 +371,7 @@ export default function CitizenPortal() {
               </div>
 
               {/* Depth Preset Buttons */}
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {depthPresets.map((p) => (
                   <button
                     type="button"

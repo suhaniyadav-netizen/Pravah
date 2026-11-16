@@ -137,75 +137,94 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Slide-in Drawer */}
+        {/* Mobile Slide-in Drawer with Backdrop Overlay */}
         {mobileOpen && (
-          <div
-            className="lg:hidden fixed inset-y-0 right-0 w-[80%] max-w-[300px] bg-white/85 dark:bg-[#070e17]/90 backdrop-blur-2xl border-l border-slate-200/80 dark:border-white/10 p-6 flex flex-col justify-between shadow-2xl z-50 transition-transform duration-200"
-          >
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-limelight text-xl tracking-wider text-[var(--text-primary)] uppercase">
-                    PRAVAH
-                  </span>
-                  <span className="font-heading text-xs font-semibold text-[var(--brand)]">
-                    (प्रवाह)
-                  </span>
+          <>
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+              onClick={() => setMobileOpen(false)}
+              aria-hidden="true"
+            />
+            <div
+              className="lg:hidden fixed inset-y-0 right-0 w-[82%] max-w-[320px] bg-white/95 dark:bg-[#070e17]/95 backdrop-blur-2xl border-l border-slate-200/80 dark:border-white/10 p-6 flex flex-col justify-between shadow-2xl z-50 transition-transform duration-200"
+            >
+              <div className="space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-limelight text-xl tracking-wider text-[var(--text-primary)] uppercase">
+                      PRAVAH
+                    </span>
+                    <span className="font-heading text-xs font-semibold text-[var(--brand)]">
+                      (प्रवाह)
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)] cursor-pointer"
+                    aria-label="Close menu"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
-                <button
+
+                <div className="space-y-1.5">
+                  {navItems.map((item, idx) => {
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={idx}
+                        to={item.path}
+                        onClick={() => setMobileOpen(false)}
+                        className={`block py-2.5 px-3.5 rounded-lg text-sm font-medium transition-colors no-underline ${
+                          isActive
+                            ? 'text-[var(--brand)] font-semibold bg-sky-500/10'
+                            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                  <Link
+                    to="/simulator"
+                    onClick={() => setMobileOpen(false)}
+                    className={`block py-2.5 px-3.5 rounded-lg text-sm font-medium transition-colors no-underline ${
+                      location.pathname === '/simulator'
+                        ? 'text-[var(--brand)] font-semibold bg-sky-500/10'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
+                    }`}
+                  >
+                    Flood Simulator
+                  </Link>
+                </div>
+              </div>
+
+              <div className="space-y-3 pt-6 border-t border-[var(--border)]">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-xs text-[var(--text-muted)] font-medium">Appearance</span>
+                  <ThemeToggle />
+                </div>
+
+                <Link
+                  to="/admin"
                   onClick={() => setMobileOpen(false)}
-                  className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  className="w-full py-2 px-3 rounded-lg border border-[var(--border)] text-xs font-medium flex items-center justify-center gap-2 no-underline text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
-                  <X size={18} />
-                </button>
-              </div>
+                  <Lock size={13} />
+                  <span>Admin Portal</span>
+                </Link>
 
-              <div className="space-y-1.5">
-                {navItems.map((item, idx) => {
-                  const isActive = location.pathname === item.path;
-                  return (
-                    <Link
-                      key={idx}
-                      to={item.path}
-                      onClick={() => setMobileOpen(false)}
-                      className={`block py-2.5 px-3.5 rounded-lg text-sm font-medium transition-colors no-underline ${
-                        isActive
-                          ? 'text-[var(--brand)] font-semibold bg-sky-500/10'
-                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-soft)]'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
+                <Link
+                  to="/report"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full py-2.5 rounded-full btn-primary text-xs font-semibold flex items-center justify-center gap-2 no-underline"
+                >
+                  <ShieldAlert size={14} />
+                  <span>Report Incident</span>
+                </Link>
               </div>
             </div>
-
-            <div className="space-y-3 pt-6 border-t border-[var(--border)]">
-              <div className="flex items-center justify-between px-1">
-                <span className="text-xs text-[var(--text-muted)] font-medium">Appearance</span>
-                <ThemeToggle />
-              </div>
-
-              <Link
-                to="/admin"
-                onClick={() => setMobileOpen(false)}
-                className="w-full py-2 px-3 rounded-lg border border-[var(--border)] text-xs font-medium flex items-center justify-center gap-2 no-underline text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >
-                <Lock size={13} />
-                <span>Admin Portal</span>
-              </Link>
-
-              <Link
-                to="/report"
-                onClick={() => setMobileOpen(false)}
-                className="w-full py-2.5 rounded-full btn-primary text-xs font-semibold flex items-center justify-center gap-2 no-underline"
-              >
-                <ShieldAlert size={14} />
-                <span>Report Incident</span>
-              </Link>
-            </div>
-          </div>
+          </>
         )}
       </div>
     </header>

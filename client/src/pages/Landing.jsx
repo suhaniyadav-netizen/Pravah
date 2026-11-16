@@ -166,14 +166,14 @@ export default function Landing() {
         </div>
 
         {/* Lower Hero Bar: Radar Heartbeat Left & Coordinates Right Above City Risk Index */}
-        <div className="relative z-10 max-w-6xl mx-auto w-full flex items-center justify-between pt-3 border-t border-white/15 text-xs text-white/70 font-mono">
+        <div className="relative z-10 max-w-6xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 pt-3 border-t border-white/15 text-xs text-white/70 font-mono">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
             <span className="tracking-wider uppercase text-[10px] text-white/70 font-semibold">
               LIVE RADAR SYNC · UPDATED 2 MINS AGO
             </span>
           </div>
-          <span className="text-[11px] text-white/80 tracking-wider font-semibold">
+          <span className="text-[10px] sm:text-[11px] text-white/80 tracking-wider font-semibold">
             28.6139° N · 77.2090° E · DELHI NCT
           </span>
         </div>
@@ -238,15 +238,15 @@ export default function Landing() {
         </div>
 
         {/* Live Municipal Advisory Ticker Bar */}
-        <div className="mt-2.5 px-3 py-1.5 rounded-lg bg-[var(--surface-soft)]/70 border border-[var(--border)] text-[11px] font-mono text-[var(--text-secondary)] flex flex-wrap items-center justify-between gap-2 transition-colors duration-300">
-          <div className="flex items-center gap-2">
+        <div className="mt-2.5 px-3 py-1.5 rounded-lg bg-[var(--surface-soft)]/70 border border-[var(--border)] text-[10px] sm:text-[11px] font-mono text-[var(--text-secondary)] flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 transition-colors duration-300">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
             <span className="text-[var(--text-primary)] font-semibold">YAMUNA RIVER LEVEL: 204.85 m</span>
-            <span className="text-[var(--text-muted)]">(Warning: 205.33 m · Safe Flow)</span>
+            <span className="text-[var(--text-muted)] text-[10px]">(Warning: 205.33 m · Safe Flow)</span>
           </div>
-          <div className="flex items-center gap-4 text-[10px] text-[var(--text-muted)]">
-            <span>Pumps Staged: 142/150</span>
-            <span>Minto Bridge: Clear</span>
+          <div className="flex items-center gap-3 text-[10px] text-[var(--text-muted)] flex-wrap">
+            <span>Pumps: 142/150</span>
+            <span>Minto: Clear</span>
             <span>ITO: Clear</span>
             <span className="hidden md:inline">Doppler Radar: Active</span>
           </div>
@@ -307,9 +307,9 @@ export default function Landing() {
           {/* Interactive Map & Telemetry HUD */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Map Container */}
-            <div className="lg:col-span-8 rounded-2xl overflow-hidden border border-[var(--border)] shadow-lg relative bg-[var(--surface)] min-h-[500px]">
+            <div className="lg:col-span-8 rounded-2xl overflow-hidden border border-[var(--border)] shadow-lg relative bg-[var(--surface)] min-h-[380px] sm:min-h-[500px]">
               {loading ? (
-                <div className="h-[500px] flex items-center justify-center font-mono text-xs text-[var(--text-muted)] space-x-2">
+                <div className="h-[380px] sm:h-[500px] flex items-center justify-center font-mono text-xs text-[var(--text-muted)] space-x-2">
                   <span className="w-2 h-2 rounded-full bg-[var(--brand)] animate-ping" />
                   <span>Loading Delhi Geospatial Boundaries…</span>
                 </div>
@@ -318,7 +318,7 @@ export default function Landing() {
                   wardsData={displayedWards}
                   selectedWardId={selectedWard?.ward_code || selectedWard?.id}
                   onSelectWard={handleSelectWard}
-                  height="500px"
+                  height="100%"
                 />
               )}
             </div>
@@ -446,15 +446,15 @@ export default function Landing() {
           </div>
 
           {/* Mathematical Equation Ribbon */}
-          <div className="p-4 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] font-mono text-xs sm:text-sm flex flex-col md:flex-row items-center justify-between gap-3 text-[var(--text-primary)] transition-colors duration-300">
+          <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] font-mono text-xs sm:text-sm flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3 text-[var(--text-primary)] transition-colors duration-300">
             <div className="flex items-center gap-2">
               <Cpu className="w-4 h-4 text-[var(--brand)] shrink-0" />
               <span className="font-semibold text-xs tracking-wide">HYDROLOGICAL RISK EQUATION:</span>
             </div>
-            <div className="text-center font-bold text-xs sm:text-sm text-[var(--brand)]">
+            <div className="text-center font-bold text-[11px] sm:text-xs md:text-sm text-[var(--brand)] break-words">
               Risk(w) = (Drainage Deficit × 0.40) + (Precipitation × 0.35) + (Citizen Reports × 0.25)
             </div>
-            <span className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+            <span className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 shrink-0">
               100% Audit-Verifiable
             </span>
           </div>

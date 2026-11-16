@@ -527,13 +527,15 @@ export default function WardDetail() {
             <span>City Overview</span>
           </Link>
           <ChevronRight className="w-3 h-3 opacity-40" />
-          <Link
-            to="/dashboard"
-            className="hover:text-[var(--text-primary)] transition-colors"
-          >
-            Municipal Ward Vulnerability Directory
-          </Link>
-          <ChevronRight className="w-3 h-3 opacity-40" />
+          <span className="hidden sm:inline-flex items-center gap-2">
+            <Link
+              to="/dashboard"
+              className="hover:text-[var(--text-primary)] transition-colors"
+            >
+              Directory
+            </Link>
+            <ChevronRight className="w-3 h-3 opacity-40" />
+          </span>
           <span className="font-mono font-bold text-[var(--brand)] bg-[var(--surface-soft)] px-2 py-0.5 border border-[var(--border)]">
             {wardInfo.code}
           </span>
