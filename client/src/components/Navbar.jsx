@@ -55,7 +55,7 @@ export default function Navbar() {
                 PRAVAH
               </span>
               <span
-                className={`font-serif text-xs sm:text-sm font-semibold transition-opacity ${
+                className={`font-heading text-xs sm:text-sm font-semibold transition-opacity ${
                   isHeroTop ? 'text-sky-400 opacity-90' : 'text-[var(--brand)] opacity-85'
                 } group-hover:opacity-100`}
               >
@@ -148,7 +148,7 @@ export default function Navbar() {
                   <span className="font-limelight text-xl tracking-wider text-[var(--text-primary)] uppercase">
                     PRAVAH
                   </span>
-                  <span className="font-serif text-xs font-semibold text-[var(--brand)]">
+                  <span className="font-heading text-xs font-semibold text-[var(--brand)]">
                     (प्रवाह)
                   </span>
                 </div>

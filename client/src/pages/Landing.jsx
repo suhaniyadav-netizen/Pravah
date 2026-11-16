@@ -327,7 +327,7 @@ export default function Landing() {
             <div className="lg:col-span-4 surface-card p-5 rounded-2xl border border-[var(--border)] space-y-4">
               <div className="flex items-start justify-between pb-3 border-b border-[var(--border)]">
                 <div>
-                  <h3 className="text-lg font-bold font-serif text-[var(--text-primary)] tracking-tight">
+                  <h3 className="text-lg font-bold font-heading text-[var(--text-primary)] tracking-tight">
                     {selectedWard?.name || selectedWard?.ward_name || 'Connaught Place'}
                   </h3>
                   <div className="text-xs text-[var(--text-muted)] font-mono mt-0.5">
@@ -466,7 +466,7 @@ export default function Landing() {
                 <span className="text-2xl font-black font-mono text-[var(--brand)]">40%</span>
                 <Layers className="w-5 h-5 text-[var(--brand)]" />
               </div>
-              <h3 className="text-base font-bold font-serif text-[var(--text-primary)] tracking-tight">
+              <h3 className="text-base font-bold font-heading text-[var(--text-primary)] tracking-tight">
                 Drainage Deficit
               </h3>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
@@ -479,7 +479,7 @@ export default function Landing() {
                 <span className="text-2xl font-black font-mono text-cyan-700 dark:text-cyan-400">35%</span>
                 <CloudRain className="w-5 h-5 text-cyan-600" />
               </div>
-              <h3 className="text-base font-bold font-serif text-[var(--text-primary)] tracking-tight">
+              <h3 className="text-base font-bold font-heading text-[var(--text-primary)] tracking-tight">
                 Rainfall Forecast
               </h3>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
@@ -492,7 +492,7 @@ export default function Landing() {
                 <span className="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">25%</span>
                 <Radio className="w-5 h-5 text-emerald-600" />
               </div>
-              <h3 className="text-base font-bold font-serif text-[var(--text-primary)] tracking-tight">
+              <h3 className="text-base font-bold font-heading text-[var(--text-primary)] tracking-tight">
                 Civic Complaints
               </h3>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
@@ -600,7 +600,7 @@ export default function Landing() {
                       <div className="text-[10px] font-mono tracking-wider uppercase text-[var(--text-muted)] font-semibold">
                         {item.badge}
                       </div>
-                      <h3 className="text-base font-serif font-bold text-[var(--text-primary)] tracking-tight group-hover:text-[var(--brand)] transition-colors">
+                      <h3 className="text-base font-bold font-heading text-[var(--text-primary)] tracking-tight group-hover:text-[var(--brand)] transition-colors">
                         {item.title}
                       </h3>
                       <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">

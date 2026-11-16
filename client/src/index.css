@@ -299,6 +299,11 @@
     font-family: 'Instrument Serif', Georgia, Cambria, 'Times New Roman', Times, serif;
   }
 
+  .font-heading,
+  .font-poppins {
+    font-family: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif !important;
+  }
+
   .font-limelight {
     font-family: 'Limelight', cursive, sans-serif;
   }
