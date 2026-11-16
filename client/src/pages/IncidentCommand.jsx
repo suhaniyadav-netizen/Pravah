@@ -544,7 +544,7 @@ export default function IncidentCommand() {
               </span>
               <div>
                 <div className="flex items-center space-x-2">
-                  <h2 className="text-sm font-bold text-[var(--text-primary)]">
+                  <h2 className="text-sm font-heading font-bold text-[var(--text-primary)]">
                     AI Tactical Roadmap
                   </h2>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--brand)]/10 text-[var(--brand)] font-semibold">
@@ -757,7 +757,7 @@ export default function IncidentCommand() {
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
               <div className="flex items-center space-x-2">
                 <Truck className="w-4 h-4 text-[var(--brand)]" />
-                <h2 className="text-sm font-bold text-[var(--text-primary)]">
+                <h2 className="text-sm font-heading font-bold text-[var(--text-primary)]">
                   Tactical Dispatch Console
                 </h2>
               </div>

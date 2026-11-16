@@ -326,11 +326,11 @@ export default function Analytics() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="p-3 rounded-none bg-[var(--surface-elevated)] border border-[var(--border)] shadow-sm space-y-1">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-            <span className="font-medium">Identified Hotspots</span>
+            <span className="font-medium font-heading">Identified Hotspots</span>
             <Flame className="w-3.5 h-3.5 text-rose-500" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-2xl font-bold text-[var(--text-primary)]">{totalHotspots}</span>
+            <span className="text-2xl font-heading font-bold text-[var(--text-primary)]">{totalHotspots}</span>
             <span className="text-[11px] text-rose-500 font-medium">Critical Nodes</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Mapped across 250 municipal wards</p>
@@ -338,11 +338,11 @@ export default function Analytics() {
 
         <div className="p-3 rounded-none bg-[var(--surface-elevated)] border border-[var(--border)] shadow-sm space-y-1">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-            <span className="font-medium">Peak Inundation Recorded</span>
+            <span className="font-medium font-heading">Peak Inundation Recorded</span>
             <Waves className="w-3.5 h-3.5 text-sky-500" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-2xl font-bold text-[var(--text-primary)]">{maxWaterDepth}</span>
+            <span className="text-2xl font-heading font-bold text-[var(--text-primary)]">{maxWaterDepth}</span>
             <span className="text-[11px] text-[var(--text-muted)] font-mono">cm depth</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Minto Bridge grade-depression</p>
@@ -350,11 +350,11 @@ export default function Analytics() {
 
         <div className="p-3 rounded-none bg-[var(--surface-elevated)] border border-[var(--border)] shadow-sm space-y-1">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-            <span className="font-medium">Mean Recurrence Score</span>
+            <span className="font-medium font-heading">Mean Recurrence Score</span>
             <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-2xl font-bold text-[var(--text-primary)]">{avgRecurrence}</span>
+            <span className="text-2xl font-heading font-bold text-[var(--text-primary)]">{avgRecurrence}</span>
             <span className="text-[11px] text-amber-500 font-mono">/ 100</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Culvert siltation & runoff index</p>
@@ -362,11 +362,11 @@ export default function Analytics() {
 
         <div className="p-3 rounded-none bg-[var(--surface-elevated)] border border-[var(--border)] shadow-sm space-y-1">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-            <span className="font-medium">Primary Basin Risk</span>
+            <span className="font-medium font-heading">Primary Basin Risk</span>
             <Layers className="w-3.5 h-3.5 text-[var(--brand)]" />
           </div>
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-xl font-bold text-[var(--text-primary)] truncate">Barapullah</span>
+            <span className="text-xl font-heading font-bold text-[var(--text-primary)] truncate">Barapullah</span>
             <span className="text-[11px] text-emerald-500 font-medium">5 Nodes</span>
           </div>
           <p className="text-[10px] text-[var(--text-muted)] truncate">Najafgarh basin carries 42% peak runoff</p>
@@ -381,7 +381,7 @@ export default function Analytics() {
           <div className="p-4 rounded-none bg-[var(--surface-elevated)] border border-[var(--border)] shadow-sm space-y-3">
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
               <div>
-                <h3 className="text-xs font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
+                <h3 className="text-xs font-heading font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
                   <Droplets className="w-3.5 h-3.5 text-[var(--brand)]" />
                   <span>Precipitation Surge vs Civic Waterlogging Reports</span>
                 </h3>
@@ -479,7 +479,7 @@ export default function Analytics() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-1.5">
                 <Flame className="w-4 h-4 text-rose-500" />
-                <h3 className="text-xs font-bold text-[var(--text-primary)]">
+                <h3 className="text-xs font-heading font-bold text-[var(--text-primary)]">
                   Chronic Hotspot Registry
                 </h3>
               </div>

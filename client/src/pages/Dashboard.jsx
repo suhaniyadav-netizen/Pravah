@@ -479,7 +479,7 @@ export default function Dashboard() {
                 <div className="flex items-start justify-between mb-2.5">
                   <div>
                     <div className="text-[9px] text-[var(--text-muted)] uppercase tracking-widest mb-0.5">Ward Telemetry</div>
-                    <h3 className="text-sm font-black text-[var(--text-primary)] leading-tight">
+                    <h3 className="text-sm font-heading font-black text-[var(--text-primary)] leading-tight">
                       {selectedWard.ward_name || selectedWard.name || `Ward ${selectedWard.ward_code || selectedWard.id}`}
                     </h3>
                     <span className="text-[10px] font-mono text-[var(--brand)] font-bold">
@@ -591,7 +591,7 @@ export default function Dashboard() {
               <div>
                 <div className="flex items-center space-x-1.5 mb-1.5">
                   <TrendingUp className="w-3.5 h-3.5 text-[var(--brand)]" />
-                  <h3 className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                  <h3 className="text-xs font-heading font-bold text-[var(--text-primary)] uppercase tracking-wider">
                     Risk Escalation Trend (24h)
                   </h3>
                 </div>
@@ -660,7 +660,7 @@ export default function Dashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="text-sm font-bold text-[var(--text-primary)]">Municipal Ward Vulnerability Directory</h3>
+              <h3 className="text-sm font-heading font-bold text-[var(--text-primary)]">Municipal Ward Vulnerability Directory</h3>
               <span className="px-2 py-0.5 bg-[var(--surface-soft)] text-[10px] font-mono text-[var(--text-muted)] border border-[var(--border)]">
                 {filteredWards.length} of 250 wards
               </span>

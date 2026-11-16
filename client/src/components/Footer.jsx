@@ -19,7 +19,7 @@ export default function Footer() {
             <span className="font-limelight text-base sm:text-lg tracking-wider uppercase text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors">
               PRAVAH
             </span>
-            <span className="text-xs font-semibold text-[var(--brand)] opacity-85">
+            <span className="font-heading text-xs font-semibold text-[var(--brand)] opacity-85">
               (प्रवाह)
             </span>
           </div>

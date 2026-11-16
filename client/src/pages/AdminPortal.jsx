@@ -541,7 +541,7 @@ export default function AdminPortal() {
                 <div className="w-8 h-8 bg-sky-500/10 text-sky-400 flex items-center justify-center">
                   <Sliders className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
+                <h3 className="text-base font-heading font-bold text-[var(--text-primary)] tracking-tight">
                   Flood Scenario Simulator
                 </h3>
                 <p className="text-xs text-[var(--text-muted)] leading-relaxed">
@@ -563,7 +563,7 @@ export default function AdminPortal() {
                 <div className="w-8 h-8 bg-blue-500/10 text-blue-400 flex items-center justify-center">
                   <Droplets className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
+                <h3 className="text-base font-heading font-bold text-[var(--text-primary)] tracking-tight">
                   Drainage Capacity Overrides
                 </h3>
                 <p className="text-xs text-[var(--text-muted)] leading-relaxed">
@@ -585,7 +585,7 @@ export default function AdminPortal() {
                 <div className="w-8 h-8 bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Users className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
+                <h3 className="text-base font-heading font-bold text-[var(--text-primary)] tracking-tight">
                   Incident Command
                 </h3>
                 <p className="text-xs text-[var(--text-muted)] leading-relaxed">
@@ -606,7 +606,7 @@ export default function AdminPortal() {
           <div className="surface-card p-5 border border-[var(--border)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)] tracking-tight">
+                <h3 className="text-base sm:text-lg font-heading font-bold text-[var(--text-primary)] tracking-tight">
                   Wards Needing Attention
                 </h3>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5">
@@ -816,7 +816,7 @@ export default function AdminPortal() {
                 {/* Search & Filter Header */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                    <h3 className="text-sm font-heading font-bold text-[var(--text-primary)] flex items-center gap-2">
                       <Layers className="w-4 h-4 text-[var(--brand)]" />
                       <span>Municipal Ward Directory</span>
                     </h3>
@@ -980,7 +980,7 @@ export default function AdminPortal() {
                       <Gauge className="w-3.5 h-3.5" />
                       <span>Calibrate Hydraulic Baseline</span>
                     </div>
-                    <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] tracking-tight mt-0.5">
+                    <h2 className="text-lg sm:text-xl font-heading font-bold text-[var(--text-primary)] tracking-tight mt-0.5">
                       {selectedWard?.wardName || selectedWardId}
                     </h2>
                     <div className="text-xs text-[var(--text-muted)] font-mono">
@@ -1171,7 +1171,7 @@ export default function AdminPortal() {
               {/* Recent Drainage Overrides Audit Trail */}
               <div className="surface-card p-5 border border-[var(--border)] rounded-xl sm:rounded-2xl space-y-3 shadow-xs">
                 <div className="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
-                  <h3 className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-2">
+                  <h3 className="text-xs font-heading font-bold text-[var(--text-primary)] uppercase tracking-wider font-mono flex items-center gap-2">
                     <Shield className="w-3.5 h-3.5 text-sky-500" />
                     <span>Hydraulic Audit Trail</span>
                   </h3>
@@ -1227,7 +1227,7 @@ export default function AdminPortal() {
         <div className="surface-card p-5 border border-[var(--border)] space-y-4">
           <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-lg sm:text-xl font-heading font-bold text-[var(--text-primary)] tracking-tight">
                 Administrative Audit Logs
               </h2>
               <p className="text-xs text-[var(--text-muted)] mt-0.5">

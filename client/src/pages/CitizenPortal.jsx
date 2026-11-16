@@ -238,7 +238,7 @@ export default function CitizenPortal() {
           <div className="flex items-center space-x-2.5 pb-4 border-b border-[var(--border)]">
             <Waves className="w-5 h-5 text-[var(--brand)]" />
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-base sm:text-lg font-heading font-bold text-[var(--text-primary)] tracking-tight">
                 Waterlogging Incident Form
               </h2>
               <p className="text-xs text-[var(--text-muted)]">
@@ -526,7 +526,7 @@ export default function CitizenPortal() {
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
               <div className="flex items-center space-x-2">
                 <Clock className="w-4 h-4 text-[var(--brand)]" />
-                <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] tracking-tight">
+                <h3 className="text-xs sm:text-sm font-heading font-bold text-[var(--text-primary)] tracking-tight">
                   Recent Citizen Reports
                 </h3>
               </div>
@@ -599,7 +599,7 @@ export default function CitizenPortal() {
           <div className="surface-card p-5 border border-[var(--border)] space-y-3">
             <div className="flex items-center space-x-2 pb-2 border-b border-[var(--border)]">
               <PhoneCall className="w-4 h-4 text-emerald-400" />
-              <h3 className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+              <h3 className="text-xs font-heading font-bold text-[var(--text-primary)] uppercase tracking-wider">
                 Emergency Municipal Contacts
               </h3>
             </div>
